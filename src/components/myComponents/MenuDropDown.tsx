@@ -4,6 +4,7 @@ import React from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { LogOut, MessageCircleCode, Palette, Pin, Settings, Settings2 } from "lucide-react";
 import { useTheme } from "next-themes";
+import { signOut } from "next-auth/react";
 
 const MenuDropDown = () => {
   const { theme, setTheme } = useTheme();
@@ -40,7 +41,7 @@ const MenuDropDown = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex gap-3 p-3 cursor-pointer">
+        <DropdownMenuItem className="flex gap-3 p-3 cursor-pointer" onClick={() => signOut()}>
             <LogOut size={20} />
             <span className="font-medium">Log out</span>
         </DropdownMenuItem>
