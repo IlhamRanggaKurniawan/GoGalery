@@ -1,7 +1,10 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from "next-auth/providers/credentials"
-import { NextAuthOptions } from 'next-auth';
-
+import { NextAuthOptions, Session, User } from 'next-auth';
+import { prisma } from '@/lib/dataStorage/db';
+import { compare } from 'bcrypt';
+import { JWT } from 'next-auth/jwt';
+  
 
 const authOptions: NextAuthOptions = {
     session: {
@@ -17,22 +20,35 @@ const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password", placeholder: "password" }
             },
             async authorize(credentials) {
-                const { password, username } = credentials as { username: string; password: string; }
-                const user: any = {
-                    id: 1,
-                    username,
-                    role: "admin"
-                }
-                if (username === "ilham" && password === "123123123") {
-                    return user
+
+                const {username, password} = credentials as { username: string, password: string}
+
+                const user: User | null = await prisma.user.findUnique({
+                    where: {
+                        username
+                    }
+                })
+
+                if (!user) {
+                    throw new Error('No user found');
                 }
 
-                return null
+                const isPasswordValid = await compare(password, user.password)
+
+                if(!isPasswordValid) {
+                    throw new Error("invalid password")
+                }
+
+                return {
+                    ...user,
+                    id: String(user.id)
+                }
             }
         })
     ],
     callbacks: {
-        async jwt({ token, user }: any) {
+        async jwt({ token, user }: {token: JWT, user: User}) {
+
             if (user) {
                 token.id = user.id
                 token.username = user.username
@@ -42,7 +58,8 @@ const authOptions: NextAuthOptions = {
             return token
         },
 
-        async session({ session, token }: any) {
+        async session({ session, token }: {session: Session, token: JWT}) {
+        
             if (token) {
                 session.user.id = token.id;
                 session.user.username = token.username;

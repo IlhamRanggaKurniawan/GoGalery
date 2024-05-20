@@ -3,48 +3,70 @@
 import { prisma } from "../dataStorage/db"
 import bcrypt from "bcrypt"
 
+interface RegisterParams {
+    username: string;
+    email: string;
+    password: string;
+    confPassword: string;
+}
 
-const register = async (formData: FormData) => {
-
-    const username = formData.get("username") as string | null
-    const email = formData.get("email") as string | null
-    const password = formData.get("password") as string | null
-    const confPassword = formData.get("confPassword") as string | null
+const register = async ({ username, email, password, confPassword }: RegisterParams) => {
 
     if (!username || !email || !password || !confPassword) {
-        throw new Error("please fill all the fields")
-    }
-    
-    try {
-        const [existingUsername, existingEmail] = await Promise.all([
-            prisma.user.findUnique({ where: { username } }),
-            prisma.user.findUnique({ where: { email } }),
-        ]);
-
-        if(existingEmail || existingUsername ) {
-            throw new Error("email or username already used")
-        }
-
-        if(password !== confPassword ) {
-            throw new Error("password doesn't match")
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10)
-
-        const user = await prisma.user.create({
-            data: {
-                username,
-                email,
-                password: hashedPassword
-            }
+        return ({
+            error: true,
+            message: "please fill all the fields",
+            statusCode: 400
         })
-
-        console.log(user)
-
-        return user
-    } catch (error) {
-        console.log(error)
     }
+
+    const [existingUsername, existingEmail] = await Promise.all([
+        prisma.user.findUnique({ where: { username } }),
+        prisma.user.findUnique({ where: { email } }),
+    ]);
+
+    if (existingEmail || existingUsername) {
+        return ({
+            error: true,
+            message: "email or username already exists",
+            statusCode: 409
+        })
+    }
+
+    if (password !== confPassword) {
+        return ({
+            error: true,
+            message: "password doesn't match",
+            statusCode: 400
+        })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const user = await prisma.user.create({
+        data: {
+            username,
+            email,
+            password: hashedPassword
+        }
+    })
+
+    if (!user) {
+        return ({
+            error: true,
+            message: "failed to register",
+            statusCode: 500
+        })
+    }
+
+    return ({
+        error: false,
+        message: "register success",
+        statusCode: 200
+    })
+
 }
+
+
 
 export default register

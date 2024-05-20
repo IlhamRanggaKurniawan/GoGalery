@@ -2,7 +2,7 @@
 
 /* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { FormEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
@@ -11,20 +11,22 @@ import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
 
+  const [error, setError] = useState<string>("")
+
   const router = useRouter()
 
-  const handleSubmit = async (e : any) => {
+  const handleSubmit = async (e : FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       const result = await signIn("credentials", {
-        username: e.target.username.value,
-        password: e.target.password.value,
+        username: e.currentTarget.username.value,
+        password: e.currentTarget.password.value,
         redirect: false,
         callbackUrl: "/"
       })
 
       if(result?.error) {
-        console.log(result.error)
+        return setError(result.error)
       }
 
       router.push("/")
@@ -43,7 +45,7 @@ const LoginForm = () => {
           <h1 className="text-center font-bold"> SpaceShip Social media</h1>
         </div>
         <Separator className="my-2" />
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-4" onSubmit={(e) => handleSubmit(e)}>
           <div>
             <label htmlFor="username">username</label>
             <Input id="username" type="text" required placeholder="username" name="username"/>
@@ -52,6 +54,7 @@ const LoginForm = () => {
             <label htmlFor="password">password</label>
             <Input id="password" type="password" required placeholder="password" name="password" />
           </div>
+          {error && <p className="text-red-500">{error}</p>}
           <div className="flex justify-center">
             <Button className="w-full font-bold" type="submit">
               login

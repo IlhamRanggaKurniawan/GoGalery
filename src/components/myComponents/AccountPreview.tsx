@@ -2,7 +2,6 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { SheetClose } from "../ui/sheet";
-import { X } from "lucide-react";
 
 const AccountPreview = ({ username }: { username: string }) => {
   return (
@@ -19,7 +18,6 @@ const AccountPreview = ({ username }: { username: string }) => {
           </div>
         </Link>
       </SheetClose>
-      <X className="cursor-pointer" />
     </div>
   );
 };

@@ -1,13 +1,38 @@
+"use client";
+
 /* eslint-disable react/no-unescaped-entities */
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Input } from "../ui/input";
 import { X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import AccountPreview from "./AccountPreview";
 import { ScrollArea } from "../ui/scroll-area";
+import { findUser } from "@/lib/actions/user";
+import { useDebounce } from "use-debounce"
+
+type user  = {
+  username: string
+}
 
 const SearchSheet = ({ children }: { children: ReactNode }) => {
+  const [search, setSearch] = useState<string>("")
+  const [users, setUsers] = useState<user[]>([])
+
+  const [debouncedSearch] = useDebounce(search, 1000)
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getUsers = async() => {
+    if(search.length > 0 ) {
+      setUsers(await findUser(debouncedSearch))
+    }
+  }
+
+  useEffect(() => {
+    getUsers()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch])
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -20,50 +45,17 @@ const SearchSheet = ({ children }: { children: ReactNode }) => {
             <X />
           </SheetClose>
         </div>
-        <form className="my-2">
-          <Input type="text" placeholder="Search" />
-        </form>
+        <Input type="text" placeholder="Search" onChange={(e) => setSearch(e.target.value)} />
+
         <Separator className="my-1" />
         <ScrollArea className="h-full pb-[70px] flex flex-col gap-2 pr-2">
-          <AccountPreview username="ilham_rku" />
-          <AccountPreview username="john_doe" />
-          <AccountPreview username="jane_smith" />
-          <AccountPreview username="susan_jones" />
-          <AccountPreview username="michael_williams" />
-          <AccountPreview username="emily_taylor" />
-          <AccountPreview username="david_brown" />
-          <AccountPreview username="sophia_anderson" />
-          <AccountPreview username="william_thomas" />
-          <AccountPreview username="olivia_jackson" />
-          <AccountPreview username="james_martin" />
-          <AccountPreview username="alexander_white" />
-          <AccountPreview username="isabella_hall" />
-          <AccountPreview username="matthew_miller" />
-          <AccountPreview username="ava_thompson" />
-          <AccountPreview username="ethan_garcia" />
-          <AccountPreview username="mia_martinez" />
-          <AccountPreview username="daniel_rodriguez" />
-          <AccountPreview username="charlotte_lee" />
-          <AccountPreview username="noah_gonzalez" />
-          <AccountPreview username="amelia_hernandez" />
-          <AccountPreview username="logan_nelson" />
-          <AccountPreview username="harper_wright" />
-          <AccountPreview username="mason_adams" />
-          <AccountPreview username="evelyn_scott" />
-          <AccountPreview username="logan_green" />
-          <AccountPreview username="abigail_baker" />
-          <AccountPreview username="lucas_hill" />
-          <AccountPreview username="victoria_carter" />
-          <AccountPreview username="benjamin_murphy" />
-          <AccountPreview username="avery_torres" />
-          <AccountPreview username="grace_rogers" />
-          <AccountPreview username="samuel_peterson" />
-          <AccountPreview username="aubrey_flores" />
-          <AccountPreview username="leah_morris" />
-          <AccountPreview username="henry_nguyen" />
-          <AccountPreview username="zoey_kim" />
-          <AccountPreview username="wyatt_james" />
-          <AccountPreview username="nora_king" />
+        {users.length > 0 ? (
+            users.map((user) => (
+              <AccountPreview key={user.username} username={user.username} />
+            ))
+          ) : (
+            <div className="text-center"></div>
+          )}
         </ScrollArea>
       </SheetContent>
     </Sheet>
