@@ -14,10 +14,21 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  email     String    @unique
   password  String
-  role      String   @default("member")
-  createdAt DateTime @default(now())
+  role      String    @default("member")
+  content   Content[]
+  createdAt DateTime  @default(now())
+}
+
+model Content {
+  id         Int      @id @default(autoincrement())
+  uploaderId Int
+  uploader   User     @relation(fields: [uploaderId], references: [id])
+  caption    String
+  url        String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

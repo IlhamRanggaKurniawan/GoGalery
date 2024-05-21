@@ -7,14 +7,14 @@ declare module "next-auth" {
         user: {
             username: string;
             email: string;
-            id: number | string;
+            id: number ;
             role: string;
         };
         expires: string;
     }
 
     interface User {
-        id: number | string,
+        id: number ,
         username: string,
         email: string,
         password: string,
@@ -27,7 +27,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
     interface JWT extends DefaultJWT {
-      id: string | number;
+      id: number,
       username: string;
       role: string;
     }

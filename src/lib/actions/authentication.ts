@@ -57,7 +57,7 @@ const register = async ({ username, email, password, confPassword }: RegisterPar
             message: "failed to register",
             statusCode: 500
         })
-    }
+    } 
 
     return ({
         error: false,

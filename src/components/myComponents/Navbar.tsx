@@ -46,7 +46,7 @@ const Navbar = () => {
             <span className="hidden lg:inline-block">Explore</span>
           </div>
         </Link>
-        <Link href="/" title="Upload image">
+        <Link href="/upload" title="Upload image">
           <div className="flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
             <ImageUp size={25} />
             <span className="hidden lg:inline-block">Upload</span>
