@@ -4,15 +4,15 @@ import ContentHeader from "./ContentHeader";
 import ContentFooter from "./ContentFooter";
 import ContentDescription from "./ContentDescription";
 
-const Content = () => {
+const Content = ({uploader, url, caption}: {uploader : string, url : string, caption: string}) => {
   return (
     <div className="w-screen max-w-[425px]">
       <div className="m-1">
-        <ContentHeader />
+        <ContentHeader uploader={uploader}/>
       </div>
-      <ContentMain />
+      <ContentMain url={url} alt={caption}/>
       <ContentFooter />
-      <ContentDescription />
+      <ContentDescription caption={caption}/>
     </div>
   );
 };

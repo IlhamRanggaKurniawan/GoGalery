@@ -2,17 +2,17 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import Link from "next/link";
 
-const ContentHeader = () => {
+const ContentHeader = ({uploader} : {uploader: string}) => {
   return (
     <div className="flex items-center gap-3">
-      <Link href="/ilham_rku" className="flex items-center gap-3">
+      <Link href={`/${uploader}`} className="flex items-center gap-3">
         <div>
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>ilham</AvatarFallback>
+            <AvatarImage src="https://github.com/shadcn.png" alt={uploader} />
+            <AvatarFallback>{uploader}</AvatarFallback>
           </Avatar>
         </div>
-        <span className="font-semibold text-sm">Ilham Rangga</span>
+        <span className="font-semibold text-sm">{uploader}</span>
       </Link>
     </div>
   );
