@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { uploadContent } from "@/lib/actions/content";
+import { revalidatePath } from "next/cache";
 
 const UploadInput = () => {
   const [fileName, setFileName] = useState<string>("");
@@ -53,14 +54,17 @@ const UploadInput = () => {
       return setError("cannot upload");
     }
 
+    const revalidate = "/"
+
     try {
-      const respond = await uploadContent({ formData, uploaderId });
+      const respond = await uploadContent({ formData, uploaderId, revalidate});
 
       if (respond.error) {
         return setError(respond.message);
       }
 
       router.push(`/${session.user.username}`);
+      revalidatePath(`/${session.user.username}`)
     } catch (error) {
       return setError("something went wrong")
     }
@@ -103,7 +107,7 @@ const UploadInput = () => {
           <Button className="w-[50%] border border-primary max-w-72" type="reset" variant={"ghost"} onClick={() => setFileName("")}>
             Cancel
           </Button>
-          <Button className="w-[50%] max-w-72" type="submit">
+          <Button className="w-[50%] max-w-72" type="submit" onClick={() => setError("")}>
             Upload Image
           </Button>
         </div>

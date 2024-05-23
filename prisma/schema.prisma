@@ -21,6 +21,8 @@ model User {
   password  String
   role      String    @default("member")
   content   Content[]
+  followers Follow[]  @relation("followersRelation")
+  following Follow[]  @relation("followingRelation")
   createdAt DateTime  @default(now())
 }
 
@@ -32,4 +34,15 @@ model Content {
   url        String   @unique
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Follow {
+  id          Int   @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  follower    User  @relation("followersRelation", fields: [followerId], references: [id])
+  following   User  @relation("followingRelation", fields: [followingId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
 }

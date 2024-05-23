@@ -1,6 +1,6 @@
 "use server"
 
-import { prisma } from "../dataStorage/db"
+import  prisma  from "../dataStorage/db"
 import bcrypt from "bcrypt"
 
 interface RegisterParams {

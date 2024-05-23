@@ -1,6 +1,6 @@
 "use server"
 
-import { prisma } from "../dataStorage/db"
+import  prisma  from "../dataStorage/db"
 
 export const findUser = async (username : string) => {
     const users = await prisma.user.findMany({

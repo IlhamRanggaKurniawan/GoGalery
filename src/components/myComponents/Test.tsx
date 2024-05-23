@@ -2,12 +2,12 @@
 
 import React from 'react'
 import { Button } from '../ui/button'
-import { getAllContent } from '@/lib/actions/content'
+import { getContentByUsername } from '@/lib/actions/content'
 
 const Test = () => {
   return (
     <div>
-      <Button onClick={() => getAllContent()}>tes</Button>
+      <Button onClick={() => getContentByUsername("ilham")}>tes</Button>
 
     </div>
   )

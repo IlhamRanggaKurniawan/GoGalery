@@ -1,8 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import React from "react";
 import ProfileBio from "./ProfileBio";
+import ProfileInfo from "./ProfileInfo";
 
 const ProfileMain = ({ username }: { username: string }) => {
   return (
@@ -16,22 +16,7 @@ const ProfileMain = ({ username }: { username: string }) => {
           <h2 className="text-lg font-medium truncate">{username}</h2>
         </div>
       </div>
-      <div className="flex justify-between items-center px-5 my-2">
-        <div className="flex flex-col items-center w-[30%]">
-          <h4>911</h4>
-          <span>post</span>
-        </div>
-        <Separator orientation="vertical" className="h-12" />
-        <div className="flex flex-col items-center w-[30%]">
-          <h4>911</h4>
-          <span>follower</span>
-        </div>
-        <Separator orientation="vertical" className="h-12" />
-        <div className="flex flex-col items-center w-[30%]">
-          <h4>911</h4>
-          <span>following</span>
-        </div>
-      </div>
+      <ProfileInfo />
       <div className="flex justify-center my-2 gap-2">
         <Button className="py-4 px-8 max-w-24">Follow</Button>
         <Button className="py-4 px-8 max-w-24">Message</Button>

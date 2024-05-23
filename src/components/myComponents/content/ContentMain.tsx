@@ -3,14 +3,13 @@ import React from "react";
 
 const ContentMain = ({url, alt}: {url: string, alt: string}) => {
   return (
-    <div className="w-full aspect-square border border-slate-300 bg-black flex items-center">
       <Image 
         src={url}
-        width={800}
-        height={800}
+        width={1080}
+        height={1080}
         alt={alt}
+        className="w-full aspect-square border bg-black object-contain"
       />
-    </div>
   );
 };
 

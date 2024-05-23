@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from "next-auth/providers/credentials"
 import { NextAuthOptions, Session, User } from 'next-auth';
-import { prisma } from '@/lib/dataStorage/db';
+import  prisma  from '@/lib/dataStorage/db';
 import { compare } from 'bcrypt';
 import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';

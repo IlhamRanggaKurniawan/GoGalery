@@ -1,12 +1,23 @@
 import Content from "@/components/myComponents/content/Content";
-import { getAllContent, IContent } from "@/lib/actions/content";
+import { getChainingContent, getContentById, IContent } from "@/lib/actions/content";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-const page = async() => {
-  const contents = await getAllContent()
+const page = async ({ params }: { params: { id: string } }) => {
+  const id = parseInt(params.id);
 
+  if (isNaN(id)) {
+    return;
+  }
+
+  const content = await getContentById(id);
+
+  if (!content) {
+    return;
+  }
+
+  const chainingContents = await getChainingContent({id, });
 
   return (
     <div className="pt-12 mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
@@ -17,12 +28,15 @@ const page = async() => {
         <h1 className="text-lg font-medium">Explore</h1>
       </div>
       <div className="flex flex-col gap-4 items-center">
-      {contents ? contents.map((content : IContent) => (
-          <Content key={content.id} uploader={content.uploader.username} caption={content.caption} url={content.url}/>
-        )): (
-          <span className="text-red-600 font-semibold ">Something went wrong</span>
+        {content ? <Content uploader={content.uploader.username} caption={content.caption} url={content.url} /> : <div>no content available</div>}
+
+        {chainingContents ? (
+          chainingContents.map((content: IContent) => (
+              <Content uploader={content.uploader.username} caption={content.caption} url={content.url} key={content.id}/>
+          ))
+        ) : (
+          <div>halo</div>
         )}
-  
       </div>
     </div>
   );
