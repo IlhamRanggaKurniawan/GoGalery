@@ -17,7 +17,7 @@ export interface IContent {
     }
 }
 
-export interface IContentByUser {
+export interface IContentWithUploader {
 
 }
 
@@ -44,8 +44,6 @@ export const uploadContent = async ({ formData, uploaderId, revalidate }: { form
             }
         })
     ])
-
-    console.log("halo")
 
     if (uploadContent.error) {
         console.log(uploadContent.error)

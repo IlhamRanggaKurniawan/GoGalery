@@ -17,3 +17,33 @@ export const findUser = async (username : string) => {
     return users
 }   
 
+export const getUserProfie = async (username : string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            username
+        },
+        include: {
+            content: {
+                orderBy: {
+                    createdAt: "desc"
+                }
+            }
+        },
+    })
+
+    if(!user) {
+        return ({
+            error: "user not found",
+            data: null
+        })
+    }
+
+    console.log(user)
+    
+
+    return ({
+        error: null,
+        data: user
+    })
+}
+
