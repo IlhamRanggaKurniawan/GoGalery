@@ -36,10 +36,7 @@ export const getUserProfie = async (username : string) => {
             error: "user not found",
             data: null
         })
-    }
-
-    console.log(user)
-    
+    }    
 
     return ({
         error: null,

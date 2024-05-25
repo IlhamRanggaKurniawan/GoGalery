@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import ProfileBio from "./ProfileBio";
 import ProfileInfo from "./ProfileInfo";
+import FollowButton from "../FollowButton";
 
-const ProfileMain = ({ username }: { username: string }) => {
+const ProfileMain = ({ username,userId }: { username: string, userId: number }) => {
   return (
     <div>
       <div className="flex items-center gap-3 py-4 flex-col">
@@ -18,7 +19,7 @@ const ProfileMain = ({ username }: { username: string }) => {
       </div>
       <ProfileInfo />
       <div className="flex justify-center my-2 gap-2">
-        <Button className="py-4 px-8 max-w-24">Follow</Button>
+        <FollowButton userId={userId}/>
         <Button className="py-4 px-8 max-w-24">Message</Button>
       </div>
       <ProfileBio />

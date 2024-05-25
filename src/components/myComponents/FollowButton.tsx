@@ -6,24 +6,20 @@ import { follow, isFollowing, unfollow } from "@/lib/actions/follow";
 import { useDebouncedCallback } from "use-debounce";
 import { useSession } from "next-auth/react";
 
-const Test = () => {
-  const followingId = 14;
-  const {data: session} = useSession()
+const FollowButton = ({ userId }: { userId: number }) => {
+  const followingId = userId;
+  const { data: session } = useSession();
 
   const [isFollow, setIsFollow] = useState(false);
   const [followId, setFollowId] = useState(0);
 
-  useEffect(() => {
-    checkFollow();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFollow]);
-
   const checkFollow = async () => {
-    if(!session) {
-      return
+    if (!session) {
+      return;
     }
 
-    const { data } = await isFollowing({ followerId : session.user.id, followingId });
+    const { data } = await isFollowing({ followerId: session.user.id, followingId });
 
     if (data) {
       setFollowId(data.id);
@@ -35,9 +31,13 @@ const Test = () => {
     return data;
   };
 
+  useEffect(() => {
+    checkFollow();
+  }, [isFollow, checkFollow]);
+
   const debouncedFollow = useDebouncedCallback(async () => {
-    if(!session) {
-      return
+    if (!session) {
+      return;
     }
 
     if (isFollow) {
@@ -50,17 +50,17 @@ const Test = () => {
 
     setIsFollow(!isFollow);
 
-    console.log(tes);
+    return tes;
   }, 500);
 
   return (
     <div>
       {isFollow ? (
-        <Button onClick={() => debouncedFollow()} className="bg-slate-600">
+        <Button onClick={() => debouncedFollow()} className="bg-slate-600 py-4 px-8 max-w-24">
           unfollow
         </Button>
       ) : (
-        <Button onClick={() => debouncedFollow()} className="bg-blue-400">
+        <Button onClick={() => debouncedFollow()} className="bg-blue-400 py-4 px-8 max-w-24">
           follow
         </Button>
       )}
@@ -68,4 +68,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default FollowButton;
