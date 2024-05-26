@@ -18,13 +18,12 @@ type user  = {
 const SearchSheet = ({ children }: { children: ReactNode }) => {
   const [search, setSearch] = useState<string>("")
   const [users, setUsers] = useState<user[]>([])
-
   const [debouncedSearch] = useDebounce(search, 1000)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getUsers = async() => {
     if(search.length > 0 ) {
-      setUsers(await findUser(debouncedSearch))
+      setUsers(await findUser({username: debouncedSearch}))
     }
   }
 

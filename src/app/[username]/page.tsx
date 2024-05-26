@@ -2,12 +2,13 @@ import ContentMain from "@/components/myComponents/content/ContentMain";
 import ProfileMain from "@/components/myComponents/profile/ProfileMain";
 import ProfileNavigation from "@/components/myComponents/profile/ProfileNavigation";
 import { Separator } from "@/components/ui/separator";
-import { getUserProfie } from "@/lib/actions/user";
+import { getUserProfile } from "@/lib/actions/user";
 import Link from "next/link";
 import React from "react";
 
 const page = async ({ params }: { params: { username: string } }) => {
-  const {data, error} = await getUserProfie(params.username);
+
+  const {data, error} = await getUserProfile(params.username);
 
   if(!data || error) {
     return (
@@ -20,7 +21,7 @@ const page = async ({ params }: { params: { username: string } }) => {
   return (
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">
       <div className="max-w-5xl">
-        <ProfileMain username={`${data.username}`} userId={data.id}/>
+        <ProfileMain username={`${data.username}`} userId={data.id} following={data._count.following} follower={data._count.followers} content={data._count.content}/>
         <Separator className="my-2" />
         <div>
           <ProfileNavigation username={`${data.username}`} isTagged={false} />
@@ -30,7 +31,7 @@ const page = async ({ params }: { params: { username: string } }) => {
           {contents ? (
             contents.map((content) => (
               <Link href={`/${data.username}/${content.id}`} key={content.id}>
-                <ContentMain alt={content.caption} url={content.url} />
+                <ContentMain alt={content.caption} url={content.url} preview={true}/>
               </Link>
             ))
           ) : (

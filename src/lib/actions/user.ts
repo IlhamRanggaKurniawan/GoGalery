@@ -1,28 +1,37 @@
 "use server"
 
-import  prisma  from "../dataStorage/db"
+import prisma from "../dataStorage/db"
 
-export const findUser = async (username : string) => {
+export const findUser = async ({username} : {username: string}) => {
     const users = await prisma.user.findMany({
         where: {
             username: {
                 contains: username
             }
         },
-        select: {
-            username: true
+        orderBy: {
+            followers: {
+                _count: "desc"
+            }
         }
     })
 
     return users
-}   
+}
 
-export const getUserProfie = async (username : string) => {
+export const getUserProfile = async (username: string) => {
     const user = await prisma.user.findUnique({
         where: {
             username
         },
         include: {
+            _count: {
+                select: {
+                    followers: true,
+                    content: true,
+                    following: true
+                }
+            },
             content: {
                 orderBy: {
                     createdAt: "desc"
@@ -31,12 +40,14 @@ export const getUserProfie = async (username : string) => {
         },
     })
 
-    if(!user) {
+    // console.log(user)
+
+    if (!user) {
         return ({
             error: "user not found",
             data: null
         })
-    }    
+    }
 
     return ({
         error: null,

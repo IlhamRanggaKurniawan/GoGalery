@@ -30,14 +30,14 @@ export const isFollowing = async ({ followerId, followingId }: { followerId: num
 
 export const follow  = async ({ followerId, followingId }: { followerId: number, followingId: number }) => {
 
-    const createFollow = await prisma.follow.create({
+    const follow = await prisma.follow.create({
         data: {
             followerId,
             followingId
         }
     })
 
-    if (!createFollow) {
+    if (!follow) {
         return {
             data: null,
             error: "something went wrong"
@@ -45,7 +45,7 @@ export const follow  = async ({ followerId, followingId }: { followerId: number,
     }
 
     return {
-        data: "followed",
+        data: follow,
         error: null
     }
 }
@@ -70,3 +70,4 @@ export const unfollow = async ({id} : {id: number}) => {
         error: null
     };
 }
+

@@ -16,7 +16,7 @@ const page = async() => {
       <div className="grid grid-cols-3 gap-[2px] m-1 mt-12 sm:mt-2">
       {contents ? contents.map((content : IContent) => (
           <Link href={`/explore/${content.id}`} key={content.id} className="max-w-80">
-              <ContentMain url={content.url} alt={content.caption} />
+              <ContentMain url={content.url} alt={content.caption} preview={true}/>
           </Link>
         )): (
           <span className="text-red-600 font-semibold ">Something went wrong</span>
