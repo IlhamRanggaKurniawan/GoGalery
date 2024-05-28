@@ -1,5 +1,6 @@
 import Content from "@/components/myComponents/content/Content";
-import { getChainingContent, getContentById, IContent } from "@/lib/actions/content";
+import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
+import { exploreChainingContent, getContentById } from "@/lib/actions/content";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -11,13 +12,11 @@ const page = async ({ params }: { params: { id: string } }) => {
     return;
   }
 
-  const content = await getContentById(id);
+  const content = await getContentById({id});
 
   if (!content) {
     return;
   }
-
-  const chainingContents = await getChainingContent({id, });
 
   return (
     <div className="pt-12 mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
@@ -28,15 +27,8 @@ const page = async ({ params }: { params: { id: string } }) => {
         <h1 className="text-lg font-medium">Explore</h1>
       </div>
       <div className="flex flex-col gap-4 items-center">
-        {content ? <Content uploader={content.uploader.username} caption={content.caption} url={content.url} /> : <div>no content available</div>}
-
-        {chainingContents ? (
-          chainingContents.map((content: IContent) => (
-              <Content uploader={content.uploader.username} caption={content.caption} url={content.url} key={content.id}/>
-          ))
-        ) : (
-          <div>halo</div>
-        )}
+      <Content uploader={content.uploader.username} caption={content.caption} url={content.url}/>
+      <StraightContentInfinityScroll contentFuction={exploreChainingContent}/>
       </div>
     </div>
   );

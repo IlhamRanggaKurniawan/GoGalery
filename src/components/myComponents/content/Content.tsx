@@ -6,7 +6,7 @@ import ContentDescription from "./ContentDescription";
 
 const Content = ({uploader, url, caption}: {uploader : string, url : string, caption: string}) => {
   return (
-    <div className="w-screen max-w-[425px]">
+    <div className="w-screen max-w-[500px]">
       <div className="m-1">
         <ContentHeader uploader={uploader}/>
       </div>

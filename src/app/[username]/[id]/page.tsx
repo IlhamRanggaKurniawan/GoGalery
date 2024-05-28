@@ -1,5 +1,6 @@
 import Content from "@/components/myComponents/content/Content";
-import { getContentById } from "@/lib/actions/content";
+import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
+import { getContentById, profileChainingContent } from "@/lib/actions/content";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -7,13 +8,15 @@ import React from "react";
 const page = async ({ params }: { params: { id: string; username: string } }) => {
   const id = parseInt(params.id);
 
-  if(isNaN(id)) {
-    return
+  if (isNaN(id)) {
+    return;
   }
 
-  const content = await getContentById(id);
+  const content = await getContentById({id})
 
-
+  if(!content) {
+    return
+  }
 
   return (
     <div className="pt-12 mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
@@ -24,10 +27,8 @@ const page = async ({ params }: { params: { id: string; username: string } }) =>
         <h1 className="text-lg font-medium">Post</h1>
       </div>
       <div className="flex flex-col gap-4 items-center">
-        {content ? 
-        <Content uploader={content.uploader.username} caption={content.caption} url={content.url} />
-         : 
-         <div>no content available</div>}
+        <Content uploader={content.uploader.username} caption={content.caption} url={content.url}/>
+        <StraightContentInfinityScroll contentFuction={profileChainingContent} parameter={{username: params.username, id}}/>
       </div>
     </div>
   );

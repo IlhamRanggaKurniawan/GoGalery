@@ -1,8 +1,8 @@
 "use server"
 
 // import { revalidatePath } from "next/cache"
-import  supabase  from "../dataStorage/bucket"
-import  prisma  from "../dataStorage/db"
+import supabase from "../dataStorage/bucket"
+import prisma from "../dataStorage/db"
 
 export interface IContent {
     id: number,
@@ -66,9 +66,15 @@ export const uploadContent = async ({ formData, uploaderId, revalidate }: { form
 }
 
 
-export const getAllContent = async () => {
+export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pageSize: number }) => {
 
     const contents: IContent[] = await prisma.content.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        orderBy: {
+            id: "desc"
+        },
         include: {
             uploader: {
                 select: {
@@ -83,17 +89,24 @@ export const getAllContent = async () => {
         throw new Error("something went wrong")
     }
 
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-
-    return contents
+    return { contents, nextCursor }
 }
 
-export const getContentByUsername = async (username : string) => {
+export const getContentByUsername = async ({ parameter, cursor, pageSize }: { parameter: string, cursor?: number, pageSize: number }) => {
+
     const contents: IContent[] = await prisma.content.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
         where: {
             uploader: {
-                username
-            } 
+                username: parameter
+            }
+        },
+        orderBy: {
+            id: "desc"
         },
         include: {
             uploader: {
@@ -103,20 +116,21 @@ export const getContentByUsername = async (username : string) => {
                 }
             }
         },
-        orderBy: {
-            createdAt: "desc"
-        }
-    }) 
+    });
 
     if (!contents) {
-        return
+        throw new Error("something went wrong")
     }
 
-    return contents
-}
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-export const getContentById = async (id : number) => {
-    const contents: IContent | null = await prisma.content.findFirst({
+    return { contents, nextCursor };
+};
+
+
+
+export const getContentById = async ({ id }: { id: number, }) => {
+    const content: IContent | null = await prisma.content.findUnique({
         where: {
             id
         },
@@ -127,21 +141,27 @@ export const getContentById = async (id : number) => {
                     username: true
                 }
             }
-        }
-    }) 
+        },
+    })
 
-    if (!contents) {
+    if (!content) {
         return
     }
 
-    return contents
+    return content
 }
 
-export const getChainingContent = async ({id} : {id: number}) => {
-    const contents: any[] = await prisma.content.findMany({
+export const profileChainingContent = async ({ id, username, pageSize, cursor }: { id: number, username: string, pageSize: number, cursor?: number }) => {
+    const contents: IContent[] | null = await prisma.content.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
         where: {
-            NOT: {
-                id
+            id: {
+                lt: id
+            },
+            uploader: {
+                username
             }
         },
         include: {
@@ -151,13 +171,43 @@ export const getChainingContent = async ({id} : {id: number}) => {
                     username: true
                 }
             }
+        },
+        orderBy: {
+            id: "desc"
         }
     })
 
-    if(!contents) {
+    if (!contents) {
         return
     }
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return contents
+    return { contents, nextCursor };
+}
+
+export const exploreChainingContent = async ({ pageSize, cursor }: { pageSize: number, cursor?: number }) => {
+    const contents: IContent[] | null = await prisma.content.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        include: {
+            uploader: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            }
+        },
+        orderBy: {
+            id: "desc"
+        }
+    })
+
+    if (!contents) {
+        return
+    }
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
+
+    return { contents, nextCursor };
 }
 

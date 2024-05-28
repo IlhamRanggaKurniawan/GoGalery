@@ -7,10 +7,10 @@ const ContentMain = ({ url, alt, preview }: { url: string; alt: string; preview?
       {preview ? (
         <Image
           src={url}
-          width={1080}
-          height={1080}
+          width={1920}
+          height={1920}
           alt={alt}
-          className="w-full aspect-square border bg-black object-contain"
+          className="w-full aspect-square border bg-black object-cover"
           loading="lazy"
           layout="responsive"
           objectFit="cover"
@@ -19,10 +19,10 @@ const ContentMain = ({ url, alt, preview }: { url: string; alt: string; preview?
       ) : (
         <Image
           src={url}
-          width={1080}
-          height={1080}
+          width={1920}
+          height={1920}
           alt={alt}
-          // className="w-full aspect-square border bg-black object-contain"
+          className="border"
           loading="lazy"
           layout="responsive"
           objectFit="cover"
