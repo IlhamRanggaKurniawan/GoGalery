@@ -1,21 +1,17 @@
 "use client";
 
-import React, {  } from "react";
-import { Button } from "../ui/button";
+import dynamic from "next/dynamic";
+import React from "react";
+import ContentSkeleton from "./content/ContentSkeleton";
+const Content = dynamic(() => import("./content/ContentMain"), {
+  loading: () => <ContentSkeleton />
+})
 
 const Test = () => {
-  const followingId = 14;
 
-  const followers = async() => {
-    console.log("halo")
-    console.log(followingId)
-  }
   return (
     <div>
-        <Button onClick={() => followers()} className="bg-slate-600">
-          follow
-        </Button>
-
+        <Content url={"https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/17168885011432379587.png"} alt={"tes"}/>
     </div>
   );
 };

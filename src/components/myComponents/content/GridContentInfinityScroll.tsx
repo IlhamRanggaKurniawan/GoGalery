@@ -3,7 +3,11 @@
 import { IContent } from "@/lib/actions/content";
 import Link from "next/link";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import ContentMain from "./ContentMain";
+import dynamic from "next/dynamic";
+import ContentSkeleton from "./ContentSkeleton";
+const ContentMain = dynamic(() => import("./ContentMain"), {
+  loading: () => <ContentSkeleton />
+})
 
 const GridContentInfinityScroll = ({ contentFuction, parameter }: { contentFuction: any; parameter?: any }) => {
   const [contents, setContents] = useState<IContent[]>([]);
@@ -18,7 +22,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter }: { contentFucti
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = parameter ? await contentFuction({ parameter, cursor: nextCursor, pageSize: 12 }) : await contentFuction({cursor: nextCursor, pageSize: 12 });
+        const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 15 })
         setContents((prevContents) => [...prevContents, ...result.contents]);
         setNextCursor(result.nextCursor ?? null);
       }

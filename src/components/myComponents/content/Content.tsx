@@ -1,8 +1,11 @@
-import React from "react";
-import ContentMain from "./ContentMain";
 import ContentHeader from "./ContentHeader";
 import ContentFooter from "./ContentFooter";
 import ContentDescription from "./ContentDescription";
+import dynamic from "next/dynamic";
+import ContentSkeleton from "./ContentSkeleton";
+const ContentMain = dynamic(() => import("./ContentMain"), {
+  loading: () => <ContentSkeleton />
+})
 
 const Content = ({uploader, url, caption}: {uploader : string, url : string, caption: string}) => {
   return (

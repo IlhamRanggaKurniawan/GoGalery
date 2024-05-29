@@ -1,8 +1,12 @@
 "use client"
 
-import { IContent } from "@/lib/actions/content";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Content from "./Content";
+import { IContent } from "@/lib/actions/content";
+import ContentSkeleton from "./ContentSkeleton";
+import dynamic from "next/dynamic";
+const Content = dynamic(() => import("./Content"), {
+  loading: () => <ContentSkeleton />
+})
 
 const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentFuction: any; parameter?: any }) => {
 
@@ -18,7 +22,9 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = parameter ? await contentFuction({ ...parameter, cursor: nextCursor, pageSize:4}) : await contentFuction({cursor: nextCursor, pageSize: 4 });
+        console.log({...parameter})
+        const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 3 })
+        console.log(result)
         setContents((prevContents) => [...prevContents, ...result.contents]);
         setNextCursor(result.nextCursor ?? null);
       }

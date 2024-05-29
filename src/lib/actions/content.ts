@@ -17,16 +17,12 @@ export interface IContent {
     }
 }
 
-export interface IContentWithUploader {
+export const uploadContent = async ({ formData, uploaderId }: { formData: FormData, uploaderId: number }) => {
 
-}
-
-export const uploadContent = async ({ formData, uploaderId, revalidate }: { formData: FormData, uploaderId: number, revalidate: string }) => {
-
-    const file = formData.get("file")
+    const file = formData.get("file") as File
     const caption = formData.get("caption") as string
 
-    if (!file || !(file instanceof File) || file.size === 0 || !caption) {
+    if (!file || file.size === 0 || !caption) {
         throw new Error("Please fill all the fields and provide a non-empty file")
     }
 
@@ -34,25 +30,22 @@ export const uploadContent = async ({ formData, uploaderId, revalidate }: { form
     const fileExtension = file.name.split('.').pop();
     const path = `Content/${date}${file.size}.${fileExtension}`
 
-    const [uploadContent, content] = await Promise.all([
-        supabase.storage.from("Connect Verse").upload(path, file),
-        prisma.content.create({
-            data: {
-                uploaderId,
-                caption,
-                url: `https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/${path}`
-            }
-        })
-    ])
+    const picture = await supabase.storage.from("Connect Verse").upload(path, file)
 
-    if (uploadContent.error) {
-        console.log(uploadContent.error)
-        throw new Error(uploadContent.error.message)
+    if (!picture || picture.error) {
+        console.log(picture.error)
+        throw new Error(picture.error.message)
     }
 
+    const content = await prisma.content.create({
+        data: {
+            uploaderId,
+            caption,
+            url: `https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/${path}`
+        }
+    })
 
     if (!content) {
-        console.log("here")
         throw new Error("something went wrong")
     }
 
@@ -62,6 +55,7 @@ export const uploadContent = async ({ formData, uploaderId, revalidate }: { form
         statusCode: 200,
         content
     };
+
 
 }
 
@@ -185,11 +179,16 @@ export const profileChainingContent = async ({ id, username, pageSize, cursor }:
     return { contents, nextCursor };
 }
 
-export const exploreChainingContent = async ({ pageSize, cursor }: { pageSize: number, cursor?: number }) => {
+export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSize: number, cursor?: number, id: number }) => {
     const contents: IContent[] | null = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,
+        where: {
+            id: {
+                not: id
+            }
+        },
         include: {
             uploader: {
                 select: {

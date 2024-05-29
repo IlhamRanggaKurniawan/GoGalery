@@ -7,7 +7,6 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { uploadContent } from "@/lib/actions/content";
-import { revalidatePath } from "next/cache";
 
 const UploadInput = () => {
   const [fileName, setFileName] = useState<string>("");
@@ -20,8 +19,6 @@ const UploadInput = () => {
     if (!e.target.files) {
       return setError("please fill all the fields");
     }
-
-    
 
     const fileType = e.target.files[0].type;
 
@@ -40,7 +37,7 @@ const UploadInput = () => {
 
     const file = formData.get("file") as File;
 
-    if (!(file instanceof File)) {
+    if (!file ) {
       return setError("please fill all the fields");
     }
 
@@ -54,17 +51,18 @@ const UploadInput = () => {
       return setError("cannot upload");
     }
 
-    const revalidate = "/"
-
     try {
-      const respond = await uploadContent({ formData, uploaderId, revalidate});
+      const respond = await uploadContent({ formData, uploaderId});
+
+      if(!respond) {
+        return
+      }
 
       if (respond.error) {
         return setError(respond.message);
       }
 
       router.push(`/${session.user.username}`);
-      revalidatePath(`/${session.user.username}`)
     } catch (error) {
       return setError("something went wrong")
     }
