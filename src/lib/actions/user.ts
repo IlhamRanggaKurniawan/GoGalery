@@ -27,9 +27,7 @@ export const getUserProfile = async (username: string) => {
         include: {
             _count: {
                 select: {
-                    followers: true,
-                    content: true,
-                    following: true
+                    content: true
                 }
             },
             content: {

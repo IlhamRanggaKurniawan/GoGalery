@@ -61,7 +61,7 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
   return (
     <div>
       {contents.length > 0 ? (
-        contents.map((content: IContent) => <Content caption={content.caption} uploader={content.uploader.username} url={content.url} key={content.id} />)
+        contents.map((content: IContent) => <Content caption={content.caption} uploader={content.uploader.username} url={content.url} key={content.id} contentId={content.id}/>)
       ) : (
         <div></div>
       )}

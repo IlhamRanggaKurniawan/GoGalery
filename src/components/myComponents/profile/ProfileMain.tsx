@@ -5,7 +5,7 @@ import ProfileBio from "./ProfileBio";
 import ProfileInfo from "./ProfileInfo";
 import FollowButton from "../FollowButton";
 
-const ProfileMain = ({ username,userId, follower, following, content }: { username: string, userId: number, follower: number, following : number, content: number }) => {
+const ProfileMain = ({ username,userId, content}: { username: string, userId: number, content: number}) => {
   
   return (
     <div>
@@ -18,7 +18,7 @@ const ProfileMain = ({ username,userId, follower, following, content }: { userna
           <h2 className="text-lg font-medium truncate">{username}</h2>
         </div>
       </div>
-      <ProfileInfo follower={follower} following={following} content={content}/>
+      <ProfileInfo userId={userId} content={content}/>
       <div className="flex justify-center my-2 gap-2">
         <FollowButton userId={userId}/>
         <Button className="py-4 px-8 max-w-24">Message</Button>

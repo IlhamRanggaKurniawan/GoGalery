@@ -71,3 +71,18 @@ export const unfollow = async ({id} : {id: number}) => {
     };
 }
 
+export const countFollow = async ({userId}: {userId: number}) => {
+    const follower = await prisma.follow.count({
+        where:{
+            followingId: userId
+        }
+    })
+
+    const following = await prisma.follow.count({
+        where: {
+            followerId: userId
+        }
+    })
+
+    return {follower, following}
+}

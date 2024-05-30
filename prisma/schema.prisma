@@ -21,28 +21,69 @@ model User {
   password  String
   role      String    @default("member")
   content   Content[]
+  like      Like[]
+  save      Save[]
+  comment   Comment[]
   followers Follow[]  @relation("followersRelation")
   following Follow[]  @relation("followingRelation")
   createdAt DateTime  @default(now())
 }
 
 model Content {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   uploaderId Int
-  uploader   User     @relation(fields: [uploaderId], references: [id])
+  uploader   User      @relation(fields: [uploaderId], references: [id])
   caption    String
-  url        String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  url        String    @unique
+  Like       Like[]
+  Save       Save[]
+  comment    Comment[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Follow {
-  id          Int   @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   followerId  Int
   followingId Int
-  follower    User  @relation("followersRelation", fields: [followerId], references: [id])
-  following   User  @relation("followingRelation", fields: [followingId], references: [id])
+  follower    User     @relation("followersRelation", fields: [followerId], references: [id])
+  following   User     @relation("followingRelation", fields: [followingId], references: [id])
   createdAt   DateTime @default(now())
 
   @@unique([followerId, followingId])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  contentId Int
+  user      User     @relation(fields: [userId], references: [id])
+  content   Content  @relation(fields: [contentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, contentId])
+}
+
+model Save {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  contentId Int
+  user      User     @relation(fields: [userId], references: [id])
+  content   Content  @relation(fields: [contentId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, contentId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  contentId Int
+  userId    Int
+  content   Content  @relation(fields: [contentId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contentId, userId])
 }

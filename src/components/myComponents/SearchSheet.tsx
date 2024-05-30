@@ -53,7 +53,7 @@ const SearchSheet = ({ children }: { children: ReactNode }) => {
               <AccountPreview key={user.username} username={user.username} />
             ))
           ) : (
-            <div className="text-center"></div>
+            <div className="text-center">Search for user</div>
           )}
         </ScrollArea>
       </SheetContent>

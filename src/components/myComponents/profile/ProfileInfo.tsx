@@ -1,7 +1,16 @@
-import { Separator } from '@/components/ui/separator'
-import React from 'react'
+"use client"
 
-const ProfileInfo = ({follower, following, content}: {follower: number, following : number, content: number}) => {
+import { Separator } from '@/components/ui/separator'
+import { useFollowStore } from '@/lib/store/followStore'
+import React, { useEffect } from 'react'
+
+const ProfileInfo = ({userId, content}: {userId: number, content: number}) => {
+  const {follower, following, countUserFollow} = useFollowStore()
+
+  useEffect(() => {
+    countUserFollow({userId})
+  }, [countUserFollow, userId, follower, following])
+
   return (
     <div className="flex justify-between items-center px-5 my-2">
         <div className="flex flex-col items-center w-[30%]">
