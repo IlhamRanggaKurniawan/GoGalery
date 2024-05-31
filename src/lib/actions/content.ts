@@ -210,5 +210,32 @@ export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSiz
     return { contents, nextCursor };
 }
 
+export const getSavedContentByUsername = async({username, cursor, pageSize}: {username: string, cursor?: number, pageSize: number}) => {
+    const contents = await prisma.content.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        where: {
+            Save: {
+                some: {
+                    user: {
+                        username
+                    }
+                }
+            }
+        },
+        orderBy: {
+            id: "desc"
+        },
+        
+    })
 
+    if (!contents) {
+        throw new Error("something went wrong")
+    }
+
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
+
+    return { contents, nextCursor };
+}
 

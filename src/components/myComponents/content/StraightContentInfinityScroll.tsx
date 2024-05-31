@@ -22,9 +22,7 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        console.log({...parameter})
         const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 3 })
-        console.log(result)
         setContents((prevContents) => [...prevContents, ...result.contents]);
         setNextCursor(result.nextCursor ?? null);
       }

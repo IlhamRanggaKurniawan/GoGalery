@@ -9,7 +9,7 @@ const ContentMain = dynamic(() => import("./ContentMain"), {
   loading: () => <ContentSkeleton />
 })
 
-const GridContentInfinityScroll = ({ contentFuction, parameter }: { contentFuction: any; parameter?: any }) => {
+const GridContentInfinityScroll = ({ contentFuction, parameter, id }: { contentFuction: any; parameter?: any, id?: any }) => {
   const [contents, setContents] = useState<IContent[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter }: { contentFucti
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 15 })
+        const result = await contentFuction({ ...id ,...parameter, cursor: nextCursor, pageSize: 15 })
         setContents((prevContents) => [...prevContents, ...result.contents]);
         setNextCursor(result.nextCursor ?? null);
       }
@@ -32,7 +32,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter }: { contentFucti
     } finally {
       setLoading(false);
     }
-  }, [loading, nextCursor, parameter, contentFuction]);
+  }, [loading, nextCursor, contentFuction, id, parameter]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
