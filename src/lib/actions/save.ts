@@ -2,9 +2,9 @@
 
 import prisma from "../dataStorage/db"
 
-export const saveContent = async({userId, contentId}: {userId: number, contentId: number}) => {
+export const saveContent = async ({ userId, contentId }: { userId: number, contentId: number }) => {
     const save = await prisma.save.create({
-        data:{
+        data: {
             userId,
             contentId
         }
@@ -23,7 +23,7 @@ export const saveContent = async({userId, contentId}: {userId: number, contentId
     }
 }
 
-export const unsaveContent = async({userId,contentId}: {userId: number, contentId: number}) => {
+export const unsaveContent = async ({ userId, contentId }: { userId: number, contentId: number }) => {
     const save = await prisma.save.findFirst({
         where: {
             userId,
@@ -31,17 +31,17 @@ export const unsaveContent = async({userId,contentId}: {userId: number, contentI
         }
     })
 
-    if(!save) {
+    if (!save) {
         return
     }
 
     const unsave = await prisma.save.delete({
-        where:{
-            id : save.id
+        where: {
+            id: save.id
         }
     })
 
-    if(!unsave) {
+    if (!unsave) {
         return {
             data: null,
             error: "something went wrong"
@@ -54,7 +54,7 @@ export const unsaveContent = async({userId,contentId}: {userId: number, contentI
     };
 }
 
-export const isSaved = async({userId, contentId}: {userId: number, contentId: number}) => {
+export const isSaved = async ({ userId, contentId }: { userId: number, contentId: number }) => {
 
     const isSave = await prisma.save.findFirst({
         where: {
@@ -75,4 +75,52 @@ export const isSaved = async({userId, contentId}: {userId: number, contentId: nu
         data: isSave,
         status: true
     }
+}
+
+export const getSavedContent = async ({ username, cursor, pageSize }: { username: string, cursor?: number, pageSize: number }) => {
+    const savedContents = await prisma.save.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        where: {
+            user: {
+                username
+            }
+        },
+        select: {
+            content: {
+                include: {
+                    uploader: {
+                        select: {
+                            id: true,
+                            username: true
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: {
+            createdAt: 'desc'
+        }
+    })
+
+    if(!savedContents) {
+        return
+    }
+    const contents = savedContents.map(save => ({
+        id: save.content.id,
+        uploaderId: save.content.uploaderId,
+        caption: save.content.caption,
+        url: save.content.url,
+        createdAt: save.content.createdAt,
+        updatedAt: save.content.updatedAt,
+        uploader: {
+            id: save.content.uploader.id,
+            username: save.content.uploader.username
+        }
+    }));
+
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
+
+    return { contents, nextCursor };
 }

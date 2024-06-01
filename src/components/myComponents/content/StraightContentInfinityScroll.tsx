@@ -4,11 +4,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IContent } from "@/lib/actions/content";
 import ContentSkeleton from "./ContentSkeleton";
 import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
 const Content = dynamic(() => import("./Content"), {
   loading: () => <ContentSkeleton />
 })
 
 const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentFuction: any; parameter?: any }) => {
+  const {data: session} = useSession()
+
 
   const [contents, setContents] = useState<IContent[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
@@ -22,7 +25,7 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 3 })
+        const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 3, username: session?.user.username  })
         setContents((prevContents) => [...prevContents, ...result.contents]);
         setNextCursor(result.nextCursor ?? null);
       }
@@ -32,7 +35,7 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
     } finally {
       setLoading(false);
     }
-  }, [loading, nextCursor, parameter, contentFuction]);
+  }, [loading, nextCursor, contentFuction, parameter, session?.user.username]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -55,6 +58,10 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
       }
     };
   }, [loadMoreContents, nextCursor]);
+
+  if(!session) {
+    return
+  }
 
   return (
     <div>

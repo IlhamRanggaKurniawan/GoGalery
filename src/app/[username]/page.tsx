@@ -22,7 +22,7 @@ const page = async ({ params }: { params: { username: string } }) => {
           <ProfileNavigation username={`${data.username}`} isTagged={false} />
         </div>
         <Separator className="my-2" />
-        <GridContentInfinityScroll contentFuction={getContentByUsername} parameter={data.username} />
+        <GridContentInfinityScroll contentFuction={getContentByUsername} parameter={data.username} href={data.username}/>
       </div>
     </div>
   );

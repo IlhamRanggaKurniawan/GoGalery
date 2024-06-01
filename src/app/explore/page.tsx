@@ -11,7 +11,7 @@ const page = async () => {
         <SearchBar />
       </SearchSheet>
       <div className="max-w-[1000px] mt-12 sm:mt-0">
-        <GridContentInfinityScroll contentFuction={getAllContent} />
+        <GridContentInfinityScroll contentFuction={getAllContent} href="explore"/>
       </div>
     </div>
   );

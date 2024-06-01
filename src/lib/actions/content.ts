@@ -210,12 +210,50 @@ export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSiz
     return { contents, nextCursor };
 }
 
-export const getSavedContentByUsername = async({username, cursor, pageSize}: {username: string, cursor?: number, pageSize: number}) => {
+export const getContentByFollowing = async ({ username, cursor, pageSize }: { username: string, cursor?: number, pageSize: number }) => {
+
     const contents = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,
         where: {
+            uploader: {
+                followers: {
+                    some: {
+                        following: {
+                            username
+                        }
+                    }
+                }
+            }
+        },
+        include: {
+            uploader: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            }
+        },
+        orderBy: {
+            id: "desc"
+        },
+    })
+
+    const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
+
+    return { contents, nextCursor };
+}
+
+export const savedChainingContent = async ({ pageSize, cursor, id, username }: { pageSize: number, cursor?: number, id: number, username: string }) => {
+    const contents: IContent[] | null = await prisma.content.findMany({
+        take: pageSize,
+        cursor: cursor ? { id: cursor } : undefined,
+        skip: cursor ? 1 : 0,
+        where: {
+            id: {
+                not: id
+            },
             Save: {
                 some: {
                     user: {
@@ -224,18 +262,25 @@ export const getSavedContentByUsername = async({username, cursor, pageSize}: {us
                 }
             }
         },
+        include: {
+            uploader: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            }
+        },
         orderBy: {
             id: "desc"
-        },
-        
+        }
     })
 
-    if (!contents) {
-        throw new Error("something went wrong")
-    }
+    console.log(contents)
 
+    if (!contents) {
+        return
+    }
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
     return { contents, nextCursor };
 }
-

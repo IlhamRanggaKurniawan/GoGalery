@@ -4,18 +4,16 @@ import React from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { LogOut, MessageCircleCode, Palette, Pin, Settings, Settings2 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 const MenuDropDown = () => {
-  const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
-  if (!session) return;
 
   return (
     <DropdownMenu>
@@ -36,7 +34,7 @@ const MenuDropDown = () => {
             <span className="font-medium">Switch theme</span>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer p-0">
-            <Link href={`/${session.user.username}/saved`} className="flex gap-3 w-full p-3">
+            <Link href="/saved" className="flex gap-3 w-full p-3">
               <Pin size={20} />
               <span className="font-medium">Saved</span>
             </Link>

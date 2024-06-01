@@ -5,11 +5,14 @@ import Link from "next/link";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import ContentSkeleton from "./ContentSkeleton";
+import { useSession } from "next-auth/react";
 const ContentMain = dynamic(() => import("./ContentMain"), {
   loading: () => <ContentSkeleton />
 })
 
-const GridContentInfinityScroll = ({ contentFuction, parameter, id }: { contentFuction: any; parameter?: any, id?: any }) => {
+const GridContentInfinityScroll = ({ contentFuction, parameter, id, href }: { contentFuction: any; parameter?: any, id?: any, href: string }) => {
+  const {data: session} = useSession()
+
   const [contents, setContents] = useState<IContent[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
   const [loading, setLoading] = useState(false);
@@ -22,7 +25,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter, id }: { contentF
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = await contentFuction({ ...id ,...parameter, cursor: nextCursor, pageSize: 15 })
+        const result = await contentFuction({ ...id ,...parameter, cursor: nextCursor, pageSize: 15, username: session?.user.username })
         setContents((prevContents) => [...prevContents, ...result.contents]);
         setNextCursor(result.nextCursor ?? null);
       }
@@ -32,7 +35,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter, id }: { contentF
     } finally {
       setLoading(false);
     }
-  }, [loading, nextCursor, contentFuction, id, parameter]);
+  }, [loading, nextCursor, contentFuction, id, parameter, session?.user.username]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -61,7 +64,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter, id }: { contentF
       {contents.length ? (
         <div className="grid grid-cols-3 gap-[1px] m-1 sm:mt-2 sm:gap-1">
           {contents.map((content) => (
-            <Link href={parameter ? `/${parameter}/${content.id}` : `/explore/${content.id}`} key={content.id}>
+            <Link href={`/${href}/${content.id}`} key={content.id}>
               <ContentMain url={content.url} alt={content.caption} preview={true} />
             </Link>
           ))}
