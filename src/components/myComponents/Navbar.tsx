@@ -34,7 +34,7 @@ const Navbar = () => {
             <span className="hidden lg:inline-block">Home</span>
           </div>
         </Link>
-        <SearchSheet>
+        <SearchSheet side="left">
           <div className="hidden sm:flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg cursor-pointer">
             <Search size={25} />
             <span className="hidden lg:inline-block">Search</span>

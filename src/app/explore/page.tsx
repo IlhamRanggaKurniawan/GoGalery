@@ -7,7 +7,7 @@ import React from "react";
 const page = async () => {
   return (
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4 flex items-center justify-center">
-      <SearchSheet>
+      <SearchSheet side="bottom">
         <SearchBar />
       </SearchSheet>
       <div className="max-w-[1000px] mt-12 sm:mt-0">

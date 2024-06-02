@@ -15,10 +15,10 @@ type user  = {
   username: string
 }
 
-const SearchSheet = ({ children }: { children: ReactNode }) => {
+const SearchSheet = ({ children, side }: { children: ReactNode, side: "left" | "bottom" | "top" | "right" }) => {
   const [search, setSearch] = useState<string>("")
   const [users, setUsers] = useState<user[]>([])
-  const [debouncedSearch] = useDebounce(search, 1000)
+  const [debouncedSearch] = useDebounce(search, 500)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getUsers = async() => {
@@ -35,7 +35,7 @@ const SearchSheet = ({ children }: { children: ReactNode }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent side={"bottom"} className="h-screen w-screen sm:w-96">
+      <SheetContent side={side} className="h-screen w-screen sm:w-96">
         <div className="flex items-center justify-between">
           <SheetHeader>
             <SheetTitle className="text-xl">Search</SheetTitle>
