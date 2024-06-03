@@ -1,4 +1,16 @@
+"use server"
+
 import prisma from "../dataStorage/db"
+
+export interface IComment {
+    id: number,
+    contentId: number,
+    userId: number,
+    text: string,
+    createdAt: Date,
+    updatedAt: Date
+}
+
 
 export const sendComment = async({userId, contentId, text}: {userId: number, contentId:number, text: string}) => {
     const comment = await prisma.comment.create({
@@ -45,4 +57,18 @@ export const deleteComment = async({commentId}: {commentId : number}) => {
     }
 
     return comment
+}
+
+export const getComment = async({contentId}: {contentId :number}) => {
+    const comments = await prisma.comment.findMany({
+        where: {
+            contentId
+        }
+    })
+
+    if(!comments) {
+        return
+    }
+
+    return comments
 }
