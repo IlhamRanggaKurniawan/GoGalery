@@ -7,11 +7,11 @@ import dynamic from "next/dynamic";
 import ContentSkeleton from "./ContentSkeleton";
 import { useSession } from "next-auth/react";
 const ContentMain = dynamic(() => import("./ContentMain"), {
-  loading: () => <ContentSkeleton />
-})
+  loading: () => <ContentSkeleton />,
+});
 
-const GridContentInfinityScroll = ({ contentFuction, parameter, id, href }: { contentFuction: any; parameter?: any, id?: any, href: string }) => {
-  const {data: session} = useSession()
+const GridContentInfinityScroll = ({ contentFuction, accountUsername, id, href }: { contentFuction: any; accountUsername?: string; id?: any; href: string }) => {
+  const { data: session } = useSession();
 
   const [contents, setContents] = useState<IContent[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
@@ -25,9 +25,11 @@ const GridContentInfinityScroll = ({ contentFuction, parameter, id, href }: { co
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = await contentFuction({ ...id ,...parameter, cursor: nextCursor, pageSize: 15, username: session?.user.username })
-        setContents((prevContents) => [...prevContents, ...result.contents]);
-        setNextCursor(result.nextCursor ?? null);
+        const result = await contentFuction({ ...id, accountUsername, cursor: nextCursor, pageSize: 15, username: session?.user.username });
+        if (result) {
+          setContents((prevContents) => [...prevContents, ...result.contents]);
+          setNextCursor(result.nextCursor ?? null);
+        }
       }
     } catch (error) {
       console.error("Failed to load contents:", error);
@@ -35,7 +37,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter, id, href }: { co
     } finally {
       setLoading(false);
     }
-  }, [loading, nextCursor, contentFuction, id, parameter, session?.user.username]);
+  }, [loading, nextCursor, contentFuction, id, accountUsername, session?.user.username]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -74,7 +76,7 @@ const GridContentInfinityScroll = ({ contentFuction, parameter, id, href }: { co
       )}
       {error && <p className="text-red-600">{error}</p>}
 
-      <div ref={triggerRef} className="w-full h-1"></div>
+      <div ref={triggerRef} className="w-full h-1" />
     </div>
   );
 };

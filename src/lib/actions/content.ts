@@ -55,8 +55,6 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
         statusCode: 200,
         content
     };
-
-
 }
 
 
@@ -88,7 +86,7 @@ export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pag
     return { contents, nextCursor }
 }
 
-export const getContentByUsername = async ({ parameter, cursor, pageSize }: { parameter: string, cursor?: number, pageSize: number }) => {
+export const getContentByUsername = async ({ accountUsername, cursor, pageSize }: { accountUsername: string, cursor?: number, pageSize: number }) => {
 
     const contents: IContent[] = await prisma.content.findMany({
         take: pageSize,
@@ -96,7 +94,7 @@ export const getContentByUsername = async ({ parameter, cursor, pageSize }: { pa
         skip: cursor ? 1 : 0,
         where: {
             uploader: {
-                username: parameter
+                username: accountUsername
             }
         },
         orderBy: {
@@ -174,6 +172,7 @@ export const profileChainingContent = async ({ id, username, pageSize, cursor }:
     if (!contents) {
         return
     }
+
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
     return { contents, nextCursor };
@@ -205,12 +204,13 @@ export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSiz
     if (!contents) {
         return
     }
+
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
     return { contents, nextCursor };
 }
 
-export const getContentByFollowing = async ({ username, cursor, pageSize }: { username: string, cursor?: number, pageSize: number }) => {
+export const getContentByFollowing = async ({ userId, cursor, pageSize }: { userId: number, cursor?: number, pageSize: number }) => {
 
     const contents = await prisma.content.findMany({
         take: pageSize,
@@ -218,15 +218,13 @@ export const getContentByFollowing = async ({ username, cursor, pageSize }: { us
         skip: cursor ? 1 : 0,
         where: {
             uploader: {
-                followers: {
-                    some: {
-                        following: {
-                            username
-                        }
-                    }
-                }
-            }
-        },
+              following: {
+                some: {
+                  followerId: userId,
+                },
+              },
+            },
+          },
         include: {
             uploader: {
                 select: {
@@ -274,8 +272,6 @@ export const savedChainingContent = async ({ pageSize, cursor, id, username }: {
             id: "desc"
         }
     })
-
-    console.log(contents)
 
     if (!contents) {
         return

@@ -15,18 +15,19 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String    @unique
-  password  String
-  role      String    @default("member")
-  content   Content[]
-  like      Like[]
-  save      Save[]
-  comment   Comment[]
-  followers Follow[]  @relation("followersRelation")
-  following Follow[]  @relation("followingRelation")
-  createdAt DateTime  @default(now())
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
+  email        String         @unique
+  password     String
+  role         String         @default("member")
+  content      Content[]
+  like         Like[]
+  save         Save[]
+  comment      Comment[]
+  followers    Follow[]       @relation("followersRelation")
+  following    Follow[]       @relation("followingRelation")
+  Notification Notification[]
+  createdAt    DateTime       @default(now())
 }
 
 model Content {
@@ -86,4 +87,14 @@ model Comment {
   updatedAt DateTime @updatedAt
 
   @@index([contentId, userId])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  type      String
+  content   String 
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

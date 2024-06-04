@@ -8,22 +8,22 @@ import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import { IComment, sendComment } from "@/lib/actions/comment";
 
-const CommentSheet = ({ children, contentId }: { children: React.ReactNode; contentId: number }) => {
+const CommentSheet = ({ children, contentId, comments }: { children: React.ReactNode; contentId: number, comments: IComment[] }) => {
   const [text, setText] = useState("");
-  const [comments, setComments] = useState<IComment[]>([])
   const { data: session } = useSession();
 
   const submitComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (session) {
-      const comment: any = await sendComment({ text, userId: session.user.id, contentId });
+      const comment = await sendComment({ text, userId: session.user.id, contentId });
 
-      if(comment) {
+      if (comment) {
         setText("");
-        setComments((prevComments) => [ ...prevComments, ...comment])
+        comments.unshift(comment)
       }
     }
   };
+
 
   return (
     <Sheet>
@@ -34,44 +34,9 @@ const CommentSheet = ({ children, contentId }: { children: React.ReactNode; cont
         </SheetHeader>
         <Separator className="my-1" />
         <div className="flex flex-col pb-4 h-[26rem] sm:h-[633px] gap-1 overflow-y-scroll px-3">
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
-          <Comment text="halo" />
+          {comments.map((comment) => (
+            <Comment text={comment.text} username={comment.user.username} key={comment.id} createdAt={comment.createdAt} uploader={comment.content.uploader.username} commentId={comment.id} />
+          ))}
         </div>
         <form className="w-full h-14 border-y-2" onSubmit={submitComment}>
           <Input required placeholder="Send a comment" className="border-0 rounded-none h-14" value={text} onChange={(e) => setText(e.target.value)} />

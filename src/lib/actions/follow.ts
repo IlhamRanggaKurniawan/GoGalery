@@ -1,6 +1,7 @@
 "use server"
 
 import prisma from "../dataStorage/db"
+import { createNotification } from "./notification"
 
 export const isFollowing = async ({ followerId, followingId }: { followerId: number, followingId: number }) => {
 
@@ -18,6 +19,9 @@ export const isFollowing = async ({ followerId, followingId }: { followerId: num
         }
     }
 
+    console.log(isFollow)
+
+
 
     return {
         data: isFollow,
@@ -28,12 +32,17 @@ export const isFollowing = async ({ followerId, followingId }: { followerId: num
 
 
 
-export const follow  = async ({ followerId, followingId }: { followerId: number, followingId: number }) => {
+export const follow = async ({ followerId, followingId }: { followerId: number, followingId: number }) => {
 
     const follow = await prisma.follow.create({
         data: {
             followerId,
             followingId
+        },
+        include: {
+            follower: {
+
+            }
         }
     })
 
@@ -44,6 +53,21 @@ export const follow  = async ({ followerId, followingId }: { followerId: number,
         }
     }
 
+    await prisma.notification.create({
+        data: {
+            userId: followingId,
+            type: "follow",
+            content: `${follow.follower.username} follow you`
+        }
+    })
+
+    await createNotification({
+        receiverId: followingId,
+        type: "follow",
+        content: `${follow.follower.username} follow you`,
+        senderId: follow.followerId
+    })
+
     return {
         data: follow,
         error: null
@@ -51,14 +75,14 @@ export const follow  = async ({ followerId, followingId }: { followerId: number,
 }
 
 
-export const unfollow = async ({id} : {id: number}) => {
+export const unfollow = async ({ id }: { id: number }) => {
     const unfollow = await prisma.follow.delete({
         where: {
             id
         }
     });
 
-    if(!unfollow) {
+    if (!unfollow) {
         return {
             data: null,
             error: "something went wrong"
@@ -71,9 +95,9 @@ export const unfollow = async ({id} : {id: number}) => {
     };
 }
 
-export const countFollow = async ({userId}: {userId: number}) => {
+export const countFollow = async ({ userId }: { userId: number }) => {
     const follower = await prisma.follow.count({
-        where:{
+        where: {
             followingId: userId
         }
     })
@@ -84,5 +108,5 @@ export const countFollow = async ({userId}: {userId: number}) => {
         }
     })
 
-    return {follower, following}
+    return { follower, following }
 }

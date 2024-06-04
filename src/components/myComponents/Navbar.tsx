@@ -1,26 +1,26 @@
 "use client";
 
-import { CircleUser, Compass, Home, ImageUp, MessageCircle, Rocket, Search } from "lucide-react";
+import { Bell, CircleUser, Compass, Home, ImageUp, MessageCircle, Rocket, Search } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import SearchSheet from "./SearchSheet";
 import MenuDropDown from "./MenuDropDown";
 import { useSession } from "next-auth/react";
-
-interface User {
-  email?: string;
-  id?: number;
-  username?: string;
-  role?: string;
-}
-
-interface Session {
-  user: User;
-  expires: string;
-}
+import NotificationSheet from "./Notification/NotificationSheet";
+import { getAllNotification, INotification } from "@/lib/actions/notification";
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const [notifications, setNotifications] = useState<INotification[]>([]);
+
+  const getNotification = async () => {
+    if (session) {
+      const response: any = await getAllNotification({ userId: session.user.id });
+
+      setNotifications(response);
+    }
+  };
+
   return (
     <div className="h-14 bg-background fixed bottom-0 left-0 w-screen sm:h-full sm:w-14 md:w-16 lg:w-56 z-50 flex flex-col sm:border-r-2 sm:justify-evenly py-4">
       <div className="hidden sm:flex items-center justify-center gap-2 font-bold text-primary">
@@ -52,6 +52,14 @@ const Navbar = () => {
             <span className="hidden lg:inline-block">Upload</span>
           </div>
         </Link>
+        <button className="hidden sm:flex" onClick={getNotification}>
+          <NotificationSheet side="left" notifications={notifications}>
+            <div className="hidden sm:flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
+              <Bell size={25} />
+              <span className="hidden lg:inline-block">Notification</span>
+            </div>
+          </NotificationSheet>
+        </button>
         <Link href="/messages" title="Send message">
           <div className="flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
             <MessageCircle size={25} />

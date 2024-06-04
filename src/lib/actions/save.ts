@@ -70,7 +70,6 @@ export const isSaved = async ({ userId, contentId }: { userId: number, contentId
         }
     }
 
-
     return {
         data: isSave,
         status: true

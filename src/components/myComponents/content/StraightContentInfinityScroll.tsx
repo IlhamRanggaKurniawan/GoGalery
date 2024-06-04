@@ -1,33 +1,43 @@
-"use client"
+"use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { IContent } from "@/lib/actions/content";
+import { getAllContent, IContent } from "@/lib/actions/content";
 import ContentSkeleton from "./ContentSkeleton";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 const Content = dynamic(() => import("./Content"), {
-  loading: () => <ContentSkeleton />
-})
+  loading: () => <ContentSkeleton />,
+});
 
-const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentFuction: any; parameter?: any }) => {
-  const {data: session} = useSession()
-
+const StraightContentInfinityScroll = ({ contentFuction, id, accountUsername }: { contentFuction: any; id?: number; accountUsername?: string }) => {
+  const { data: session } = useSession();
 
   const [contents, setContents] = useState<IContent[]>([]);
+  const [altContents, setAltContents] = useState<IContent[]>([]);
   const [nextCursor, setNextCursor] = useState<number | null>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const triggerRef = useRef<HTMLDivElement | null>(null);
-  
+
   const loadMoreContents = useCallback(async () => {
     if (loading || nextCursor === null) return;
 
     setLoading(true);
     try {
       if (nextCursor !== null) {
-        const result = await contentFuction({ ...parameter, cursor: nextCursor, pageSize: 3, username: session?.user.username  })
-        setContents((prevContents) => [...prevContents, ...result.contents]);
+        const result = await contentFuction({ id, accountUsername, cursor: nextCursor, pageSize: 3, username: session?.user.username, userId: session?.user.id });
+        const contents = result.contents;
+
+        if (!result || contents.length === 0) {
+          const response = await getAllContent({ cursor: nextCursor, pageSize: 3 });
+          setAltContents((prevContents) => [...prevContents, ...response.contents]);
+          setNextCursor(response.nextCursor ?? null);
+          return;
+        }
+
+        setContents((prevContents) => [...prevContents, ...contents]);
         setNextCursor(result.nextCursor ?? null);
+        return;
       }
     } catch (error) {
       console.error("Failed to load contents:", error);
@@ -35,7 +45,7 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
     } finally {
       setLoading(false);
     }
-  }, [loading, nextCursor, contentFuction, parameter, session?.user.username]);
+  }, [loading, nextCursor, contentFuction, id, accountUsername, session?.user.username, session?.user.id]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -59,16 +69,20 @@ const StraightContentInfinityScroll = ({ contentFuction, parameter }: { contentF
     };
   }, [loadMoreContents, nextCursor]);
 
-  if(!session) {
-    return
+  if (!session) {
+    return;
   }
 
   return (
     <div>
       {contents.length > 0 ? (
-        contents.map((content: IContent) => <Content caption={content.caption} uploader={content.uploader.username} url={content.url} key={content.id} contentId={content.id}/>)
+        contents.map((content: IContent) => <Content caption={content.caption} uploader={content.uploader.username} url={content.url} key={content.id} contentId={content.id} />)
       ) : (
-        <div></div>
+        <div>
+          {altContents.map((content: IContent) => (
+            <Content caption={content.caption} uploader={content.uploader.username} url={content.url} key={content.id} contentId={content.id} />
+          ))}
+        </div>
       )}
       {error && <p className="text-red-600">{error}</p>}
       <div ref={triggerRef} className="w-full h-1"></div>

@@ -1,12 +1,26 @@
 "use server"
 
 import prisma from "../dataStorage/db"
+import { createNotification } from "./notification"
 
 export const likeContent = async({userId, contentId}: {userId: number, contentId: number}) => {
     const like = await prisma.like.create({
         data:{
             userId,
             contentId
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            },
+            content: {
+                include: {
+                    uploader: true
+                }
+            }
         }
     })
 
@@ -16,6 +30,15 @@ export const likeContent = async({userId, contentId}: {userId: number, contentId
             error: "something went wrong"
         }
     }
+
+    await createNotification({
+        receiverId: like.content.uploaderId,
+        type: "like",
+        content: `${like.user.username} like your content`,
+        senderId: userId
+    })
+
+    console.log("halo")
 
     return {
         data: like,
@@ -69,7 +92,6 @@ export const isLike = async({userId, contentId}: {userId: number, contentId: num
             status: false
         }
     }
-
 
     return {
         data: isLike,

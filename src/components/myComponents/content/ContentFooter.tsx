@@ -8,11 +8,14 @@ import React, { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import  CommentSheet  from "../Comment/CommentSheet";
 import { useTheme } from "next-themes";
+import { getComments, IComment } from "@/lib/actions/comment";
 
 const ContentFooter = ({ contentId }: { contentId: number }) => {
   const [isLike, setIsLike] = useState(false);
   const [isSave, setIsSave] = useState(false);
   const [pinColor, setPinColor] = useState("black");
+  const [comments, setComments] = useState<IComment[]>([]);
+
   const { data: session } = useSession();
   const { theme } = useTheme();
 
@@ -70,16 +73,25 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
     return await unsaveContent({ userId: session.user.id, contentId });
   }, 300);
 
+  const getAllComment = async () => {
+    const comments = await getComments({ contentId });
+
+    if (comments) {
+      setComments(comments);
+    }
+  };
+
+
   return (
     <div>
       <div className="flex justify-between m-2">
         <div className="flex gap-3">
           <button onClick={() => debouncedLike()}>{isLike ? <Star fill="#FFF200" color="#FFF200" /> : <Star />}</button>
-          <div className="flex items-center">
-            <CommentSheet contentId={contentId}>
+          <button className="flex items-center" onClick={getAllComment}>
+            <CommentSheet contentId={contentId} comments={comments}>
               <MessageCircle className="cursor-pointer" />
             </CommentSheet>
-          </div>
+          </button>
           <button>
             <ExternalLink />
           </button>

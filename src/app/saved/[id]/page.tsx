@@ -28,7 +28,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
       <div className="flex flex-col gap-4 items-center">
       <Content uploader={content.uploader.username} caption={content.caption} url={content.url} contentId={content.id}/>
-      <StraightContentInfinityScroll contentFuction={savedChainingContent} parameter={{id}}/>
+      <StraightContentInfinityScroll contentFuction={savedChainingContent} id={id}/>
       </div>
     </div>
   );
