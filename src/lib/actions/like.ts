@@ -4,7 +4,7 @@ import prisma from "../dataStorage/db"
 import { createNotification } from "./notification"
 
 export const likeContent = async({userId, contentId}: {userId: number, contentId: number}) => {
-    const like = await prisma.like.create({
+    const like = await prisma.likeContent.create({
         data:{
             userId,
             contentId
@@ -47,7 +47,7 @@ export const likeContent = async({userId, contentId}: {userId: number, contentId
 }
 
 export const unlikeContent = async({userId,contentId}: {userId: number, contentId: number}) => {
-    const like = await prisma.like.findFirst({
+    const like = await prisma.likeContent.findFirst({
         where: {
             userId,
             contentId
@@ -58,7 +58,7 @@ export const unlikeContent = async({userId,contentId}: {userId: number, contentI
         return
     }
 
-    const unlike = await prisma.like.delete({
+    const unlike = await prisma.likeContent.delete({
         where:{
             id : like.id
         }
@@ -79,7 +79,7 @@ export const unlikeContent = async({userId,contentId}: {userId: number, contentI
 
 export const isLike = async({userId, contentId}: {userId: number, contentId: number}) => {
 
-    const isLike = await prisma.like.findFirst({
+    const isLike = await prisma.likeContent.findFirst({
         where: {
             userId,
             contentId

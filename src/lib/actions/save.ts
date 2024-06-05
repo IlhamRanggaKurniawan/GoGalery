@@ -3,7 +3,7 @@
 import prisma from "../dataStorage/db"
 
 export const saveContent = async ({ userId, contentId }: { userId: number, contentId: number }) => {
-    const save = await prisma.save.create({
+    const save = await prisma.saveContent.create({
         data: {
             userId,
             contentId
@@ -24,7 +24,7 @@ export const saveContent = async ({ userId, contentId }: { userId: number, conte
 }
 
 export const unsaveContent = async ({ userId, contentId }: { userId: number, contentId: number }) => {
-    const save = await prisma.save.findFirst({
+    const save = await prisma.saveContent.findFirst({
         where: {
             userId,
             contentId
@@ -35,7 +35,7 @@ export const unsaveContent = async ({ userId, contentId }: { userId: number, con
         return
     }
 
-    const unsave = await prisma.save.delete({
+    const unsave = await prisma.saveContent.delete({
         where: {
             id: save.id
         }
@@ -56,7 +56,7 @@ export const unsaveContent = async ({ userId, contentId }: { userId: number, con
 
 export const isSaved = async ({ userId, contentId }: { userId: number, contentId: number }) => {
 
-    const isSave = await prisma.save.findFirst({
+    const isSave = await prisma.saveContent.findFirst({
         where: {
             userId,
             contentId
@@ -77,7 +77,7 @@ export const isSaved = async ({ userId, contentId }: { userId: number, contentId
 }
 
 export const getSavedContent = async ({ username, cursor, pageSize }: { username: string, cursor?: number, pageSize: number }) => {
-    const savedContents = await prisma.save.findMany({
+    const savedContents = await prisma.saveContent.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,

@@ -38,7 +38,7 @@ export const getUserProfile = async (username: string) => {
         },
     })
 
-    // console.log(user)
+    console.log(user)
 
     if (!user) {
         return ({

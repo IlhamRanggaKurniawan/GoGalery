@@ -61,3 +61,18 @@ export const getAllNotification = async ({userId}: {userId: number}) => {
 
     return notifications
 }
+
+export const checkNotification = async ({userId}: {userId: number}) => {
+    const notification = await prisma.notification.findFirst({
+        where: {
+            userId,
+            isRead: false
+        }
+    })
+
+    if(!notification) {
+        return false
+    }
+
+    return true
+}

@@ -15,32 +15,35 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  username     String         @unique
-  email        String         @unique
-  password     String
-  role         String         @default("member")
-  content      Content[]
-  like         Like[]
-  save         Save[]
-  comment      Comment[]
-  followers    Follow[]       @relation("followersRelation")
-  following    Follow[]       @relation("followingRelation")
-  Notification Notification[]
-  createdAt    DateTime       @default(now())
+  id            Int             @id @default(autoincrement())
+  username      String          @unique
+  email         String          @unique
+  password      String
+  role          String          @default("member")
+  content       Content[]
+  likeContent   LikeContent[]
+  saveContent   SaveContent[]
+  comment       Comment[]
+  followers     Follow[]        @relation("followersRelation")
+  following     Follow[]        @relation("followingRelation")
+  Notification  Notification[]
+  createdAt     DateTime        @default(now())
+  GroupChat     GroupChat[]
+  DirectMessage DirectMessage[]
+  Message       Message[]
 }
 
 model Content {
-  id         Int       @id @default(autoincrement())
-  uploaderId Int
-  uploader   User      @relation(fields: [uploaderId], references: [id])
-  caption    String
-  url        String    @unique
-  Like       Like[]
-  Save       Save[]
-  comment    Comment[]
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id          Int           @id @default(autoincrement())
+  uploaderId  Int
+  uploader    User          @relation(fields: [uploaderId], references: [id])
+  caption     String
+  url         String        @unique
+  likeContent LikeContent[]
+  Save        SaveContent[]
+  comment     Comment[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model Follow {
@@ -54,7 +57,7 @@ model Follow {
   @@unique([followerId, followingId])
 }
 
-model Like {
+model LikeContent {
   id        Int      @id @default(autoincrement())
   userId    Int
   contentId Int
@@ -65,7 +68,7 @@ model Like {
   @@unique([userId, contentId])
 }
 
-model Save {
+model SaveContent {
   id        Int      @id @default(autoincrement())
   userId    Int
   contentId Int
@@ -94,7 +97,36 @@ model Notification {
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   type      String
-  content   String 
+  content   String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+model DirectMessage {
+  id           Int       @id @default(autoincrement())
+  participants User[]
+  message      Message[]
+  createdAt    DateTime  @default(now())
+
+}
+
+model GroupChat {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  member    User[]
+  message   Message[]
+  createdAt DateTime  @default(now())
+}
+
+model Message {
+  id              Int            @id @default(autoincrement())
+  message         String
+  senderId        Int
+  sender          User           @relation(fields: [senderId], references: [id])
+  directMessageId Int?
+  DirectMessage   DirectMessage? @relation(fields: [directMessageId], references: [id])
+  groupChatId     Int?
+  GroupChat       GroupChat?     @relation(fields: [groupChatId], references: [id])
+  isRead          Boolean        @default(false)
+  createdAt       DateTime       @default(now())
 }
