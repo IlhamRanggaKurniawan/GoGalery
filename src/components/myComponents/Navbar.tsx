@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, CircleUser, Compass, Home, ImageUp, MessageCircle, Rocket, Search } from "lucide-react";
+import { Bell, CircleUser, Compass, Home, ImageUp, MessageCircle, Rocket, Search, Users } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import SearchSheet from "./SearchSheet";
@@ -70,7 +70,7 @@ const Navbar = () => {
             <div className="hidden sm:flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
               <div className="relative">
                 <Bell size={25} />
-                {isNotification && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600"></span>}
+                {isNotification && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600"/>}
               </div>
               <span className="hidden lg:inline-block">Notification</span>
             </div>
@@ -79,7 +79,13 @@ const Navbar = () => {
         <Link href="/messages" title="Send message">
           <div className="flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
             <MessageCircle size={25} />
-            <span className="hidden lg:inline-block">Messages</span>
+            <span className="hidden lg:inline-block">Private Chat</span>
+          </div>
+        </Link>
+        <Link href="/group" title="Send message">
+          <div className="flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
+            <Users size={25} />
+            <span className="hidden lg:inline-block">Group Chat</span>
           </div>
         </Link>
         <Link href={`/${session?.user?.username}`} title="Profile page">

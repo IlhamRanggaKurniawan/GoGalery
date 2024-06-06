@@ -4,7 +4,6 @@ import prisma from "../dataStorage/db"
 
 export const sendMessage = async ({message, senderId, directMessageId, groupId}: {message: string, senderId: number, directMessageId?: number, groupId?: number  }) => {
 
-
     const chat = directMessageId ? await prisma.message.create({
         data: {
             senderId,
