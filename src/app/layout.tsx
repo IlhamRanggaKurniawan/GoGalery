@@ -19,15 +19,20 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  const hideNavbar = pathname === "/login" || pathname === "/register";
-
+  const hideNavbar = /^\/(login|register)$/.test(pathname);
+  const hideNavbarOnMobile = /^\/(group\/.*|messages\/.*)$/.test(pathname);
+  
   return (
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {children}
-            {!hideNavbar && <Navbar />}
+            {!hideNavbar && (
+              <div className={hideNavbarOnMobile ? "hidden sm:flex" : ""}>
+                <Navbar />
+              </div>
+            )}
           </ThemeProvider>
         </SessionProvider>
       </body>

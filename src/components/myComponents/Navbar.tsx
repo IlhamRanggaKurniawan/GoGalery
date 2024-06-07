@@ -82,7 +82,7 @@ const Navbar = () => {
             <span className="hidden lg:inline-block">Private Chat</span>
           </div>
         </Link>
-        <Link href="/group" title="Send message">
+        <Link href="/group" title="Send message" className="hidden sm:flex">
           <div className="flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
             <Users size={25} />
             <span className="hidden lg:inline-block">Group Chat</span>
