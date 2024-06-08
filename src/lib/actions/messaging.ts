@@ -67,7 +67,7 @@ export const createGroup = async ({ name, member }: { name: string, member: any[
     return group
 }
 
-export const createDM = async ({ participants }: { participants: any[] }) => {
+export const createDM = async ({ participants }: { participants: [{ id: number }] }) => {
     const DM = await prisma.directMessage.create({
         data: {
             participants: {
@@ -83,26 +83,31 @@ export const createDM = async ({ participants }: { participants: any[] }) => {
     return DM
 }
 
-export const getAllMessage = async ({ directMessageId, groupChatId }: { directMessageId?: number, groupChatId?: number }) => {
+export const getDirectMessageData = async ({ directMessageId }: { directMessageId: number }) => {
 
-    const chat = directMessageId ? await prisma.message.findMany({
+    const data = await prisma.directMessage.findUnique({
         where: {
-            directMessageId
+            id: directMessageId
+        },
+        include: {
+            message: {},
+            participants: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            }
         }
-    }) : await prisma.message.findMany({
-        where: {
-            groupChatId
-        }
-    });
+    })
 
-    if (!chat) {
+    if (!data) {
         return
     }
 
-    return chat
+    return data
 }
 
-export const getExistingDM = async ({ userId }: { userId: number }) => {
+export const getDirectMessage = async ({ userId }: { userId: number }) => {
     const DM = await prisma.directMessage.findMany({
         where: {
             participants: {
@@ -125,7 +130,47 @@ export const getExistingDM = async ({ userId }: { userId: number }) => {
         return
     }
 
-    console.log(DM)
-
     return DM
+}
+
+export const getGroup = async ({ userId }: { userId: number }) => {
+    const group = await prisma.groupChat.findMany({
+        where: {
+            member: {
+                some: {
+                    id: userId
+                }
+            }
+        }
+    })
+
+    if (!group) {
+        return
+    }
+
+    return group
+}
+
+export const getGroupData = async ({ groupChatId }: { groupChatId: number }) => {
+
+    const data = await prisma.groupChat.findUnique({
+        where: {
+            id: groupChatId
+        },
+        include: {
+            message: {},
+            member: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            }
+        }
+    })
+
+    if (!data) {
+        return
+    }
+
+    return data
 }

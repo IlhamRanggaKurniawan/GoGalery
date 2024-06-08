@@ -3,50 +3,54 @@
 import React, { useEffect, useState } from "react";
 import Contact from "./Contact";
 import { useSession } from "next-auth/react";
-import { getExistingDM, IDM } from "@/lib/actions/messaging";
+import { getDirectMessage, getGroup, IDM } from "@/lib/actions/messaging";
 
 const ContactList = ({ group }: { group: boolean }) => {
   const { data: session } = useSession();
 
-  const [contacts, setContacts] = useState<IDM[]>([])
+  const [contacts, setContacts] = useState<IDM[]>([]);
+  const [groupList, setGroupList] = useState<any[]>([]);
 
   const getAllContact = async () => {
-    if (session) {
-      const DM: any = await getExistingDM({ userId: session.user.id });
-
-      setContacts(DM)
+    if (!session) {
+      return;
     }
+
+    if (!group) {
+      const DM: any = await getDirectMessage({ userId: session.user.id });
+
+      return setContacts(DM);
+    }
+
+    const Group: any = await getGroup({ userId: session.user.id });
+
+    return setGroupList(Group);
   };
 
   useEffect(() => {
     getAllContact();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
-  if(!session) {
-    return
+  if (!session) {
+    return;
   }
 
   return (
     <div>
-        {contacts.map((contact) => {
-        // Find the participant that is not the current user
-        const otherParticipant = contact.participants.find(
-          (participant) => participant.id !== session.user.id
-        );
+      {group ? (
+        groupList.map((group) => (
+          <Contact key={group.id} group id={group.id} name={group.name}/>
+        ))
+      ) : (
+        contacts.map((contact) => {
+          const otherParticipant = contact.participants.find((participant: any) => participant.id !== session.user.id);
 
-        // If otherParticipant is found, display their username
-        const name = otherParticipant ? otherParticipant.username : "Unknown";
+          const name = otherParticipant?.username;
 
-        return (
-          <Contact
-            key={contact.id}
-            id={contact.id}
-            group={group}
-            name={name}
-          />
-        );
-      })}
+          return <Contact key={contact.id} id={contact.id} group={false} name={name} />;
+        })
+      )}
     </div>
   );
 };

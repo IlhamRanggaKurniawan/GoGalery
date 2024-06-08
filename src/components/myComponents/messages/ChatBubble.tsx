@@ -12,7 +12,7 @@ const ChatBubble = ({ message, senderId }: {  message: string, senderId: number 
 
   return (
     <div>
-      {senderId !== session.user.id ? (
+      {senderId === session.user.id ? (
         <div className="flex py-1 justify-end">
           <div className="w-fit px-4 py-2 max-w-[60%] rounded-lg bg-blue-300 text-white break-words text-sm rounded-ee-none">
             {message}
