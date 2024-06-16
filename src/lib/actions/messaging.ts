@@ -1,6 +1,7 @@
 "use server"
 
 import prisma from "../dataStorage/db"
+import pusher from "../pusher"
 
 export interface IDM {
     id: number,
@@ -33,6 +34,13 @@ export const sendMessage = async ({ message, senderId, directMessageId, groupId 
         return
     }
 
+    pusher.trigger(directMessageId ? `dm-${directMessageId}` : `group-${groupId}`, 'new-message', {
+        senderId,
+        message,
+        directMessageId,
+        groupId
+    });
+
     return chat
 }
 
@@ -46,6 +54,10 @@ export const deleteMessage = async ({ id }: { id: number }) => {
     if (!chat) {
         return
     }
+
+    pusher.trigger('messages', 'delete-message', {
+        id
+    });
 
     return chat
 }
@@ -67,7 +79,7 @@ export const createGroup = async ({ name, member }: { name: string, member: any[
     return group
 }
 
-export const createDM = async ({ participants }: { participants: [{ id: number }] }) => {
+export const createDM = async ({ participants }: { participants: { id: number }[] }) => {
     const DM = await prisma.directMessage.create({
         data: {
             participants: {
@@ -173,4 +185,20 @@ export const getGroupData = async ({ groupChatId }: { groupChatId: number }) => 
     }
 
     return data
+}
+
+export const checkExistingDM = async ({participantIDs}: {participantIDs: number[]}) => {
+    const dm = await prisma.directMessage.findFirst({
+        where: {
+            participants: {
+                every: {
+                    id: {
+                        in: participantIDs
+                    }
+                }
+            }
+        }
+    })
+
+    return dm
 }

@@ -14,7 +14,6 @@ const MenuDropDown = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
@@ -25,9 +24,11 @@ const MenuDropDown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 ml-2" side="top">
         <DropdownMenuGroup className="flex flex-col gap-1">
-          <DropdownMenuItem className="flex gap-3 p-3 cursor-pointer">
-            <Settings size={20} />
-            <span className="font-medium">Setting</span>
+          <DropdownMenuItem className="cursor-pointer p-0">
+            <Link href="/setting" className="flex gap-3 w-full p-3">
+              <Settings size={20} />
+              <span className="font-medium">Setting</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="flex gap-3 p-3 cursor-pointer" onClick={() => toggleTheme()}>
             <Palette size={20} />

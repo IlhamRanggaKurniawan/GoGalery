@@ -15,23 +15,26 @@ export interface INotification {
     }
 }
 
-export const createNotification = async ({receiverId, type, content, senderId}: {receiverId: number, type: string, content: string, senderId: number}) => {
-    if(receiverId === senderId) {
-        return 
+export const createNotification = async ({ receiverId, type, content, senderId }: { receiverId: number, type: string, content: string, senderId: number }) => {
+    if (receiverId === senderId) {
+        return
     }
 
     const notification = await prisma.notification.create({
         data: {
-            userId: receiverId ,
+            userId: receiverId,
             type,
             content
+        },
+        include: {
+            user: {}
         }
     })
 
     return notification
 }
 
-export const getAllNotification = async ({userId}: {userId: number}) => {
+export const getAllNotification = async ({ userId }: { userId: number }) => {
     const notifications = await prisma.notification.findMany({
         where: {
             userId
@@ -43,16 +46,20 @@ export const getAllNotification = async ({userId}: {userId: number}) => {
                     username: true
                 }
             }
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     })
 
-    if(!notifications) {
+    if (!notifications) {
         return
     }
 
     await prisma.notification.updateMany({
         where: {
-            userId
+            userId,
+            isRead: false
         },
         data: {
             isRead: true
@@ -62,7 +69,7 @@ export const getAllNotification = async ({userId}: {userId: number}) => {
     return notifications
 }
 
-export const checkNotification = async ({userId}: {userId: number}) => {
+export const checkNotification = async ({ userId }: { userId: number }) => {
     const notification = await prisma.notification.findFirst({
         where: {
             userId,
@@ -70,7 +77,7 @@ export const checkNotification = async ({userId}: {userId: number}) => {
         }
     })
 
-    if(!notification) {
+    if (!notification) {
         return false
     }
 

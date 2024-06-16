@@ -9,28 +9,29 @@ import { Separator } from "../ui/separator";
 import AccountPreview from "./AccountPreview";
 import { ScrollArea } from "../ui/scroll-area";
 import { findUser } from "@/lib/actions/user";
-import { useDebounce } from "use-debounce"
+import { useDebounce } from "use-debounce";
+import Link from "next/link";
 
-type user  = {
-  username: string
-}
+type user = {
+  username: string;
+};
 
-const SearchSheet = ({ children, side }: { children: ReactNode, side: "left" | "bottom" | "top" | "right" }) => {
-  const [search, setSearch] = useState<string>("")
-  const [users, setUsers] = useState<user[]>([])
-  const [debouncedSearch] = useDebounce(search, 500)
+const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "bottom" | "top" | "right" }) => {
+  const [search, setSearch] = useState<string>("");
+  const [users, setUsers] = useState<user[]>([]);
+  const [debouncedSearch] = useDebounce(search, 500);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const getUsers = async() => {
-    if(search.length > 0 ) {
-      setUsers(await findUser({username: debouncedSearch}))
+  const getUsers = async () => {
+    if (search.length > 0) {
+      setUsers(await findUser({ username: debouncedSearch }));
     }
-  }
+  };
 
   useEffect(() => {
-    getUsers()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch])
+    getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
 
   return (
     <Sheet>
@@ -48,9 +49,13 @@ const SearchSheet = ({ children, side }: { children: ReactNode, side: "left" | "
 
         <Separator className="my-1" />
         <ScrollArea className="h-full pb-[70px] flex flex-col gap-2 pr-2">
-        {users.length > 0 ? (
+          {users.length > 0 ? (
             users.map((user) => (
-              <AccountPreview key={user.username} username={user.username} />
+              <SheetClose asChild key={user.username}>
+                <Link href={`/${user.username}`} className="flex items-center cursor-pointer gap-3 w-full" >
+                  <AccountPreview username={user.username} />
+                </Link>
+              </SheetClose>
             ))
           ) : (
             <div className="text-center">Search for user</div>

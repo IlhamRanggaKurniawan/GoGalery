@@ -6,13 +6,8 @@ import Link from "next/link";
 import React from "react";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const id = parseInt(params.id);
 
-  if (isNaN(id)) {
-    return;
-  }
-
-  const content = await getContentById({id});
+  const content = await getContentById({id: +params.id});
 
   if (!content) {
     return;
@@ -28,7 +23,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
       <div className="flex flex-col gap-4 items-center">
       <Content uploader={content.uploader.username} caption={content.caption} url={content.url} contentId={content.id}/>
-      <StraightContentInfinityScroll contentFuction={exploreChainingContent} id={id}/>
+      <StraightContentInfinityScroll contentFuction={exploreChainingContent} id={+params.id}/>
       </div>
     </div>
   );

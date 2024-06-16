@@ -32,7 +32,8 @@ const Navbar = () => {
 
   useEffect(() => {
     checkIsNotification();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
 
   return (
     <div className="h-14 bg-background fixed bottom-0 left-0 w-screen sm:h-full sm:w-14 md:w-16 lg:w-56 z-50 flex flex-col sm:border-r-2 sm:justify-evenly py-4">
@@ -65,12 +66,18 @@ const Navbar = () => {
             <span className="hidden lg:inline-block">Upload</span>
           </div>
         </Link>
-        <button className="hidden sm:flex" onClick={getNotification}>
+        <button
+          className="hidden sm:flex"
+          onClick={() => {
+            getNotification();
+            setIsNotification(false);
+          }}
+        >
           <NotificationSheet side="left" notifications={notifications}>
             <div className="hidden sm:flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg">
               <div className="relative">
                 <Bell size={25} />
-                {isNotification && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600"/>}
+                {isNotification && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600" />}
               </div>
               <span className="hidden lg:inline-block">Notification</span>
             </div>

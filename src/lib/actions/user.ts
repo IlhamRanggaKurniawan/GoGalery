@@ -2,7 +2,7 @@
 
 import prisma from "../dataStorage/db"
 
-export const findUser = async ({username} : {username: string}) => {
+export const findUser = async ({ username }: { username: string }) => {
     const users = await prisma.user.findMany({
         where: {
             username: {
@@ -13,6 +13,10 @@ export const findUser = async ({username} : {username: string}) => {
             followers: {
                 _count: "desc"
             }
+        },
+        select: {
+            id: true,
+            username: true
         }
     })
 
@@ -38,8 +42,6 @@ export const getUserProfile = async (username: string) => {
         },
     })
 
-    console.log(user)
-
     if (!user) {
         return ({
             error: "user not found",
@@ -53,3 +55,70 @@ export const getUserProfile = async (username: string) => {
     })
 }
 
+export const getUserWefollow = async ({ id, username }: { id: number, username: string }) => {
+    const users = await prisma.user.findMany({
+        where: {
+            following: {
+                some: {
+                    followerId: {
+                        equals: id
+                    }
+                }
+            },
+            username: {
+                contains: username
+            }
+        },
+        select: {
+            id: true,
+            username: true
+        }
+    })
+
+    const randomUsers = await prisma.user.findMany({
+        where: {
+            username: {
+                contains: username
+            },
+            id: {
+                notIn: users.map(user => user.id)
+            }
+        },
+        select: {
+            id: true,
+            username: true
+        }
+    })
+
+    return { users, randomUsers }
+}
+
+export const getMutualFollowers = async ({ id, username }: { id: number, username: string }) => {
+    const mutualFollowers = await prisma.user.findMany({
+        where: {
+            following: {
+                some: {
+                    followerId: id
+                }
+            },
+            followers: {
+                some: {
+                    followingId: id
+                }
+            },
+            username: {
+                contains: username
+            }
+        },
+        select: {
+            id: true,
+            username: true
+        }
+    });
+
+    console.log(mutualFollowers)
+
+    if(!mutualFollowers) return
+
+    return mutualFollowers;
+}
