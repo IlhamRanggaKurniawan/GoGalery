@@ -9,7 +9,7 @@ const ConversationHeader = ({ group,name }: { group: boolean, name: string }) =>
       <Link href={`${group ? "/group" : "/messages"}`}>
         <ChevronLeft size={40} />
       </Link>
-      <Link href="/" className="flex items-center gap-3 max-w-[80%]">
+      <Link href={`/${name}`} className="flex items-center gap-3 max-w-[80%]">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>{name}</AvatarFallback>

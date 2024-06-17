@@ -19,7 +19,7 @@ interface IUser {
 }
 
 const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
-    const [name, setName] = useState("")
+  const [name, setName] = useState("");
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
@@ -29,7 +29,6 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const getUsers = async () => {
-    if (search.length === 0) return;
     if (!session) return;
 
     const users = await getMutualFollowers({ username: search, id: session.user.id });
@@ -48,12 +47,11 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleCreateGroup = async () => {
-    if(!session) return
-    const group = await createGroup({name, member: [...selectedUsers, {id: session.user.id}]})
+    if (!session) return;
+    const group = await createGroup({ name, member: [...selectedUsers, { id: session.user.id }] });
 
-
-    router.push("/group/" + group?.id)
-  }
+    router.push("/group/" + group?.id);
+  };
 
   useEffect(() => {
     getUsers();
@@ -70,7 +68,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             <X />
           </DialogClose>
         </div>
-        <Input type="text" placeholder="Group name" onChange={(e) => setName(e.target.value)}/>
+        <Input type="text" placeholder="Group name" onChange={(e) => setName(e.target.value)} />
         <Separator className=" bg-black" />
         <Input type="text" placeholder="Add members" onChange={(e) => setSearch(e.target.value)} />
         <div className="h-96">
@@ -83,7 +81,15 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             );
           })}
         </div>
-        {selectedUsers.length !== 0 ? <Button className="w-full" onClick={handleCreateGroup}>Create Group</Button> : <Button className="w-full" variant={"secondary"} disabled>Create Group</Button>}
+        {selectedUsers.length !== 0 ? (
+          <Button className="w-full" onClick={handleCreateGroup}>
+            Create Group
+          </Button>
+        ) : (
+          <Button className="w-full" variant={"secondary"} disabled>
+            Create Group
+          </Button>
+        )}
       </DialogContent>
     </Dialog>
   );
