@@ -1,5 +1,5 @@
-import SettingBar from "@/components/myComponents/SettingBar";
-import React from "react";
+import SettingBar from '@/components/myComponents/SettingBar'
+import React from 'react'
 
 const page = () => {
   return (
@@ -8,8 +8,9 @@ const page = () => {
           <h1 className="p-3 font-semibold text-xl text-center">Settings</h1>
           <SettingBar />
         </div>
+        
     </div>
-  );
-};
+  )
+}
 
-export default page;
+export default page

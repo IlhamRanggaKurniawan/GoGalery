@@ -20,7 +20,7 @@ const MessageInput = ({ id, group }: { id: number; group: boolean }) => {
   };
 
   return (
-    <div className="h-16 fixed bottom-0 left-0 w-screen z-50 px-2 items-center flex bg-background sm:pl-18 md:pl-20 lg:pl-60 pr-4 py-2">
+    <div className="h-16 fixed bottom-0 left-0 w-screen z-50 px-2 items-center flex bg-background sm:pl-16 md:pl-20 lg:pl-60 pr-4 py-2">
       <form className="flex gap-2 w-screen" onSubmit={handleSubmit}>
         <Input placeholder="Message..." type="text" required className="rounded-full" onChange={(e) => setText(e.target.value)} value={text} />
         <button>

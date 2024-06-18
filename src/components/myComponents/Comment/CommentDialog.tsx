@@ -16,7 +16,7 @@ const CommentDialog = ({ children, commentId }: { children: React.ReactNode; com
       <DialogContent>
         <DialogClose className="flex flex-col gap-2">
           <Button variant={"destructive"} className="w-full" onClick={handleClick}>
-            Delete
+            Delete comment
           </Button>
           <Button className="w-full" variant={"secondary"}>
             Close

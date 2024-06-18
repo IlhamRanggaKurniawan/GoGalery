@@ -20,6 +20,8 @@ model User {
   email         String          @unique
   password      String
   role          String          @default("member")
+  profileUrl    String?
+  bio           String?
   content       Content[]
   likeContent   LikeContent[]
   saveContent   SaveContent[]
@@ -27,10 +29,10 @@ model User {
   followers     Follow[]        @relation("followersRelation")
   following     Follow[]        @relation("followingRelation")
   Notification  Notification[]
-  createdAt     DateTime        @default(now())
   GroupChat     GroupChat[]
   DirectMessage DirectMessage[]
   Message       Message[]
+  createdAt     DateTime        @default(now())
 }
 
 model Content {
@@ -107,15 +109,15 @@ model DirectMessage {
   participants User[]
   message      Message[]
   createdAt    DateTime  @default(now())
-
 }
 
 model GroupChat {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  member    User[]
-  message   Message[]
-  createdAt DateTime  @default(now())
+  id         Int       @id @default(autoincrement())
+  name       String
+  pictureUrl String?
+  member     User[]
+  message    Message[]
+  createdAt  DateTime  @default(now())
 }
 
 model Message {

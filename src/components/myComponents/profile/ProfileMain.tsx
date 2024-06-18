@@ -1,9 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import React from "react";
 import ProfileBio from "./ProfileBio";
 import ProfileInfo from "./ProfileInfo";
-import FollowButton from "../FollowButton";
+import ProfileButton from "./ProfileButton";
 
 const ProfileMain = ({ username,userId, content}: { username: string, userId: number, content: number}) => {
   
@@ -20,8 +19,7 @@ const ProfileMain = ({ username,userId, content}: { username: string, userId: nu
       </div>
       <ProfileInfo userId={userId} content={content}/>
       <div className="flex justify-center my-2 gap-2">
-        <FollowButton userId={userId}/>
-        <Button className="py-4 px-8 max-w-24">Message</Button>
+        <ProfileButton userId={userId}/>
       </div>
       <ProfileBio />
     </div>

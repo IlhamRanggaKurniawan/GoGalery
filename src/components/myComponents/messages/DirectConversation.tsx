@@ -34,8 +34,12 @@ const DirectConversation = ({ id }: { id: number }) => {
     })
 
     const channel = pusher.subscribe(`dm-${id}`);
-    channel.bind('new-message', (data: any) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
+    channel.bind('new-message', (message: any) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    channel.bind('delete-message', (data: { id: number }) => {
+      setMessages((prevMessages) => prevMessages.filter((message) => message.id !== data.id));
     });
 
     return () => {
@@ -44,7 +48,7 @@ const DirectConversation = ({ id }: { id: number }) => {
     };
   
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
   const isUserAuthorized = () => {
@@ -61,7 +65,7 @@ const DirectConversation = ({ id }: { id: number }) => {
     <div className="flex flex-col">
       <ConversationHeader group={false} name={otherParticipant} />
       <div className="py-16 overflow-y-scroll px-2 h-screen">
-        {messages ? messages.map((message) => <ChatBubble key={message.id} message={message.message} senderId={message.senderId} />) : <div></div>}
+        {messages ? messages.map((message) => <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id}/>) : <div></div>}
       </div>
       <MessageInput id={id} group={false}/>
     </div>

@@ -31,8 +31,13 @@ const GroupConversation = ({ id }: { id: number }) => {
     });
 
     const channel = pusher.subscribe(`group-${id}`);
+
     channel.bind('new-message', (data: any) => {
       setMessages((prevMessages) => [...prevMessages, data]);
+    });
+
+    channel.bind('delete-message', (data: { id: number }) => {
+      setMessages((prevMessages) => prevMessages.filter((message) => message.id !== data.id));
     });
 
     return () => {
@@ -43,24 +48,20 @@ const GroupConversation = ({ id }: { id: number }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
-  const isUserMember = () => {
+  const isMember = () => {
     return group?.member.some((member: any) => member.id === session?.user.id);
   };
 
-  if (!group) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isUserMember()) {
+  if (!isMember()) {
     return null;
   }
 
   return (
     <div>
-      <ConversationHeader group name={group.name} />
+      <ConversationHeader group name={group.name} id={id}/>
       <div className="py-16 overflow-y-scroll px-2 h-screen">
         {messages.length > 0 ? messages.map((message: any) => (
-          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} />
+          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id}/>
         )) : <div></div>}
       </div>
       <MessageInput id={id} group />

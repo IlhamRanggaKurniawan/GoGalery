@@ -35,6 +35,7 @@ export const sendMessage = async ({ message, senderId, directMessageId, groupId 
     }
 
     pusher.trigger(directMessageId ? `dm-${directMessageId}` : `group-${groupId}`, 'new-message', {
+        id: chat.id,
         senderId,
         message,
         directMessageId,
@@ -55,7 +56,7 @@ export const deleteMessage = async ({ id }: { id: number }) => {
         return
     }
 
-    pusher.trigger('messages', 'delete-message', {
+    pusher.trigger(chat.directMessageId ? `dm-${chat.directMessageId}`: `dm-${chat.groupChatId}`, 'delete-message', {
         id
     });
 
@@ -170,7 +171,7 @@ export const getGroupData = async ({ groupChatId }: { groupChatId: number }) => 
             id: groupChatId
         },
         include: {
-            message: {},
+            message: true,
             member: {
                 select: {
                     id: true,
@@ -201,4 +202,60 @@ export const checkExistingDM = async ({participantIDs}: {participantIDs: number[
     })
 
     return dm
+}
+
+export const addMembers = async ({members, groupId}: {members: {id: number}[], groupId: number}) => {
+    const group = await prisma.groupChat.update({
+        where: {
+            id: groupId
+        },
+        data: {
+            member: {
+                connect: members.map((member) => ({id: member.id}))
+            }
+        },
+    })
+
+    if(!group) return
+
+    return group
+}
+
+export const getGroupMembers = async ({id}: {id:number}) => {
+    const group = await prisma.groupChat.findUnique({
+        where: {
+            id
+        },
+        select: {
+            member: {
+                select: {
+                    id: true,
+                    username: true
+                }
+            }
+        }
+    })
+
+    if(!group) return
+
+    return group.member
+}
+
+export const leaveGroup = async ({userId, groupId} : {userId: number, groupId: number}) => {
+    const group = await prisma.groupChat.update({
+        where: {
+            id: groupId
+        },
+        data: {  
+            member: {
+                disconnect: {
+                    id: userId
+                }
+            }      
+        }
+    })
+
+    if(!group) return
+
+    return group
 }
