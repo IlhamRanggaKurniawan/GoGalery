@@ -33,6 +33,7 @@ model User {
   DirectMessage DirectMessage[]
   Message       Message[]
   createdAt     DateTime        @default(now())
+  Feedback      Feedback[]
 }
 
 model Content {
@@ -131,4 +132,12 @@ model Message {
   GroupChat       GroupChat?     @relation(fields: [groupChatId], references: [id])
   isRead          Boolean        @default(false)
   createdAt       DateTime       @default(now())
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  createdAt DateTime @default(now())
 }

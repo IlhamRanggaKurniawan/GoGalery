@@ -19,10 +19,6 @@ export const isFollowing = async ({ followerId, followingId }: { followerId: num
         }
     }
 
-    console.log(isFollow)
-
-
-
     return {
         data: isFollow,
         status: true

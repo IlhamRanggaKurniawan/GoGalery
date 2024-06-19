@@ -38,8 +38,6 @@ export const likeContent = async({userId, contentId}: {userId: number, contentId
         senderId: userId
     })
 
-    console.log("halo")
-
     return {
         data: like,
         error: null

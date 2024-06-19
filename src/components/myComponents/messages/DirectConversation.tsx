@@ -62,9 +62,9 @@ const DirectConversation = ({ id }: { id: number }) => {
   const otherParticipant = users.find((user) => user.id !== session?.user.id)?.username;
 
   return (
-    <div className="flex flex-col">
+    <div className="overflow-y-hidden">
       <ConversationHeader group={false} name={otherParticipant} />
-      <div className="py-16 overflow-y-scroll px-2 h-screen">
+      <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
         {messages ? messages.map((message) => <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id}/>) : <div></div>}
       </div>
       <MessageInput id={id} group={false}/>

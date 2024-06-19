@@ -40,9 +40,11 @@ const MenuDropDown = () => {
               <span className="font-medium">Saved</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex gap-3 p-3 cursor-pointer">
-            <MessageCircleCode size={20} />
-            <span className="font-medium">Give us feedback</span>
+          <DropdownMenuItem className=" p-0 cursor-pointer">
+            <Link href="/setting/problem" className="flex gap-3 w-full p-3">
+              <MessageCircleCode size={20} />
+              <span className="font-medium">Give us feedback</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

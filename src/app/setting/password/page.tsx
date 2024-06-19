@@ -1,4 +1,4 @@
-import UpdateProfileForm from "@/components/myComponents/form/UpdateProfileForm";
+import ChangePasswordForm from "@/components/myComponents/form/ChangePasswordForm";
 import SettingBar from "@/components/myComponents/SettingBar";
 import React from "react";
 
@@ -9,7 +9,7 @@ const page = () => {
         <SettingBar />
       </div>
       <div className="flex-grow">
-        <UpdateProfileForm />
+        <ChangePasswordForm />
       </div>
     </div>
   );

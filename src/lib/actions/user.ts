@@ -1,6 +1,38 @@
 "use server"
 
+import { hash } from "bcrypt"
 import prisma from "../dataStorage/db"
+
+export const updateProfile = async ({ id, data }: { id: number, data: any }) => {
+    const updateData = data
+
+    if (data.password) {
+        const hashedPassword = await hash(data.password, 10);
+        updateData.password = hashedPassword;
+    }
+
+    const user = await prisma.user.update({
+        where: {
+            id
+        },
+        data: {
+            ...updateData
+        }
+    })
+
+    if (!user) return
+
+    return user
+}
+
+export const deleteAccount = async ({id, username}: {id: number, username: string}) => {
+    await prisma.user.delete({
+        where: {
+            id,
+            username
+        }
+    })
+}
 
 export const findUser = async ({ username }: { username: string }) => {
     const users = await prisma.user.findMany({
@@ -116,9 +148,7 @@ export const getMutualFollowers = async ({ id, username }: { id: number, usernam
         }
     });
 
-    console.log(mutualFollowers)
-
-    if(!mutualFollowers) return
+    if (!mutualFollowers) return
 
     return mutualFollowers;
 }
