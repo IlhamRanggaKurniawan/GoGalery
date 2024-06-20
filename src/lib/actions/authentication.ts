@@ -12,14 +12,6 @@ interface RegisterParams {
 
 const register = async ({ username, email, password, confPassword }: RegisterParams) => {
 
-    if (!username || !email || !password || !confPassword) {
-        return ({
-            error: true,
-            message: "please fill all the fields",
-            statusCode: 400
-        })
-    }
-
     const [existingUsername, existingEmail] = await Promise.all([
         prisma.user.findUnique({ where: { username } }),
         prisma.user.findUnique({ where: { email } }),
@@ -27,19 +19,10 @@ const register = async ({ username, email, password, confPassword }: RegisterPar
 
     if (existingEmail || existingUsername) {
         return ({
-            error: true,
-            message: "email or username already exists",
+            error: "email or username already exists",
             statusCode: 409
         })
-    }
-
-    if (password !== confPassword) {
-        return ({
-            error: true,
-            message: "password doesn't match",
-            statusCode: 400
-        })
-    }
+    } 
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -53,15 +36,13 @@ const register = async ({ username, email, password, confPassword }: RegisterPar
 
     if (!user) {
         return ({
-            error: true,
-            message: "failed to register",
+            error: "failed to register",
             statusCode: 500
         })
     } 
 
     return ({
-        error: false,
-        message: "register success",
+        data: user,
         statusCode: 200
     })
 

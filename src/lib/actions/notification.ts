@@ -8,7 +8,6 @@ export interface INotification {
     type: string,
     content: string,
     createdAt: Date,
-    updatedAt: Date,
     user: {
         id: number,
         username: string
@@ -31,7 +30,17 @@ export const createNotification = async ({ receiverId, type, content, senderId }
         }
     })
 
-    return notification
+    if (!notification) {
+        return({
+            error: "something went wrong",
+            statusCode: 500
+        })
+    }
+
+    return {
+        data: notification,
+        statusCode: 200
+    }
 }
 
 export const getAllNotification = async ({ userId }: { userId: number }) => {
@@ -45,7 +54,7 @@ export const getAllNotification = async ({ userId }: { userId: number }) => {
                     id: true,
                     username: true
                 }
-            }
+            },
         },
         orderBy: {
             createdAt: "desc"
@@ -53,7 +62,10 @@ export const getAllNotification = async ({ userId }: { userId: number }) => {
     })
 
     if (!notifications) {
-        return
+        return {
+            data: notifications,
+            statusCode: 200
+        }
     }
 
     await prisma.notification.updateMany({
@@ -66,7 +78,10 @@ export const getAllNotification = async ({ userId }: { userId: number }) => {
         }
     })
 
-    return notifications
+    return ({
+        data: notifications,
+        statusCode: 200
+    })
 }
 
 export const checkNotification = async ({ userId }: { userId: number }) => {
@@ -78,8 +93,14 @@ export const checkNotification = async ({ userId }: { userId: number }) => {
     })
 
     if (!notification) {
-        return false
+        return ({
+            status: false,
+            statusCode: 200
+        })
     }
 
-    return true
+    return {
+        status: true,
+        statusCode: 200
+    }
 }

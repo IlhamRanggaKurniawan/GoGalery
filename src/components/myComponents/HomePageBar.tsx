@@ -12,19 +12,19 @@ const HomePageBar = () => {
   const [isNotification, setIsNotification] = useState<boolean>(false);
 
   const getNotification = async () => {
-    if (session) {
-      const response: any = await getAllNotification({ userId: session.user.id });
+    if (!session) return;
 
-      setNotifications(response);
-    }
+    const { data } = await getAllNotification({ userId: session.user.id });
+
+    setNotifications(data);
   };
 
   const checkIsNotification = async () => {
-    if (session) {
-      const notification = await checkNotification({ userId: session.user.id });
+    if (!session) return;
+    
+    const { status } = await checkNotification({ userId: session.user.id });
 
-      setIsNotification(notification);
-    }
+    setIsNotification(status);
   };
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const HomePageBar = () => {
         <NotificationSheet side="bottom" notifications={notifications}>
           <div className="flex items-center gap-2 p-2 px-4 w-full rounded-lg justify-between">
             <div>
-                <h1 className="text-lg font-semibold">Connect Verse</h1>
+              <h1 className="text-lg font-semibold">Connect Verse</h1>
             </div>
             <div className="relative">
               <Bell size={25} />

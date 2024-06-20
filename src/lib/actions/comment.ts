@@ -52,17 +52,23 @@ export const sendComment = async ({ userId, contentId, text }: { userId: number,
     })
 
     if (!comment) {
-        return
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
     await createNotification({
         receiverId: comment.content.uploader.id,
         type: "comment",
-        content: `${comment.user.username} comment on your post`,
+        content: ` comment on your post`,
         senderId: comment.userId
     })
 
-    return comment
+    return ({
+        data: comment,
+        statusCode: 200
+    })
 }
 
 export const updateComment = async ({ commentId, text }: { commentId: number, text: string }) => {
@@ -94,10 +100,16 @@ export const updateComment = async ({ commentId, text }: { commentId: number, te
     })
 
     if (!comment) {
-        return
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
-    return comment
+    return ({
+        data: comment,
+        statusCode: 200
+    })
 }
 
 export const deleteComment = async ({ commentId }: { commentId: number }) => {
@@ -126,10 +138,16 @@ export const deleteComment = async ({ commentId }: { commentId: number }) => {
     })
 
     if (!comment) {
-        return
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
-    return comment
+    return ({
+        data: comment,
+        statusCode: 200
+    })
 }
 
 export const getComments = async ({ contentId }: { contentId: number }) => {
@@ -157,9 +175,8 @@ export const getComments = async ({ contentId }: { contentId: number }) => {
         }
     })
 
-    if (!comments) {
-        return
-    }
-
-    return comments
+    return ({
+        data: comments,
+        statusCode: 200
+    })
 }

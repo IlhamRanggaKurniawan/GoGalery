@@ -9,22 +9,22 @@ import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 
 const GroupConversation = ({ id }: { id: number }) => {
-  const { data: session } = useSession();
   const [group, setGroup] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
+  const { data: session } = useSession();
 
   const getConversation = async () => {
-    const group = await getGroupData({ groupChatId: id });
-    if (group) {
-      setGroup(group);
-      setMessages(group.message);
-    }
+    const { data } = await getGroupData({ groupChatId: id });
+
+    if (!data) return;
+
+    setGroup(data);
+    setMessages(data.message);
   };
 
   useEffect(() => {
-    if (!session) return;
-
     getConversation();
+    const sound = new Audio("/message.mp3");
 
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER!,
@@ -32,11 +32,14 @@ const GroupConversation = ({ id }: { id: number }) => {
 
     const channel = pusher.subscribe(`group-${id}`);
 
-    channel.bind('new-message', (data: any) => {
+    channel.bind("new-message", (data: any) => {
       setMessages((prevMessages) => [...prevMessages, data]);
+      if (data.senderId !== session?.user.id) {
+        sound.play().catch((error) => console.log("Error playing sound:", error));
+      }
     });
 
-    channel.bind('delete-message', (data: { id: number }) => {
+    channel.bind("delete-message", (data: { id: number }) => {
       setMessages((prevMessages) => prevMessages.filter((message) => message.id !== data.id));
     });
 
@@ -44,25 +47,18 @@ const GroupConversation = ({ id }: { id: number }) => {
       channel.unbind_all();
       channel.unsubscribe();
     };
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
-  const isMember = () => {
-    return group?.member.some((member: any) => member.id === session?.user.id);
-  };
-
-  if (!isMember()) {
-    return null;
-  }
+  if (group?.member.some((member: any) => member.id === session?.user.id)) return;
 
   return (
     <div className="overflow-y-hidden">
-      <ConversationHeader group name={group.name} id={id}/>
+      <ConversationHeader group name={group.name} id={id} />
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
-        {messages.length > 0 ? messages.map((message: any) => (
-          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id}/>
-        )) : <div></div>}
+        {messages?.map((message: any) => (
+          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id} />
+        ))}
       </div>
       <MessageInput id={id} group />
     </div>

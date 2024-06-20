@@ -25,12 +25,10 @@ const Comment = ({ text, username, createdAt, uploader, commentId }: { text: str
       </div>
       <div className="flex items-center gap-3">
         <span className="text-xs">{new Date(createdAt).toLocaleString().split(",")[1]}</span>
-        {session?.user.role === "admin" || session?.user.username === uploader || username === session?.user.username ? (
+        {session?.user.role === "admin" || session?.user.username === uploader || username === session?.user.username && (
           <CommentDialog commentId={commentId}>
             <Ellipsis className="text-xs" size={16} />
           </CommentDialog>
-        ) : (
-          <div></div>
         )}
       </div>
     </div>

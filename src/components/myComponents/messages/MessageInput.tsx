@@ -7,16 +7,21 @@ import { useSession } from "next-auth/react";
 import React, { FormEvent, useState } from "react";
 
 const MessageInput = ({ id, group }: { id: number; group: boolean }) => {
-  const { data: session } = useSession();
   const [text, setText] = useState("");
+  const { data: session } = useSession();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (session) {
-      group ? await sendMessage({ groupId: id, message: text, senderId: session.user.id }) : await sendMessage({ directMessageId: id, message: text, senderId: session.user.id });
+    if (!session) return;
 
-      setText("");
+    if (group) {
+      await sendMessage({ groupId: id, message: text, senderId: session.user.id });
+      return setText("");
+
     }
+
+    await sendMessage({ directMessageId: id, message: text, senderId: session.user.id });
+    setText("");
   };
 
   return (

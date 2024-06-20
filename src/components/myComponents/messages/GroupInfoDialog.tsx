@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
@@ -18,32 +18,31 @@ interface IUser {
 }
 
 const GroupInfoDialog = ({ children, id }: { children: React.ReactNode; id?: number }) => {
-    const {data: session} = useSession()
-
-    const router = useRouter()
-
   const [users, setUsers] = useState<IUser[]>([]);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
+
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const groupData = async () => {
     if (!id) return;
-    const data = await getGroupData({ groupChatId: id });
 
-    if (data) {
-      setUsers(data.member);
-      setName(data.name)
-    }
+    const { data } = await getGroupData({ groupChatId: id });
+
+    if (!data) return;
+
+    setUsers(data.member);
+    setName(data.name);
   };
 
   const handleLeaveGroup = async () => {
-    if(!id) return
-    if(!session) return
+    if (!id || !session) return;
 
-    await leaveGroup({groupId: id, userId: session.user.id})
+    await leaveGroup({ groupId: id, userId: session.user.id });
 
-    groupData()
-    router.push("/group")
-  }
+    groupData();
+    router.push("/group");
+  };
 
   useEffect(() => {
     groupData();
@@ -69,19 +68,19 @@ const GroupInfoDialog = ({ children, id }: { children: React.ReactNode; id?: num
           <h2 className="text-xl font-semibold">{name}</h2>
         </div>
         <DialogClose className="flex justify-center">
-            <Button variant={"destructive"} onClick={handleLeaveGroup}>Leave Group</Button>
+          <Button variant={"destructive"} onClick={handleLeaveGroup}>
+            Leave Group
+          </Button>
         </DialogClose>
         <div className="px-2">
-            <p className="font-medium">Group members:</p>
+          <p className="font-medium">Group members:</p>
         </div>
         <div className="max-h-96">
-          {users.map((user) => {
-            return (
-              <Link href={`/${user.username}`} className="w-full text-left rounded-md" key={user.id}>
-                <AccountPreview username={user.username} />
-              </Link>
-            );
-          })}
+          {users?.map((user) => (
+            <Link href={`/${user.username}`} className="w-full text-left rounded-md" key={user.id}>
+              <AccountPreview username={user.username} />
+            </Link>
+          ))}
         </div>
       </DialogContent>
     </Dialog>

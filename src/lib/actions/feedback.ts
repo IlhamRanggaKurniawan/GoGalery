@@ -10,7 +10,15 @@ export const sendFeedback = async ({id, message}: {id: number, message: string})
         }
     })
 
-    if(feedback) return
+    if(!feedback) {
+        return({
+            error: "something went wrong",
+            statusCode: 500
+        })
+    }
 
-    return feedback
+    return {
+        data: feedback,
+        statusCode: 200,
+    };
 }

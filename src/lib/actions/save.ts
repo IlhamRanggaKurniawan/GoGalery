@@ -11,47 +11,37 @@ export const saveContent = async ({ userId, contentId }: { userId: number, conte
     })
 
     if (!save) {
-        return {
-            data: null,
-            error: "something went wrong"
-        }
+        return({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
     return {
         data: save,
-        error: null
+        statusCode: 200
     }
 }
 
-export const unsaveContent = async ({ userId, contentId }: { userId: number, contentId: number }) => {
-    const save = await prisma.saveContent.findFirst({
-        where: {
-            userId,
-            contentId
-        }
-    })
-
-    if (!save) {
-        return
-    }
+export const unsaveContent = async ({ id }: { id:number }) => {
 
     const unsave = await prisma.saveContent.delete({
         where: {
-            id: save.id
+            id
         }
     })
 
     if (!unsave) {
-        return {
-            data: null,
-            error: "something went wrong"
-        }
+        return({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
     return {
-        data: 'unsave',
-        error: null
-    };
+        data: unsave,
+        statusCode: 200
+    }
 }
 
 export const isSaved = async ({ userId, contentId }: { userId: number, contentId: number }) => {
@@ -64,16 +54,17 @@ export const isSaved = async ({ userId, contentId }: { userId: number, contentId
     })
 
     if (!isSave) {
-        return {
-            data: null,
-            status: false
-        }
+        return ({
+            status: false,
+            statusCode: 200
+        })
     }
 
-    return {
+    return ({
         data: isSave,
-        status: true
-    }
+        status: true,
+        statusCode: 200
+    })
 }
 
 export const getSavedContent = async ({ username, cursor, pageSize }: { username: string, cursor?: number, pageSize: number }) => {
@@ -106,6 +97,7 @@ export const getSavedContent = async ({ username, cursor, pageSize }: { username
     if(!savedContents) {
         return
     }
+    
     const contents = savedContents.map(save => ({
         id: save.content.id,
         uploaderId: save.content.uploaderId,
@@ -121,5 +113,9 @@ export const getSavedContent = async ({ username, cursor, pageSize }: { username
 
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor };
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
 }

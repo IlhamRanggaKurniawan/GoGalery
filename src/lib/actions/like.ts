@@ -25,53 +25,42 @@ export const likeContent = async({userId, contentId}: {userId: number, contentId
     })
 
     if (!like) {
-        return {
-            data: null,
-            error: "something went wrong"
-        }
+        return({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
     await createNotification({
         receiverId: like.content.uploaderId,
         type: "like",
-        content: `${like.user.username} like your content`,
+        content: `liking your content`,
         senderId: userId
     })
 
     return {
         data: like,
-        error: null
-    }
+        statusCode: 200,
+    };
 }
 
-export const unlikeContent = async({userId,contentId}: {userId: number, contentId: number}) => {
-    const like = await prisma.likeContent.findFirst({
-        where: {
-            userId,
-            contentId
-        }
-    })
-
-    if(!like) {
-        return
-    }
-
+export const unlikeContent = async({id}: {id: number}) => {
     const unlike = await prisma.likeContent.delete({
         where:{
-            id : like.id
+            id
         }
     })
 
     if(!unlike) {
-        return {
-            data: null,
-            error: "something went wrong"
-        }
+        return({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
     return {
-        data: 'unlike',
-        error: null
+        data: unlike,
+        statusCode: 200
     };
 }
 
@@ -85,14 +74,15 @@ export const isLike = async({userId, contentId}: {userId: number, contentId: num
     })
 
     if (!isLike) {
-        return {
-            data: null,
-            status: false
-        }
+        return({
+            status: false,
+            statusCode: 500
+        })
     }
 
     return {
         data: isLike,
-        status: true
-    }
+        status: true,
+        statusCode: 200
+    };
 }

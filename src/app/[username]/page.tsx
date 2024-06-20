@@ -1,6 +1,5 @@
 import GridContentInfinityScroll from "@/components/myComponents/content/GridContentInfinityScroll";
 import ProfileMain from "@/components/myComponents/profile/ProfileMain";
-import ProfileNavigation from "@/components/myComponents/profile/ProfileNavigation";
 import { Separator } from "@/components/ui/separator";
 import { getContentByUsername } from "@/lib/actions/content";
 import { getUserProfile } from "@/lib/actions/user";
@@ -16,12 +15,8 @@ const page = async ({ params }: { params: { username: string } }) => {
   return (
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">
       <div className="max-w-5xl">
-        <ProfileMain username={`${data.username}`} userId={data.id} content={data._count.content}/>
-        <Separator className="my-2" />
-        <div>
-          <ProfileNavigation username={`${data.username}`} isTagged={false} />
-        </div>
-        <Separator className="my-2" />
+        <ProfileMain username={data.username} userId={data.id} content={data._count.content}/>
+        <Separator className="my-4" />
         <GridContentInfinityScroll contentFuction={getContentByUsername} accountUsername={data.username} href={data.username}/>
       </div>
     </div>

@@ -16,6 +16,7 @@ interface Iuser {
   id: number;
   username: string;
 }
+
 const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<Iuser[]>([]);
   const [userWeFollow, setUserWeFollow] = useState<Iuser[]>([]);
@@ -26,32 +27,28 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const followingUsers = async () => {
-    if (!session) return;
+    if (!session || search.length === 0) return;
 
-    if (search.length === 0) return;
-    const { randomUsers, users } = await getUserWefollow({ id: session.user.id, username: search });
+    const { data } = await getUserWefollow({ id: session.user.id, username: search });
 
-    if (randomUsers) {
-      setUsers(randomUsers);
-    }
+    if (!data) return;
 
-    if (users) {
-      setUserWeFollow(users);
-    }
+    setUsers(data.randomUsers);
+    setUserWeFollow(data.users);
   };
 
   const handleClick = async ({ id }: { id: number }) => {
     if (!session) return;
 
-    const checkDm = await checkExistingDM({ participantIDs: [id, session.user.id] });
+    const { data } = await checkExistingDM({ participantIDs: [id, session.user.id] });
 
-    if (checkDm) {
-      return router.push("/messages/" + checkDm.id);
+    if (data) {
+      return router.push(`/messages/${data.id}`);
     }
 
-    const dm = await createDM({ participants: [{ id }, { id: session.user.id }] });
+    const { data: res } = await createDM({ participants: [{ id }, { id: session.user.id }] });
 
-    router.push("/messages/" + dm?.id);
+    return router.push(`/messages/${res?.id}`);
   };
 
   useEffect(() => {
@@ -72,15 +69,15 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
         <Separator className=" bg-black" />
         <Input type="text" placeholder="Search.." onChange={(e) => setSearch(e.target.value)} />
         <div className="h-[380px] overflow-y-auto">
-          {search.length === 0 && userWeFollow.length === 0 && users.length === 0 &&<div className="text-center">Search for user</div>}
-          {userWeFollow.map((user) => (
+          {search.length === 0 && userWeFollow.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
+          {userWeFollow?.map((user) => (
             <button onClick={() => handleClick({ id: user.id })} className="w-full text-left " key={user.id}>
-                <AccountPreview username={user.username} />
+              <AccountPreview username={user.username} />
             </button>
           ))}
-          {users.map((user) => (
+          {users?.map((user) => (
             <button onClick={() => handleClick({ id: user.id })} className="w-full text-left" key={user.id}>
-                <AccountPreview username={user.username} />
+              <AccountPreview username={user.username} />
             </button>
           ))}
         </div>

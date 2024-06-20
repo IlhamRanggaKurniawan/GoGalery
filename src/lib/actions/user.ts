@@ -4,11 +4,11 @@ import { hash } from "bcrypt"
 import prisma from "../dataStorage/db"
 
 export const updateProfile = async ({ id, data }: { id: number, data: any }) => {
-    const updateData = data
+    const updatedData = data
 
     if (data.password) {
         const hashedPassword = await hash(data.password, 10);
-        updateData.password = hashedPassword;
+        updatedData.password = hashedPassword;
     }
 
     const user = await prisma.user.update({
@@ -16,22 +16,42 @@ export const updateProfile = async ({ id, data }: { id: number, data: any }) => 
             id
         },
         data: {
-            ...updateData
+            ...updatedData
         }
     })
 
-    if (!user) return
+    if (!user) {
+        return {
+            error: "something went wrong",
+            statusCode: 500
+        }
+    }
 
-    return user
+    return {
+        data: user,
+        statusCode: 200
+    }
 }
 
-export const deleteAccount = async ({id, username}: {id: number, username: string}) => {
-    await prisma.user.delete({
+export const deleteAccount = async ({ id, username }: { id: number, username: string }) => {
+    const user = await prisma.user.delete({
         where: {
             id,
             username
         }
     })
+
+    if(!user) {
+        return{
+            error: "something went wrong",
+            statusCode: 500
+        }
+    }
+
+    return {
+        data: user,
+        statusCode: 200
+    }
 }
 
 export const findUser = async ({ username }: { username: string }) => {
@@ -52,7 +72,10 @@ export const findUser = async ({ username }: { username: string }) => {
         }
     })
 
-    return users
+    return {
+        data: users,
+        statusCode: 200
+    }
 }
 
 export const getUserProfile = async (username: string) => {
@@ -75,15 +98,15 @@ export const getUserProfile = async (username: string) => {
     })
 
     if (!user) {
-        return ({
+        return{
             error: "user not found",
-            data: null
-        })
+            statusCode: 400
+        }
     }
 
     return ({
-        error: null,
-        data: user
+        data: user,
+        statusCode: 200
     })
 }
 
@@ -122,7 +145,10 @@ export const getUserWefollow = async ({ id, username }: { id: number, username: 
         }
     })
 
-    return { users, randomUsers }
+    return {
+        data: {users, randomUsers},
+        statusCode: 200
+    }
 }
 
 export const getMutualFollowers = async ({ id, username }: { id: number, username: string }) => {
@@ -148,7 +174,8 @@ export const getMutualFollowers = async ({ id, username }: { id: number, usernam
         }
     });
 
-    if (!mutualFollowers) return
-
-    return mutualFollowers;
+    return {
+        data: mutualFollowers,
+        statusCode: 200
+    };
 }

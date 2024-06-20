@@ -31,26 +31,24 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
   const getUsers = async () => {
     if (!session) return;
 
-    const users = await getMutualFollowers({ username: search, id: session.user.id });
+    const { data } = await getMutualFollowers({ username: search, id: session.user.id });
 
-    if (users) {
-      setUsers(users);
-    }
+    setUsers(data);
   };
 
   const handleSelectUser = (user: { id: number; username: string }) => {
     if (selectedUsers.find((prev) => prev.id === user.id)) {
-      setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
-    } else {
-      setSelectedUsers([...selectedUsers, user]);
+      return setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
     }
+
+    setSelectedUsers([...selectedUsers, user]);
   };
 
   const handleCreateGroup = async () => {
     if (!session) return;
-    const group = await createGroup({ name, member: [...selectedUsers, { id: session.user.id }] });
+    const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id }] });
 
-    router.push("/group/" + group?.id);
+    router.push(`/group/${data?.id}`);
   };
 
   useEffect(() => {
@@ -81,12 +79,12 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             );
           })}
         </div>
-        {selectedUsers.length !== 0 ? (
-          <Button className="w-full" onClick={handleCreateGroup}>
+        {selectedUsers.length === 0 ? (
+          <Button className="w-full" variant={"secondary"} disabled>
             Create Group
           </Button>
         ) : (
-          <Button className="w-full" variant={"secondary"} disabled>
+          <Button className="w-full" onClick={handleCreateGroup}>
             Create Group
           </Button>
         )}

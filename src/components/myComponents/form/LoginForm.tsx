@@ -1,6 +1,6 @@
-"use client"
-
 /* eslint-disable react/no-unescaped-entities */
+"use client";
+
 import { Button } from "@/components/ui/button";
 import React, { FormEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -10,33 +10,25 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const [error, setError] = useState<string>("");
 
-  const [error, setError] = useState<string>("")
+  const router = useRouter();
 
-  const router = useRouter()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const result = await signIn("credentials", {
+      username: e.currentTarget.username.value,
+      password: e.currentTarget.password.value,
+      redirect: false,
+      callbackUrl: "/",
+    });
 
-  const handleSubmit = async (e : FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    try {
-      const result = await signIn("credentials", {
-        username: e.currentTarget.username.value,
-        password: e.currentTarget.password.value,
-        redirect: false,
-        callbackUrl: "/"
-      })
-
-      if(result?.error) {
-        return setError(result.error)
-      }
-
-      router.push("/")
-
-    } catch (error) {
-      console.log(error)
+    if (result?.error) {
+      return setError(result.error);
     }
-    
-  }
 
+    router.push("/");
+  };
 
   return (
     <div className="flex  justify-center items-center h-screen">
@@ -48,7 +40,7 @@ const LoginForm = () => {
         <form className="flex flex-col gap-4" onSubmit={(e) => handleSubmit(e)}>
           <div>
             <label htmlFor="username">username</label>
-            <Input id="username" type="text" required placeholder="username" name="username"/>
+            <Input id="username" type="text" required placeholder="username" name="username" />
           </div>
           <div>
             <label htmlFor="password">password</label>
@@ -62,7 +54,9 @@ const LoginForm = () => {
           </div>
         </form>
         <div>
-          <Link href="/register"><span> don't have account? </span></Link>
+          <Link href="/register">
+            <span> don't have account? </span>
+          </Link>
         </div>
       </div>
     </div>

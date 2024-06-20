@@ -3,28 +3,27 @@ import { createSelectors } from "../createSelectors";
 import { isLike, likeContent, unlikeContent } from "../actions/like";
 
 type TLikeStore = {
-    checkLike: (params: { userId: number; contentId: number }) => Promise<boolean>;
+    checkLike: (params: { userId: number; contentId: number }) => Promise<{ data?: { id: number }, status: boolean }>;
     like: (params: { userId: number; contentId: number }) => Promise<void>;
-    unlike: (params: { userId: number; contentId: number }) => Promise<void>;
+    unlike: (params: { id: number }) => Promise<void>;
 }
 
 export const useLikeStore = createSelectors(create<TLikeStore>()((set, get) => ({
     checkLike: async ({ userId, contentId }) => {
-        const { data } = await isLike({ userId, contentId })
+        const { data, status } = await isLike({ userId, contentId })
 
-        if (!data) {
-            return false
+        return {
+            data,
+            status
         }
-
-        return true
     },
 
     like: async ({ userId, contentId }) => {
         await likeContent({ userId, contentId })
     },
 
-    unlike: async ({ userId, contentId }) => {
-        await unlikeContent({ userId, contentId })
+    unlike: async ({ id }) => {
+        await unlikeContent({ id })
     }
 
 })))

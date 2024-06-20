@@ -6,7 +6,7 @@ import { ExternalLink, MessageCircle, Pin, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import  CommentSheet  from "../Comment/CommentSheet";
+import CommentSheet from "../Comment/CommentSheet";
 import { useTheme } from "next-themes";
 import { getComments, IComment } from "@/lib/actions/comment";
 
@@ -15,6 +15,8 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
   const [isSave, setIsSave] = useState(false);
   const [pinColor, setPinColor] = useState("black");
   const [comments, setComments] = useState<IComment[]>([]);
+  const [likeId, setLikeId] = useState(0);
+  const [saveId, setSaveId] = useState(0);
 
   const { data: session } = useSession();
   const { theme } = useTheme();
@@ -22,17 +24,21 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
   const { checkLike, like, unlike } = useLikeStore();
 
   const checkIsLiked = async () => {
-    if (session) {
-      const res = await checkLike({ userId: session.user.id, contentId });
-      setIsLike(res);
-    }
+    if (!session) return;
+
+    const { status, data } = await checkLike({ userId: session.user.id, contentId });
+    setIsLike(status);
+    if (!data) return;
+    setLikeId(data.id);
   };
 
   const checkIsSave = async () => {
-    if (session) {
-      const res = await isSaved({ userId: session.user.id, contentId });
-      setIsSave(res.status);
-    }
+    if (!session) return;
+
+    const { data, status } = await isSaved({ userId: session.user.id, contentId });
+    setIsSave(status);
+    if (!data) return;
+    setSaveId(data.id);
   };
 
   useEffect(() => {
@@ -48,45 +54,42 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
   }, [theme]);
 
   const debouncedLike = useDebouncedCallback(async () => {
-    if (!session) {
-      return;
-    }
+    if (!session) return;
 
     if (!isLike) {
       setIsLike(true);
       return await like({ userId: session.user.id, contentId });
     }
+
     setIsLike(false);
-    return await unlike({ userId: session.user.id, contentId });
+    return await unlike({ id: likeId });
   }, 300);
 
   const debouncedSave = useDebouncedCallback(async () => {
-    if (!session) {
-      return;
-    }
+    if (!session) return;
 
     if (!isSave) {
       setIsSave(true);
       return await saveContent({ userId: session.user.id, contentId });
     }
+
     setIsSave(false);
-    return await unsaveContent({ userId: session.user.id, contentId });
+    return await unsaveContent({ id: saveId });
   }, 300);
 
   const getAllComment = async () => {
-    const comments = await getComments({ contentId });
+    const { data } = await getComments({ contentId });
 
-    if (comments) {
-      setComments(comments);
-    }
+    if (!data) return;
+
+    return setComments(data);
   };
-
 
   return (
     <div>
       <div className="flex justify-between m-2">
         <div className="flex gap-3">
-          <button onClick={() => debouncedLike()}>{isLike ? <Star fill="#FFF200" color="#FFF200" /> : <Star />}</button>
+          <button onClick={debouncedLike}>{isLike ? <Star fill="#FFF200" color="#FFF200" /> : <Star />}</button>
           <button className="flex items-center" onClick={getAllComment}>
             <CommentSheet contentId={contentId} comments={comments}>
               <MessageCircle className="cursor-pointer" />
@@ -97,7 +100,7 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
           </button>
         </div>
         <div>
-          <button onClick={() => debouncedSave()}>{isSave ? <Pin fill={pinColor} /> : <Pin />}</button>
+          <button onClick={debouncedSave}>{isSave ? <Pin fill={pinColor} /> : <Pin />}</button>
         </div>
       </div>
     </div>

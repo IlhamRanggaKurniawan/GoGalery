@@ -7,10 +7,10 @@ import React from "react";
 
 const page = async ({ params }: { params: { id: string; username: string } }) => {
 
-  const content = await getContentById({id: +params.id});
+  const {data, error} = await getContentById({id: +params.id});
 
-  if(!content) {
-    return
+  if(!data) {
+    return <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">{error}</div>
   }
 
   return (
@@ -22,7 +22,7 @@ const page = async ({ params }: { params: { id: string; username: string } }) =>
         <h1 className="text-lg font-medium">Post</h1>
       </div>
       <div className="flex flex-col gap-4 items-center">
-        <Content uploader={content.uploader.username} caption={content.caption} url={content.url} contentId={content.id}/>
+        <Content uploader={data.uploader.username} caption={data.caption} url={data.url} contentId={data.id}/>
         <StraightContentInfinityScroll contentFuction={profileChainingContent} accountUsername={params.username} id={+params.id}/>
       </div>
     </div>

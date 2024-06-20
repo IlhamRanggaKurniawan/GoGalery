@@ -23,9 +23,11 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getUsers = async () => {
-    if (search.length > 0) {
-      setUsers(await findUser({ username: debouncedSearch }));
-    }
+    if (search.length === 0) return;
+    
+    const { data } = await findUser({ username: debouncedSearch });
+
+    setUsers(data);
   };
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
           {users.length > 0 ? (
             users.map((user) => (
               <SheetClose asChild key={user.username}>
-                <Link href={`/${user.username}`} className="flex items-center cursor-pointer gap-3 w-full" >
+                <Link href={`/${user.username}`} className="flex items-center cursor-pointer gap-3 w-full">
                   <AccountPreview username={user.username} />
                 </Link>
               </SheetClose>

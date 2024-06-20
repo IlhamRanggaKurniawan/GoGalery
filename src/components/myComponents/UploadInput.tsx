@@ -23,49 +23,36 @@ const UploadInput = () => {
     const fileType = e.target.files[0].type;
 
     if (fileType.split("/").shift() !== "image") {
-      setFileName("")
+      setFileName("");
       return setError("file type must be images");
     }
 
     setFileName(e.target.files[0].name);
-    setError("")
+    setError("");
   };
 
   const handleSubmit = async (formData: FormData) => {
-    setError("")
-    const uploaderId = session?.user?.id;
+    setError("");
+    if (!session) return;
 
     const file = formData.get("file") as File;
+    const fileType = file.type;
 
-    if (!file ) {
+    if (!file) {
       return setError("please fill all the fields");
     }
-
-    const fileType = file.type;
 
     if (fileType.split("/").shift() !== "image") {
       return setError("file type must be images");
     }
 
-    if (!uploaderId) {
-      return setError("cannot upload");
+    const { data, error } = await uploadContent({ formData, uploaderId: session.user.id });
+
+    if (error || !data) {
+      return setError(error);
     }
 
-    try {
-      const respond = await uploadContent({ formData, uploaderId});
-
-      if(!respond) {
-        return
-      }
-
-      if (respond.error) {
-        return setError(respond.message);
-      }
-
-      router.push(`/${session.user.username}`);
-    } catch (error) {
-      return setError("something went wrong")
-    }
+    router.push(`/${session.user.username}`);
   };
 
   return (

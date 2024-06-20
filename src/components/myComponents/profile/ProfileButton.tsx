@@ -14,15 +14,15 @@ const ProfileButton = ({ userId }: { userId: number }) => {
   const { isFollow, checkFollow, toggleFollow } = useFollowStore();
 
   useEffect(() => {
-    if (session) {
-      checkFollow({ followerId: session.user.id, followingId });
-    }
+    if (!session) return;
+
+    checkFollow({ followerId: session.user.id, followingId });
   }, [isFollow, checkFollow, session, followingId]);
 
   const debouncedFollow = useDebouncedCallback(async () => {
-    if (session) {
-      await toggleFollow({ followerId: session.user.id, followingId });
-    }
+    if (!session) return;
+
+    await toggleFollow({ followerId: session.user.id, followingId });
   }, 500);
 
   if (followingId === session?.user.id) {
@@ -46,9 +46,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
           </Button>
         )}
       </div>
-        {followingId !== session?.user.id && (
-          <Button className="py-4 px-8 max-w-24">Message</Button>
-        )}
+      {followingId !== session?.user.id && <Button className="py-4 px-8 max-w-24">Message</Button>}
     </div>
   );
 };

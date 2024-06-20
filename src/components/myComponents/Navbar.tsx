@@ -15,19 +15,19 @@ const Navbar = () => {
   const [isNotification, setIsNotification] = useState<boolean>(false);
 
   const getNotification = async () => {
-    if (session) {
-      const response: any = await getAllNotification({ userId: session.user.id });
+    if (!session) return;
 
-      setNotifications(response);
-    }
+    const { data } = await getAllNotification({ userId: session.user.id });
+
+    setNotifications(data);
   };
 
   const checkIsNotification = async () => {
-    if (session) {
-      const notification = await checkNotification({ userId: session.user.id });
+    if (!session) return;
+    
+    const { status } = await checkNotification({ userId: session.user.id });
 
-      setIsNotification(notification);
-    }
+    setIsNotification(status);
   };
 
   useEffect(() => {

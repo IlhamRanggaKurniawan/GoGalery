@@ -4,8 +4,7 @@ import ProfileBio from "./ProfileBio";
 import ProfileInfo from "./ProfileInfo";
 import ProfileButton from "./ProfileButton";
 
-const ProfileMain = ({ username,userId, content}: { username: string, userId: number, content: number}) => {
-  
+const ProfileMain = ({ username, userId, content }: { username: string; userId: number; content: number }) => {
   return (
     <div>
       <div className="flex items-center gap-3 py-4 flex-col">
@@ -17,9 +16,9 @@ const ProfileMain = ({ username,userId, content}: { username: string, userId: nu
           <h2 className="text-lg font-medium truncate">{username}</h2>
         </div>
       </div>
-      <ProfileInfo userId={userId} content={content}/>
+      <ProfileInfo userId={userId} content={content} />
       <div className="flex justify-center my-2 gap-2">
-        <ProfileButton userId={userId}/>
+        <ProfileButton userId={userId} />
       </div>
       <ProfileBio />
     </div>

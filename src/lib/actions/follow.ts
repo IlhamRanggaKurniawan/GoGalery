@@ -12,17 +12,10 @@ export const isFollowing = async ({ followerId, followingId }: { followerId: num
         }
     })
 
-    if (!isFollow) {
-        return {
-            data: null,
-            status: false
-        }
-    }
-
     return {
         data: isFollow,
-        status: true
-    }
+        statusCode: 200,
+    };
 }
 
 
@@ -44,30 +37,22 @@ export const follow = async ({ followerId, followingId }: { followerId: number, 
 
     if (!follow) {
         return {
-            data: null,
-            error: "something went wrong"
+            error: "something went wrong",
+            statusCode: 500
         }
     }
-
-    await prisma.notification.create({
-        data: {
-            userId: followingId,
-            type: "follow",
-            content: `${follow.follower.username} follow you`
-        }
-    })
 
     await createNotification({
         receiverId: followingId,
         type: "follow",
-        content: `${follow.follower.username} follow you`,
+        content: `following you`,
         senderId: follow.followerId
     })
 
     return {
         data: follow,
-        error: null
-    }
+        statusCode: 200,
+    };
 }
 
 
@@ -79,15 +64,15 @@ export const unfollow = async ({ id }: { id: number }) => {
     });
 
     if (!unfollow) {
-        return {
-            data: null,
-            error: "something went wrong"
-        }
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
     return {
-        data: 'unfollowed',
-        error: null
+        data: unfollow,
+        statusCode: 200,
     };
 }
 
@@ -104,5 +89,8 @@ export const countFollow = async ({ userId }: { userId: number }) => {
         }
     })
 
-    return { follower, following }
+    return {
+        data: { follower, following },
+        statusCode: 200,
+    };
 }

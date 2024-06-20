@@ -21,8 +21,8 @@ export const useFollowStore = createSelectors(create<TFollowStore>()((set,get) =
     followId: 0,
 
     countUserFollow: async ({userId}) => {
-        const { follower, following } = await countFollow({userId})
-        set({follower, following})
+        const { data } = await countFollow({userId})
+        set({follower: data.follower, following: data.following})
     },
     checkFollow: async ({ followerId, followingId }) => {
         const { data } = await isFollowing({ followerId, followingId })

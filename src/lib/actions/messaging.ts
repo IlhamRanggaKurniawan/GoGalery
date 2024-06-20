@@ -31,7 +31,10 @@ export const sendMessage = async ({ message, senderId, directMessageId, groupId 
     });
 
     if (!chat) {
-        return
+        return {
+            error: "something went wrong",
+            statusCode: 500
+        }
     }
 
     pusher.trigger(directMessageId ? `dm-${directMessageId}` : `group-${groupId}`, 'new-message', {
@@ -42,7 +45,10 @@ export const sendMessage = async ({ message, senderId, directMessageId, groupId 
         groupId
     });
 
-    return chat
+    return {
+        data: chat,
+        statusCode: 200
+    }
 }
 
 export const deleteMessage = async ({ id }: { id: number }) => {
@@ -53,14 +59,21 @@ export const deleteMessage = async ({ id }: { id: number }) => {
     })
 
     if (!chat) {
-        return
+        return {
+            error: "something went wrong",
+            statusCode: 500
+        }
     }
 
-    pusher.trigger(chat.directMessageId ? `dm-${chat.directMessageId}`: `dm-${chat.groupChatId}`, 'delete-message', {
+
+    pusher.trigger(chat.directMessageId ? `dm-${chat.directMessageId}` : `group-${chat.groupChatId}`, 'delete-message', {
         id
     });
 
-    return chat
+    return {
+        data: chat,
+        statusCode: 200
+    }
 }
 
 export const createGroup = async ({ name, member }: { name: string, member: any[] }) => {
@@ -74,10 +87,16 @@ export const createGroup = async ({ name, member }: { name: string, member: any[
     })
 
     if (!group) {
-        return
+        return {
+            error: "something went wrong",
+            statusCode: 500
+        }
     }
 
-    return group
+    return {
+        data: group,
+        statusCode: 200
+    }
 }
 
 export const createDM = async ({ participants }: { participants: { id: number }[] }) => {
@@ -90,10 +109,16 @@ export const createDM = async ({ participants }: { participants: { id: number }[
     })
 
     if (!DM) {
-        return
+        return {
+            error: "something went wrong",
+            statusCode: 500
+        }
     }
 
-    return DM
+    return {
+        data: DM,
+        statusCode: 200
+    }
 }
 
 export const getDirectMessageData = async ({ directMessageId }: { directMessageId: number }) => {
@@ -103,7 +128,7 @@ export const getDirectMessageData = async ({ directMessageId }: { directMessageI
             id: directMessageId
         },
         include: {
-            message: {},
+            message: true,
             participants: {
                 select: {
                     id: true,
@@ -114,13 +139,20 @@ export const getDirectMessageData = async ({ directMessageId }: { directMessageI
     })
 
     if (!data) {
-        return
+        return {
+            error: "direct message not found",
+            statusCode: 500
+        }
     }
 
-    return data
+
+    return {
+        data,
+        statusCode: 200
+    }
 }
 
-export const getDirectMessage = async ({ userId }: { userId: number }) => {
+export const getContacts = async ({ userId }: { userId: number }) => {
     const DM = await prisma.directMessage.findMany({
         where: {
             participants: {
@@ -139,11 +171,10 @@ export const getDirectMessage = async ({ userId }: { userId: number }) => {
         }
     })
 
-    if (!DM) {
-        return
+    return {
+        data: DM,
+        statusCode: 200
     }
-
-    return DM
 }
 
 export const getGroup = async ({ userId }: { userId: number }) => {
@@ -157,16 +188,14 @@ export const getGroup = async ({ userId }: { userId: number }) => {
         }
     })
 
-    if (!group) {
-        return
+    return {
+        data: group,
+        statusCode: 200
     }
-
-    return group
 }
 
 export const getGroupData = async ({ groupChatId }: { groupChatId: number }) => {
-
-    const data = await prisma.groupChat.findUnique({
+    const group = await prisma.groupChat.findUnique({
         where: {
             id: groupChatId
         },
@@ -181,14 +210,20 @@ export const getGroupData = async ({ groupChatId }: { groupChatId: number }) => 
         }
     })
 
-    if (!data) {
-        return
+    if (!group) {
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
     }
 
-    return data
+    return {
+        data: group,
+        statusCode: 200
+    }
 }
 
-export const checkExistingDM = async ({participantIDs}: {participantIDs: number[]}) => {
+export const checkExistingDM = async ({ participantIDs }: { participantIDs: number[] }) => {
     const dm = await prisma.directMessage.findFirst({
         where: {
             participants: {
@@ -201,27 +236,38 @@ export const checkExistingDM = async ({participantIDs}: {participantIDs: number[
         }
     })
 
-    return dm
+    return {
+        data: dm,
+        statusCode: 200
+    }
 }
 
-export const addMembers = async ({members, groupId}: {members: {id: number}[], groupId: number}) => {
+export const addMembers = async ({ members, groupId }: { members: { id: number }[], groupId: number }) => {
     const group = await prisma.groupChat.update({
         where: {
             id: groupId
         },
         data: {
             member: {
-                connect: members.map((member) => ({id: member.id}))
+                connect: members.map((member) => ({ id: member.id }))
             }
         },
     })
 
-    if(!group) return
+    if (!group) {
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
+    }
 
-    return group
+    return {
+        data: group,
+        statusCode: 200
+    }
 }
 
-export const getGroupMembers = async ({id}: {id:number}) => {
+export const getGroupMembers = async ({ id }: { id: number }) => {
     const group = await prisma.groupChat.findUnique({
         where: {
             id
@@ -236,26 +282,42 @@ export const getGroupMembers = async ({id}: {id:number}) => {
         }
     })
 
-    if(!group) return
+    if (!group) {
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
+    }
 
-    return group.member
+    return {
+        data: group.member,
+        statusCode: 200
+    }
 }
 
-export const leaveGroup = async ({userId, groupId} : {userId: number, groupId: number}) => {
+export const leaveGroup = async ({ userId, groupId }: { userId: number, groupId: number }) => {
     const group = await prisma.groupChat.update({
         where: {
             id: groupId
         },
-        data: {  
+        data: {
             member: {
                 disconnect: {
                     id: userId
                 }
-            }      
+            }
         }
     })
 
-    if(!group) return
+    if (!group) {
+        return ({
+            error: "something went wrong",
+            statusCode: 500
+        })
+    }
 
-    return group
+    return {
+        data: group,
+        statusCode: 200
+    }
 }

@@ -8,22 +8,21 @@ import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import { IComment, sendComment } from "@/lib/actions/comment";
 
-const CommentSheet = ({ children, contentId, comments }: { children: React.ReactNode; contentId: number, comments: IComment[] }) => {
+const CommentSheet = ({ children, contentId, comments }: { children: React.ReactNode; contentId: number; comments: IComment[] }) => {
   const [text, setText] = useState("");
   const { data: session } = useSession();
 
   const submitComment = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (session) {
-      const comment = await sendComment({ text, userId: session.user.id, contentId });
+    if (!session) return;
 
-      if (comment) {
-        setText("");
-        comments.unshift(comment)
-      }
+    const { data } = await sendComment({ text, userId: session.user.id, contentId });
+
+    if (data) {
+      setText("");
+      comments.unshift(data);
     }
   };
-
 
   return (
     <Sheet>
@@ -33,7 +32,7 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
           <SheetTitle className="text-center">Comment Section</SheetTitle>
         </SheetHeader>
         <Separator className="my-1" />
-        <div className="flex flex-col pb-4 h-[26rem] sm:h-[633px] gap-1 overflow-y-scroll px-3">
+        <div className="flex flex-col pb-4 h-[26rem] sm:h-[633px] gap-1 overflow-y-auto px-3">
           {comments.map((comment) => (
             <Comment text={comment.text} username={comment.user.username} key={comment.id} createdAt={comment.createdAt} uploader={comment.content.uploader.username} commentId={comment.id} />
           ))}

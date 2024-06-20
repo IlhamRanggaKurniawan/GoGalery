@@ -11,7 +11,7 @@ const Notification = ({ username, content, createdAt }: { username: string, cont
         </Avatar>
         <div className="flex items-center">
           <div className="leading-[8px]">
-            {/* <span className="text-sm font-medium mr-2">{username}</span> */}
+            <span className="text-sm font-medium mr-2">{username}</span>
             <span className="">{content}</span>
           </div>
         </div>

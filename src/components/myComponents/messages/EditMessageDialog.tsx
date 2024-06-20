@@ -1,20 +1,15 @@
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { deleteMessage } from '@/lib/actions/messaging'
-import React from 'react'
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { deleteMessage } from "@/lib/actions/messaging";
+import React from "react";
 
-const EditMessageDialog = ({children, id}: {children: React.ReactNode, id: number}) => {
-    const handleClick = async () => {
-        await deleteMessage({id})
-    }
-
-
+const EditMessageDialog = ({ children, id }: { children: React.ReactNode; id: number }) => {
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent>
         <DialogClose className="flex flex-col gap-2">
-          <Button variant={"destructive"} className="w-full" onClick={handleClick}>
+          <Button variant={"destructive"} className="w-full" onClick={() => deleteMessage({ id })}>
             Delete message
           </Button>
           <Button className="w-full" variant={"secondary"}>
@@ -23,7 +18,7 @@ const EditMessageDialog = ({children, id}: {children: React.ReactNode, id: numbe
         </DialogClose>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default EditMessageDialog
+export default EditMessageDialog;

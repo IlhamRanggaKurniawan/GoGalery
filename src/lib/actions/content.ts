@@ -23,7 +23,10 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
     const caption = formData.get("caption") as string
 
     if (!file || file.size === 0 || !caption) {
-        throw new Error("Please fill all the fields and provide a non-empty file")
+        return ({
+            error: "Please fill all the fields and provide a non-empty file",
+            statusCode: 400
+        })
     }
 
     const date = Date.now()
@@ -33,8 +36,10 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
     const picture = await supabase.storage.from("Connect Verse").upload(path, file)
 
     if (!picture || picture.error) {
-        console.log(picture.error)
-        throw new Error(picture.error.message)
+        return ({
+            error: picture.error.message,
+            statusCode: 400
+        })
     }
 
     const content = await prisma.content.create({
@@ -46,21 +51,22 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
     })
 
     if (!content) {
-        throw new Error("something went wrong")
+        return ({
+            error: "Something went wrong",
+            statusCode: 500
+        })
     }
 
     return {
-        error: false,
-        message: "Content uploaded successfully",
+        data: content,
         statusCode: 200,
-        content
     };
 }
 
 
 export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pageSize: number }) => {
 
-    const contents: IContent[] = await prisma.content.findMany({
+    const contents = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,
@@ -77,13 +83,13 @@ export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pag
         }
     })
 
-    if (!contents) {
-        throw new Error("something went wrong")
-    }
-
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor }
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
 }
 
 export const getContentByUsername = async ({ accountUsername, cursor, pageSize }: { accountUsername: string, cursor?: number, pageSize: number }) => {
@@ -110,13 +116,15 @@ export const getContentByUsername = async ({ accountUsername, cursor, pageSize }
         },
     });
 
-    if (!contents) {
-        throw new Error("something went wrong")
-    }
-
+    
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor };
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
+
 };
 
 
@@ -137,10 +145,16 @@ export const getContentById = async ({ id }: { id: number, }) => {
     })
 
     if (!content) {
-        return
+        return ({
+            error: "Content not found",
+            statusCode: 400
+        })
     }
 
-    return content
+    return ({
+        data: content,
+        statusCode: 200
+    })
 }
 
 export const profileChainingContent = async ({ id, username, pageSize, cursor }: { id: number, username: string, pageSize: number, cursor?: number }) => {
@@ -169,13 +183,13 @@ export const profileChainingContent = async ({ id, username, pageSize, cursor }:
         }
     })
 
-    if (!contents) {
-        return
-    }
-
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor };
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
 }
 
 export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSize: number, cursor?: number, id: number }) => {
@@ -201,13 +215,13 @@ export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSiz
         }
     })
 
-    if (!contents) {
-        return
-    }
-
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor };
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
 }
 
 export const getContentByFollowing = async ({ userId, cursor, pageSize }: { userId: number, cursor?: number, pageSize: number }) => {
@@ -240,7 +254,11 @@ export const getContentByFollowing = async ({ userId, cursor, pageSize }: { user
 
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor };
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
 }
 
 export const savedChainingContent = async ({ pageSize, cursor, id, username }: { pageSize: number, cursor?: number, id: number, username: string }) => {
@@ -273,10 +291,11 @@ export const savedChainingContent = async ({ pageSize, cursor, id, username }: {
         }
     })
 
-    if (!contents) {
-        return
-    }
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
-    return { contents, nextCursor };
+    return {
+        data: contents,
+        statusCode: 200,
+        nextCursor
+    };
 }

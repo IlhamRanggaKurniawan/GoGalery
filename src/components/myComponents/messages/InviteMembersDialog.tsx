@@ -21,35 +21,35 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
   const [users, setUsers] = useState<IUser[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
   const [debouncedSearch] = useDebounce(search, 500);
-  const [groupMembers, setGroupMembers] = useState<IUser[]>([])
+  const [groupMembers, setGroupMembers] = useState<IUser[]>([]);
 
   const { data: session } = useSession();
 
   const getUsers = async () => {
     if (!session) return;
 
-    const users = await getMutualFollowers({ username: search, id: session.user.id });
+    const { data } = await getMutualFollowers({ username: search, id: session.user.id });
 
-    if (users) {
-      setUsers(users);
-    }
+    if (!data) return;
+
+    setUsers(data);
   };
 
   const getMembers = async () => {
-    if(!id) return
-    const members = await getGroupMembers({id})
+    if (!id) return;
+    const { data } = await getGroupMembers({ id });
 
-    if(members) {
-        setGroupMembers(members)
-    }
-  }
+    if (!data) return;
+
+    setGroupMembers(data);
+  };
 
   const handleSelectUser = (user: { id: number; username: string }) => {
     if (selectedUsers.find((prev) => prev.id === user.id)) {
-      setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
-    } else {
-      setSelectedUsers([...selectedUsers, user]);
+      return setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
     }
+    
+    setSelectedUsers([...selectedUsers, user]);
   };
 
   const addPeople = async () => {
@@ -57,12 +57,12 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
 
     await addMembers({ groupId: id, members: selectedUsers });
 
-    getMembers()
+    getMembers();
   };
 
   useEffect(() => {
     getUsers();
-    getMembers()
+    getMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
@@ -80,7 +80,7 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
         <Input type="text" placeholder="Add members" onChange={(e) => setSearch(e.target.value)} />
         <div className="h-96 overflow-y-auto">
           {users.map((user) => {
-            if(groupMembers.some((member) => member.id === user.id)) return
+            if (groupMembers.some((member) => member.id === user.id)) return;
             const isSelected = selectedUsers.some((selectedUser) => selectedUser.id === user.id);
             return (
               <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.id} onClick={() => handleSelectUser(user)}>
@@ -89,16 +89,16 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
             );
           })}
         </div>
-        {selectedUsers.length !== 0 ? (
+        {selectedUsers.length === 0 ? (
+          <Button className="w-full" variant={"secondary"} disabled>
+            Invite users
+          </Button>
+        ) : (
           <SheetClose>
             <Button className="w-full" onClick={addPeople}>
               Invite users
             </Button>
           </SheetClose>
-        ) : (
-          <Button className="w-full" variant={"secondary"} disabled>
-            Invite users
-          </Button>
         )}
       </DialogContent>
     </Dialog>
