@@ -2,20 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import ChatBubble from "./ChatBubble";
-import { getDirectMessageData } from "@/lib/actions/messaging";
+import { getDirectMessageData, IMessage } from "@/lib/actions/messaging";
 import ConversationHeader from "./ConversationHeader";
 import { useSession } from "next-auth/react";
 import MessageInput from "./MessageInput";
 import Pusher from "pusher-js";
+import { IUserPreview } from "@/lib/actions/user";
 
 const DirectConversation = ({ id }: { id: number }) => {
-  const [messages, setMessages] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [users, setUsers] = useState<IUserPreview[]>([]);
 
   const { data: session } = useSession();
 
   const getConversation = async () => {
-    if (session) return;
+    if (!session) return;
 
     const { data } = await getDirectMessageData({ directMessageId: id });
 
@@ -37,14 +38,14 @@ const DirectConversation = ({ id }: { id: number }) => {
 
     const channel = pusher.subscribe(`dm-${id}`);
 
-    channel.bind("new-message", (message: any) => {
+    channel.bind("new-message", (message: IMessage) => {
       setMessages((prevMessages) => [...prevMessages, message]);
       if (message.senderId !== session?.user.id) {
         sound.play().catch((error) => console.log("Error playing sound:", error));
       }
     });
 
-    channel.bind("delete-message", (data: { id: number }) => {
+    channel.bind("delete-message", (data: IMessage) => {
       setMessages((prevMessages) => prevMessages.filter((message) => message.id !== data.id));
     });
 
@@ -56,15 +57,19 @@ const DirectConversation = ({ id }: { id: number }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
-  if (users.some((user) => user.id === session?.user.id)) return
+  if (!users.some((user) => user.id === session?.user.id)) return;
 
   const otherParticipant = users.find((user) => user.id !== session?.user.id)?.username;
+
+  if (!otherParticipant) return;
 
   return (
     <div className="overflow-y-hidden">
       <ConversationHeader group={false} name={otherParticipant} />
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
-        {messages?.map((message) => <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id} />)}
+        {messages?.map((message) => (
+          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id} />
+        ))}
       </div>
       <MessageInput id={id} group={false} />
     </div>

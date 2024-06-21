@@ -34,7 +34,7 @@ export const likeContent = async({userId, contentId}: {userId: number, contentId
     await createNotification({
         receiverId: like.content.uploaderId,
         type: "like",
-        content: `liking your content`,
+        content: "liking your content",
         senderId: userId
     })
 

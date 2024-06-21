@@ -11,14 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
-interface IUser {
-  id: number;
-  username: string;
-}
+import { IUserPreview } from "@/lib/actions/user";
 
 const GroupInfoDialog = ({ children, id }: { children: React.ReactNode; id?: number }) => {
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useState<IUserPreview[]>([]);
   const [name, setName] = useState("");
 
   const { data: session } = useSession();

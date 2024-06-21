@@ -56,7 +56,7 @@ const GridContentInfinityScroll = ({ contentFuction, accountUsername, href }: { 
 
   return (
     <div>
-      {contents.length === 1 && (
+      {contents.length !== 0 && (
         <div className="grid grid-cols-3 gap-[1px] m-1 sm:mt-2 sm:gap-1">
           {contents.map((content) => (
             <Link href={`/${href}/${content.id}`} key={content.id}>

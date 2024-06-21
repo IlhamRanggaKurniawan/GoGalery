@@ -3,12 +3,15 @@
 import { hash } from "bcrypt"
 import prisma from "../dataStorage/db"
 
-export const updateProfile = async ({ id, data }: { id: number, data: any }) => {
-    const updatedData = data
+export interface IUserPreview {
+    id: number,
+    username: string
+}
 
+export const updateProfile = async ({ id, data }: { id: number, data: {password?: string, bio?: string} }) => {
     if (data.password) {
         const hashedPassword = await hash(data.password, 10);
-        updatedData.password = hashedPassword;
+        data.password = hashedPassword;
     }
 
     const user = await prisma.user.update({
@@ -16,7 +19,7 @@ export const updateProfile = async ({ id, data }: { id: number, data: any }) => 
             id
         },
         data: {
-            ...updatedData
+            ...data
         }
     })
 

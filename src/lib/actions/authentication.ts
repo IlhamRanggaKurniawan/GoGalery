@@ -1,16 +1,26 @@
 "use server"
 
-import  prisma  from "../dataStorage/db"
+import prisma from "../dataStorage/db"
 import bcrypt from "bcrypt"
+import { registerSchema } from "../validation";
 
-interface RegisterParams {
-    username: string;
-    email: string;
-    password: string;
-    confPassword: string;
-}
+const register = async ({ username, email, password }: { username: string; email: string; password: string; }) => {
 
-const register = async ({ username, email, password, confPassword }: RegisterParams) => {
+    const { error } = registerSchema.validate({username, email, password});
+
+
+    if(error) {
+        if(error?.details[0].context?.regex) {
+            return {
+                error: "Username can only contain alphabets, numbers, underscores"
+            }
+        }
+
+        return {
+            error: error.message,
+            statusCode: 400
+        }
+    }
 
     const [existingUsername, existingEmail] = await Promise.all([
         prisma.user.findUnique({ where: { username } }),
@@ -22,7 +32,7 @@ const register = async ({ username, email, password, confPassword }: RegisterPar
             error: "email or username already exists",
             statusCode: 409
         })
-    } 
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -39,7 +49,7 @@ const register = async ({ username, email, password, confPassword }: RegisterPar
             error: "failed to register",
             statusCode: 500
         })
-    } 
+    }
 
     return ({
         data: user,
@@ -47,7 +57,5 @@ const register = async ({ username, email, password, confPassword }: RegisterPar
     })
 
 }
-
-
 
 export default register

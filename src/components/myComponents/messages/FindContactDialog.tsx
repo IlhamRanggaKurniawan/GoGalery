@@ -9,17 +9,12 @@ import AccountPreview from "../AccountPreview";
 import { checkExistingDM, createDM } from "@/lib/actions/messaging";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { getUserWefollow } from "@/lib/actions/user";
+import { getUserWefollow, IUserPreview } from "@/lib/actions/user";
 import { useDebounce } from "use-debounce";
 
-interface Iuser {
-  id: number;
-  username: string;
-}
-
 const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
-  const [users, setUsers] = useState<Iuser[]>([]);
-  const [userWeFollow, setUserWeFollow] = useState<Iuser[]>([]);
+  const [users, setUsers] = useState<IUserPreview[]>([]);
+  const [userWeFollow, setUserWeFollow] = useState<IUserPreview[]>([]);
   const [search, setSearch] = useState<string>("");
   const [debouncedSearch] = useDebounce(search, 500);
 

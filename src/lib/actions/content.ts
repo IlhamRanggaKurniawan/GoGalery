@@ -1,6 +1,5 @@
 "use server"
 
-// import { revalidatePath } from "next/cache"
 import supabase from "../dataStorage/bucket"
 import prisma from "../dataStorage/db"
 
@@ -94,7 +93,7 @@ export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pag
 
 export const getContentByUsername = async ({ accountUsername, cursor, pageSize }: { accountUsername: string, cursor?: number, pageSize: number }) => {
 
-    const contents: IContent[] = await prisma.content.findMany({
+    const contents = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,
@@ -116,7 +115,7 @@ export const getContentByUsername = async ({ accountUsername, cursor, pageSize }
         },
     });
 
-    
+
     const nextCursor = contents.length === pageSize ? contents[contents.length - 1].id : null
 
     return {
@@ -130,7 +129,7 @@ export const getContentByUsername = async ({ accountUsername, cursor, pageSize }
 
 
 export const getContentById = async ({ id }: { id: number, }) => {
-    const content: IContent | null = await prisma.content.findUnique({
+    const content = await prisma.content.findUnique({
         where: {
             id
         },
@@ -158,7 +157,7 @@ export const getContentById = async ({ id }: { id: number, }) => {
 }
 
 export const profileChainingContent = async ({ id, username, pageSize, cursor }: { id: number, username: string, pageSize: number, cursor?: number }) => {
-    const contents: IContent[] | null = await prisma.content.findMany({
+    const contents = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,
@@ -193,7 +192,7 @@ export const profileChainingContent = async ({ id, username, pageSize, cursor }:
 }
 
 export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSize: number, cursor?: number, id: number }) => {
-    const contents: IContent[] | null = await prisma.content.findMany({
+    const contents = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,
@@ -232,13 +231,13 @@ export const getContentByFollowing = async ({ userId, cursor, pageSize }: { user
         skip: cursor ? 1 : 0,
         where: {
             uploader: {
-              following: {
-                some: {
-                  followerId: userId,
+                following: {
+                    some: {
+                        followerId: userId,
+                    },
                 },
-              },
             },
-          },
+        },
         include: {
             uploader: {
                 select: {
@@ -262,7 +261,7 @@ export const getContentByFollowing = async ({ userId, cursor, pageSize }: { user
 }
 
 export const savedChainingContent = async ({ pageSize, cursor, id, username }: { pageSize: number, cursor?: number, id: number, username: string }) => {
-    const contents: IContent[] | null = await prisma.content.findMany({
+    const contents = await prisma.content.findMany({
         take: pageSize,
         cursor: cursor ? { id: cursor } : undefined,
         skip: cursor ? 1 : 0,

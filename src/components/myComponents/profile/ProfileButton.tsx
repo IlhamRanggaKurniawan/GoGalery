@@ -6,12 +6,14 @@ import { useDebouncedCallback } from "use-debounce";
 import { useSession } from "next-auth/react";
 import { useFollowStore } from "@/lib/store/followStore";
 import Link from "next/link";
+import { checkExistingDM, createDM } from "@/lib/actions/messaging";
+import { useRouter } from "next/navigation";
 
 const ProfileButton = ({ userId }: { userId: number }) => {
   const followingId = userId;
   const { data: session } = useSession();
-
   const { isFollow, checkFollow, toggleFollow } = useFollowStore();
+  const router = useRouter()
 
   useEffect(() => {
     if (!session) return;
@@ -33,6 +35,20 @@ const ProfileButton = ({ userId }: { userId: number }) => {
     );
   }
 
+  const handleClick = async () => {
+    if (!session) return;
+
+    const { data } = await checkExistingDM({ participantIDs: [followingId, session.user.id] });
+
+    if (data) {
+      return router.push(`/messages/${data.id}`);
+    }
+
+    const { data: res } = await createDM({ participants: [{ id: followingId }, { id: session.user.id }] });
+
+    return router.push(`/messages/${res?.id}`);
+  }
+
   return (
     <div className="flex justify-center my-2 gap-2">
       <div>
@@ -46,7 +62,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
           </Button>
         )}
       </div>
-      {followingId !== session?.user.id && <Button className="py-4 px-8 max-w-24">Message</Button>}
+      {followingId !== session?.user.id && <Button className="py-4 px-8 max-w-24" onClick={handleClick}>Message</Button>}
     </div>
   );
 };

@@ -61,7 +61,7 @@ export const sendComment = async ({ userId, contentId, text }: { userId: number,
     await createNotification({
         receiverId: comment.content.uploader.id,
         type: "comment",
-        content: ` comment on your post`,
+        content: "comment on your post",
         senderId: comment.userId
     })
 

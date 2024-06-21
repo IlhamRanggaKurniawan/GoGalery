@@ -7,21 +7,16 @@ import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import AccountPreview from "../AccountPreview";
 import { useSession } from "next-auth/react";
-import { getMutualFollowers } from "@/lib/actions/user";
+import { getMutualFollowers, IUserPreview } from "@/lib/actions/user";
 import { addMembers, getGroupMembers } from "@/lib/actions/messaging";
 import { SheetClose } from "@/components/ui/sheet";
 
-interface IUser {
-  id: number;
-  username: string;
-}
-
 const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?: number }) => {
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState<IUser[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useState<IUserPreview[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<IUserPreview[]>([]);
   const [debouncedSearch] = useDebounce(search, 500);
-  const [groupMembers, setGroupMembers] = useState<IUser[]>([]);
+  const [groupMembers, setGroupMembers] = useState<IUserPreview[]>([]);
 
   const { data: session } = useSession();
 
@@ -44,7 +39,7 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
     setGroupMembers(data);
   };
 
-  const handleSelectUser = (user: { id: number; username: string }) => {
+  const handleSelectUser = (user: IUserPreview) => {
     if (selectedUsers.find((prev) => prev.id === user.id)) {
       return setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
     }

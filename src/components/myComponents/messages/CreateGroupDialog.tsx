@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { getMutualFollowers } from "@/lib/actions/user";
+import { getMutualFollowers, IUserPreview } from "@/lib/actions/user";
 import { X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,16 +13,11 @@ import { useDebounce } from "use-debounce";
 import AccountPreview from "../AccountPreview";
 import { createGroup } from "@/lib/actions/messaging";
 
-interface IUser {
-  id: number;
-  username: string;
-}
-
 const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
   const [name, setName] = useState("");
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState<IUser[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useState<IUserPreview[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<IUserPreview[]>([]);
   const [debouncedSearch] = useDebounce(search, 500);
 
   const { data: session } = useSession();
@@ -46,7 +41,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
 
   const handleCreateGroup = async () => {
     if (!session) return;
-    const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id }] });
+    const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id, username: session.user.username }] });
 
     router.push(`/group/${data?.id}`);
   };

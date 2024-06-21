@@ -33,7 +33,6 @@ const RegisterForm = () => {
       username,
       email,
       password,
-      confPassword,
     });
 
     if (error) {

@@ -2,16 +2,25 @@
 
 import prisma from "../dataStorage/db"
 import pusher from "../pusher"
+import { IUserPreview } from "./user"
 
-export interface IDM {
+export interface IMessage {
     id: number,
-    createdAt: Date,
-    participants: [
-        {
-            id: number,
-            username: string
-        }
-    ]
+    senderId: number,
+    message: string
+}
+
+export interface IContact {
+    id: number,
+    participants: IUserPreview[],
+    createdAt: Date
+}
+
+export interface IGroup {
+    id: number,
+    name: string,
+    pictureUrl: string | null,
+    createdAt: Date
 }
 
 export const sendMessage = async ({ message, senderId, directMessageId, groupId }: { message: string, senderId: number, directMessageId?: number, groupId?: number }) => {
@@ -41,8 +50,6 @@ export const sendMessage = async ({ message, senderId, directMessageId, groupId 
         id: chat.id,
         senderId,
         message,
-        directMessageId,
-        groupId
     });
 
     return {
@@ -76,7 +83,7 @@ export const deleteMessage = async ({ id }: { id: number }) => {
     }
 }
 
-export const createGroup = async ({ name, member }: { name: string, member: any[] }) => {
+export const createGroup = async ({ name, member }: { name: string, member: IUserPreview[] }) => {
     const group = await prisma.groupChat.create({
         data: {
             name,

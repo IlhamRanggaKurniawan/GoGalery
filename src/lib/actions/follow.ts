@@ -18,9 +18,6 @@ export const isFollowing = async ({ followerId, followingId }: { followerId: num
     };
 }
 
-
-
-
 export const follow = async ({ followerId, followingId }: { followerId: number, followingId: number }) => {
 
     const follow = await prisma.follow.create({
@@ -45,7 +42,7 @@ export const follow = async ({ followerId, followingId }: { followerId: number, 
     await createNotification({
         receiverId: followingId,
         type: "follow",
-        content: `following you`,
+        content: "following you",
         senderId: follow.followerId
     })
 

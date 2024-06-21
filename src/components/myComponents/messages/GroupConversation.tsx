@@ -2,24 +2,27 @@
 
 import React, { useEffect, useState } from "react";
 import ConversationHeader from "./ConversationHeader";
-import { getGroupData } from "@/lib/actions/messaging";
+import { getGroupData, IMessage } from "@/lib/actions/messaging";
 import ChatBubble from "./ChatBubble";
 import MessageInput from "./MessageInput";
 import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
+import { IUserPreview } from "@/lib/actions/user";
 
 const GroupConversation = ({ id }: { id: number }) => {
-  const [group, setGroup] = useState<any>(null);
-  const [messages, setMessages] = useState<any[]>([]);
   const { data: session } = useSession();
+  const [groupName, setGroupName] = useState("");
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [member, setMember] = useState<IUserPreview[]>([])
 
   const getConversation = async () => {
     const { data } = await getGroupData({ groupChatId: id });
 
     if (!data) return;
 
-    setGroup(data);
+    setGroupName(data.name);
     setMessages(data.message);
+    setMember(data.member)
   };
 
   useEffect(() => {
@@ -32,14 +35,14 @@ const GroupConversation = ({ id }: { id: number }) => {
 
     const channel = pusher.subscribe(`group-${id}`);
 
-    channel.bind("new-message", (data: any) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-      if (data.senderId !== session?.user.id) {
+    channel.bind("new-message", (message: IMessage) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+      if (message.senderId !== session?.user.id) {
         sound.play().catch((error) => console.log("Error playing sound:", error));
       }
     });
 
-    channel.bind("delete-message", (data: { id: number }) => {
+    channel.bind("delete-message", (data: IMessage) => {
       setMessages((prevMessages) => prevMessages.filter((message) => message.id !== data.id));
     });
 
@@ -50,13 +53,13 @@ const GroupConversation = ({ id }: { id: number }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
-  if (group?.member.some((member: any) => member.id === session?.user.id)) return;
+  if (!member.some((member: IUserPreview) => member.id === session?.user.id)) return;
 
   return (
     <div className="overflow-y-hidden">
-      <ConversationHeader group name={group.name} id={id} />
+      <ConversationHeader group name={groupName} id={id} />
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
-        {messages?.map((message: any) => (
+        {messages.map((message: IMessage) => (
           <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id} />
         ))}
       </div>
