@@ -81,7 +81,7 @@ export const findUser = async ({ username }: { username: string }) => {
     }
 }
 
-export const getUserProfile = async (username: string) => {
+export const getUserProfile = async ({username}: {username: string}) => {
     const user = await prisma.user.findUnique({
         where: {
             username

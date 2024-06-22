@@ -9,7 +9,7 @@ const createJestConfig = nextJest({
 // Add any custom config to be passed to Jest
 const config: Config = {
   coverageProvider: 'v8',
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   modulePaths: ['<rootDir>/src'],
   collectCoverage: true,
   collectCoverageFrom: [
@@ -21,7 +21,13 @@ const config: Config = {
     "!<rootDir>/*.config.{js,ts}",
     "!**/dataStorage/**",
     "!**/ui/**"
-  ]
+  ],
+  setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1'
+  },
+
+
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 }

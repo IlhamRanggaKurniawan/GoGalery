@@ -12,7 +12,7 @@ const register = async ({ username, email, password }: { username: string; email
     if(error) {
         if(error?.details[0].context?.regex) {
             return {
-                error: "Username can only contain alphabets, numbers, underscores"
+                error: "Username can only contain alphabets, numbers and underscores"
             }
         }
 
