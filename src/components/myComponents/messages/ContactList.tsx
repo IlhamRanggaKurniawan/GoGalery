@@ -5,6 +5,8 @@ import Contact from "./Contact";
 import { useSession } from "next-auth/react";
 import { getContacts, getGroup, IContact, IGroup } from "@/lib/actions/messaging";
 import { IUserPreview } from "@/lib/actions/user";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ContactList = ({ group }: { group: boolean }) => {
   const { data: session } = useSession();
@@ -33,7 +35,17 @@ const ContactList = ({ group }: { group: boolean }) => {
 
   return (
     <div>
-      {group ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} />)
+      {session?.user.role === "admin" && (
+        <Link href="/ai/1" className="h-14 flex items-center gap-3 p-2">
+          <Avatar className="w-12 h-12">
+            <AvatarImage src="/openAI.jpeg" alt="@shadcn" />
+            <AvatarFallback>Open AI</AvatarFallback>
+          </Avatar>
+          <h4 className="truncate">Open AI</h4>
+        </Link>
+      )}
+      {group
+        ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} />)
         : contacts.map((contact) => {
             const otherParticipant = contact.participants.find((participant: IUserPreview) => participant.id !== session?.user.id)?.username;
 

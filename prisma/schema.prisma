@@ -15,25 +15,27 @@ datasource db {
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  username      String          @unique
-  email         String          @unique
-  password      String
-  role          String          @default("member")
-  profileUrl    String?
-  bio           String?
-  content       Content[]
-  likeContent   LikeContent[]
-  saveContent   SaveContent[]
-  comment       Comment[]
-  followers     Follow[]        @relation("followersRelation")
-  following     Follow[]        @relation("followingRelation")
-  Notification  Notification[]
-  GroupChat     GroupChat[]
-  DirectMessage DirectMessage[]
-  Message       Message[]
-  createdAt     DateTime        @default(now())
-  Feedback      Feedback[]
+  id             Int              @id @default(autoincrement())
+  username       String           @unique
+  email          String           @unique
+  password       String
+  role           String           @default("member")
+  profileUrl     String?
+  bio            String?
+  content        Content[]
+  likeContent    LikeContent[]
+  saveContent    SaveContent[]
+  comment        Comment[]
+  followers      Follow[]         @relation("followersRelation")
+  following      Follow[]         @relation("followingRelation")
+  Notification   Notification[]
+  GroupChat      GroupChat[]
+  DirectMessage  DirectMessage[]
+  Message        Message[]
+  createdAt      DateTime         @default(now())
+  Feedback       Feedback[]
+  AIConversation AIConversation[]
+  AIMessage      AIMessage[]
 }
 
 model Content {
@@ -140,4 +142,23 @@ model Feedback {
   user      User     @relation(fields: [userId], references: [id])
   message   String
   createdAt DateTime @default(now())
+}
+
+model AIConversation {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  message   AIMessage[]
+  createdAt DateTime    @default(now())
+}
+
+model AIMessage {
+  id               Int            @id @default(autoincrement())
+  senderId         Int
+  sender           User           @relation(fields: [senderId], references: [id])
+  AIConversation   AIConversation @relation(fields: [aIConversationId], references: [id])
+  aIConversationId Int
+  message          String
+  response         String?
+  createdAt        DateTime       @default(now())
 }

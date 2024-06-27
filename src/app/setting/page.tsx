@@ -4,17 +4,17 @@ import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "setting | Connect Verse",
-  description: "Welcome to the Connect Verse upload setting page",
+  title: "Setting | Connect Verse",
+  description: "Welcome to the Connect Verse upload Setting page",
   openGraph: {
-    title: "setting | Connect Verse",
-    description: "Welcome to the Connect Verse upload setting page",
+    title: "Setting | Connect Verse",
+    description: "Welcome to the Connect Verse upload Setting page",
     url: "https://ConnectVerse.com/setting",
   },
   twitter: {
     card: "summary_large_image",
-    title: "setting | Connect Verse",
-    description: "Welcome to the Connect Verse upload setting page",
+    title: "Setting | Connect Verse",
+    description: "Welcome to the Connect Verse upload Setting page",
   },
 };
 
