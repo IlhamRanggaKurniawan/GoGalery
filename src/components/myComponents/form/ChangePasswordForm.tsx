@@ -22,7 +22,7 @@ const ChangePasswordForm = () => {
       return setError("password doesn't match");
     }
 
-    const { data } = await updateProfile({ id: session.user.id, data: { password } });
+    const { data } = await updateProfile({ id: session.user.id, input: { password } });
 
     router.push(`/${data?.username}`);
   };

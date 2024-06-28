@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChatBubble from "./ChatBubble";
 import { getDirectMessageData, IMessage } from "@/lib/actions/messaging";
 import ConversationHeader from "./ConversationHeader";
@@ -12,6 +12,7 @@ import { IUserPreview } from "@/lib/actions/user";
 const DirectConversation = ({ id }: { id: number }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [users, setUsers] = useState<IUserPreview[]>([]);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const { data: session } = useSession();
 
@@ -57,18 +58,26 @@ const DirectConversation = ({ id }: { id: number }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   if (!users.some((user) => user.id === session?.user.id)) return;
 
-  const otherParticipant = users.find((user) => user.id !== session?.user.id)?.username;
+  const otherParticipant = users.find((user) => user.id !== session?.user.id);
 
   if (!otherParticipant) return;
 
   return (
     <div className="overflow-y-hidden">
-      <ConversationHeader group={false} name={otherParticipant} />
+      <ConversationHeader group={false} name={otherParticipant.username} profilePicture={otherParticipant.profileUrl}/>
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
-        {messages?.map((message) => (
-          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id} />
+        {messages?.map((message, index) => (
+          <div key={message.id} ref={index === messages.length - 1 ? lastMessageRef : null}>
+            <ChatBubble message={message.message} senderId={message.senderId} id={message.id} />
+          </div>
         ))}
       </div>
       <MessageInput id={id} group={false} />

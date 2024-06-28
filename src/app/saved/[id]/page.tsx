@@ -22,7 +22,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         <h1 className="text-lg font-medium">Saved</h1>
       </div>
       <div className="flex flex-col gap-4 items-center">
-      <Content uploader={data.uploader.username} caption={data.caption} url={data.url} contentId={data.id}/>
+      <Content uploader={data.uploader.username} caption={data.caption} url={data.url} contentId={data.id} profilePicture={data.uploader.profileUrl} id={data.id}/>
       <StraightContentInfinityScroll contentFuction={savedChainingContent} id={+params.id}/>
       </div>
     </div>

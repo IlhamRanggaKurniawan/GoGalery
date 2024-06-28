@@ -2,41 +2,64 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { updateProfile } from "@/lib/actions/user";
+import { Input } from "@/components/ui/input";
+import { getUserProfile, updateProfile } from "@/lib/actions/user";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const UpdateProfileForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [bio, setBio] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
-  const updateAccount = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const setProfile = async () => {
     if (!session) return;
 
-    const { data } = await updateProfile({ id: session.user.id, data: { bio } });
+    const { data } = await getUserProfile({ username: session.user.username });
+
+    if (!data) return;
+
+    if (data.bio) setBio(data.bio);
+    if (data.profileUrl) setProfilePicture(data.profileUrl);
+  };
+
+  const updateAccount = async (formData: FormData) => {
+    if (!session) return;
+
+    const file = formData.get("file") as File;
+
+    if (!bio && !file) return;
+
+    const { data } = await updateProfile({ id: session.user.id, input: { bio, profileUrl: profilePicture }, formData });
 
     router.push(`/${data?.username}`);
   };
 
+  useEffect(() => {
+    setProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
   return (
-    <form className="py-5 px-6 sm:py-10 sm:px-10 flex flex-col gap-3 w-full" onSubmit={updateAccount}>
+    <form className="py-5 px-6 sm:py-10 sm:px-10 flex flex-col gap-3 w-full" action={updateAccount}>
       <h2 className="font-medium text-lg mb-2">Edit Profile</h2>
-      <div className="bg-secondary rounded-xl flex items-center p-3">
-        <div className="w-full flex gap-3 items-center">
-          <Avatar className="h-14 w-14">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>ilham</AvatarFallback>
-          </Avatar>
-          <h3 className="font-medium">Ilham</h3>
+      <div className="flex flex-col items-center justify-center gap-5 bg-secondary p-4 rounded-xl ">
+        <Avatar className="h-28 w-28">
+          <AvatarImage src={profilePicture ? profilePicture : `/profile-picture.jpg`} alt="@shadcn" />
+          <AvatarFallback>{session?.user.username}</AvatarFallback>
+        </Avatar>
+        <div>
+          <label htmlFor="file" className="w-full bg-primary p-3 rounded-lg cursor-pointer">
+            <span className="text-background">Change Profile Picture</span>
+          </label>
+          <Input type="file" placeholder="change profile picture" className="hidden" id="file" name="file" />
         </div>
-        <Button>Change Photo</Button>
       </div>
       <div>
         <h3 className="font-medium px-2 mb-1">Bio</h3>
-        <textarea placeholder="Bio" className="rounded-xl w-full p-3 border-2 border-secondary resize-none" onChange={(e) => setBio(e.target.value)} />
+        <textarea placeholder="Bio" className="rounded-xl w-full p-3 border-2 border-secondary resize-none" onChange={(e) => setBio(e.target.value)} value={bio} />
       </div>
       <div className="flex justify-end">
         <Button type="submit" className="max-w-24">

@@ -67,12 +67,12 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
           {search.length === 0 && userWeFollow.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
           {userWeFollow?.map((user) => (
             <button onClick={() => handleClick({ id: user.id })} className="w-full text-left " key={user.id}>
-              <AccountPreview username={user.username} />
+              <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
             </button>
           ))}
           {users?.map((user) => (
             <button onClick={() => handleClick({ id: user.id })} className="w-full text-left" key={user.id}>
-              <AccountPreview username={user.username} />
+              <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
             </button>
           ))}
         </div>

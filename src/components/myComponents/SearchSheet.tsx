@@ -8,17 +8,13 @@ import { X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import AccountPreview from "./AccountPreview";
 import { ScrollArea } from "../ui/scroll-area";
-import { findUser } from "@/lib/actions/user";
+import { findUser, IUserPreview } from "@/lib/actions/user";
 import { useDebounce } from "use-debounce";
 import Link from "next/link";
 
-type user = {
-  username: string;
-};
-
 const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "bottom" | "top" | "right" }) => {
   const [search, setSearch] = useState<string>("");
-  const [users, setUsers] = useState<user[]>([]);
+  const [users, setUsers] = useState<IUserPreview[]>([]);
   const [debouncedSearch] = useDebounce(search, 500);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,7 +51,7 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
             users.map((user) => (
               <SheetClose asChild key={user.username}>
                 <Link href={`/${user.username}`} className="flex items-center cursor-pointer gap-3 w-full">
-                  <AccountPreview username={user.username} />
+                  <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
                 </Link>
               </SheetClose>
             ))

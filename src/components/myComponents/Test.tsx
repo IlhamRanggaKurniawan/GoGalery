@@ -15,8 +15,6 @@ const Test = () => {
     setLoading(true)
     const response = await imageGenerate({ prompt: input });
 
-    console.log(response)
-
     if (!response || !response.data[0] || !response.data[0].url) return;
 
     setImageUrl(response.data[0].url);

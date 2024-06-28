@@ -12,12 +12,14 @@ export interface IComment {
     updatedAt: Date,
     user: {
         id: number,
-        username: string
+        username: string,
+        profileUrl: string | null
     },
     content: {
         uploader: {
             username: string,
-            role: string
+            role: string,
+            profileUrl: string | null
         }
     }
 }
@@ -35,6 +37,7 @@ export const sendComment = async ({ userId, contentId, text }: { userId: number,
                 select: {
                     id: true,
                     username: true,
+                    profileUrl: true
                 }
             },
             content: {
@@ -43,7 +46,8 @@ export const sendComment = async ({ userId, contentId, text }: { userId: number,
                         select: {
                             id: true,
                             username: true,
-                            role: true
+                            role: true,
+                            profileUrl: true
                         }
                     }
                 }
@@ -160,6 +164,7 @@ export const getComments = async ({ contentId }: { contentId: number }) => {
                 select: {
                     id: true,
                     username: true,
+                    profileUrl: true
                 }
             },
             content: {
@@ -167,7 +172,8 @@ export const getComments = async ({ contentId }: { contentId: number }) => {
                     uploader: {
                         select: {
                             username: true,
-                            role: true
+                            role: true,
+                            profileUrl: true
                         }
                     }
                 }

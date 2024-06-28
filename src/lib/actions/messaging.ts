@@ -139,7 +139,8 @@ export const getDirectMessageData = async ({ directMessageId }: { directMessageI
             participants: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         }
@@ -172,7 +173,8 @@ export const getContacts = async ({ userId }: { userId: number }) => {
             participants: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         }
@@ -211,7 +213,8 @@ export const getGroupData = async ({ groupChatId }: { groupChatId: number }) => 
             member: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         }
@@ -283,7 +286,8 @@ export const getGroupMembers = async ({ id }: { id: number }) => {
             member: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         }

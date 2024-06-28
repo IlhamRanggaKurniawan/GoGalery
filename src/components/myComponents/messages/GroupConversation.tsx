@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ConversationHeader from "./ConversationHeader";
 import { getGroupData, IMessage } from "@/lib/actions/messaging";
 import ChatBubble from "./ChatBubble";
@@ -12,17 +12,20 @@ import { IUserPreview } from "@/lib/actions/user";
 const GroupConversation = ({ id }: { id: number }) => {
   const { data: session } = useSession();
   const [groupName, setGroupName] = useState("");
+  const [groupPicture, setGroupPicture] = useState<string | null>("")
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [member, setMember] = useState<IUserPreview[]>([])
+  const [member, setMember] = useState<IUserPreview[]>([]);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const getConversation = async () => {
     const { data } = await getGroupData({ groupChatId: id });
 
     if (!data) return;
 
+    setGroupPicture(data.pictureUrl)
     setGroupName(data.name);
     setMessages(data.message);
-    setMember(data.member)
+    setMember(data.member);
   };
 
   useEffect(() => {
@@ -53,14 +56,22 @@ const GroupConversation = ({ id }: { id: number }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, id]);
 
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   if (!member.some((member: IUserPreview) => member.id === session?.user.id)) return;
 
   return (
     <div className="overflow-y-hidden">
-      <ConversationHeader group name={groupName} id={id} />
+      <ConversationHeader group name={groupName} id={id} profilePicture={groupPicture}/>
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
-        {messages.map((message: IMessage) => (
-          <ChatBubble key={message.id} message={message.message} senderId={message.senderId} id={message.id} />
+        {messages.map((message: IMessage, index) => (
+          <div key={message.id} ref={index === messages.length - 1 ? lastMessageRef : null}>
+            <ChatBubble message={message.message} senderId={message.senderId} id={message.id} />
+          </div>
         ))}
       </div>
       <MessageInput id={id} group />

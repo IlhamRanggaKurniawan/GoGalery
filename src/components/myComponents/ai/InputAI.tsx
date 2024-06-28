@@ -1,15 +1,15 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { sendChat, textGeneration } from "@/lib/actions/ai";
+import { IAIMessage, ITextMessage, sendChat, textGeneration } from "@/lib/actions/ai";
 import { Send } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
-const InputAI = ({ conversationId, setMessage }: { conversationId: number; setMessage: any }) => {
+const InputAI = ({ conversationId, setMessage }: { conversationId: number; setMessage: React.Dispatch<React.SetStateAction<IAIMessage[]>>}) => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [params, setParams] = useState<any[]>([]);
+  const [params, setParams] = useState<ITextMessage[]>([]);
   const { data: session } = useSession();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,13 +18,13 @@ const InputAI = ({ conversationId, setMessage }: { conversationId: number; setMe
     if (!session) return;
 
     if (params.length > 5) {
-      setParams(params.shift());
-      setParams(params.shift());
+      params.shift();
+      params.shift();
     }
 
     const chat = await sendChat({ userId: session.user.id, conversationId, message: input });
 
-    setMessage((prev: any) => [...prev, chat]);
+    setMessage((prev) => [...prev, chat]);
     
     params.push({ role: "user", content: input });
 
@@ -32,7 +32,7 @@ const InputAI = ({ conversationId, setMessage }: { conversationId: number; setMe
 
     if (!tes) return;
 
-    setMessage((prev: any) => {
+    setMessage((prev) => {
       const newMessages = prev.slice(0, -1);
       return [...newMessages, tes?.data];
     });

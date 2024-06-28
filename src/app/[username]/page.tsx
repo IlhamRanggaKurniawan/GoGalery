@@ -34,7 +34,7 @@ const page = async ({ params }: { params: { username: string } }) => {
     <HeadMetaData pathname={`/${params.username}`} metaDataDescription={`${params.username} profile page`} title={params.username}/>
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">
       <div className="max-w-5xl">
-        <ProfileMain username={data.username} userId={data.id} content={data._count.content}/>
+        <ProfileMain username={data.username} userId={data.id} content={data._count.content} bio={data.bio} profilePicture={data.profileUrl}/>
         <Separator className="my-4" />
         <GridContentInfinityScroll contentFuction={getContentByUsername} accountUsername={data.username} href={data.username}/>
       </div>

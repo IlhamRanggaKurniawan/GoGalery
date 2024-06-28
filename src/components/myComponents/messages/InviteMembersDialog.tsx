@@ -79,7 +79,7 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
             const isSelected = selectedUsers.some((selectedUser) => selectedUser.id === user.id);
             return (
               <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.id} onClick={() => handleSelectUser(user)}>
-                <AccountPreview username={user.username} />
+                <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
               </button>
             );
           })}

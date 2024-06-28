@@ -4,14 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import InputAI from "./InputAI";
 import ChatBubble from "../messages/ChatBubble";
 import AIHeader from "./AIHeader";
-import { getMessage } from "@/lib/actions/ai";
+import { getAIMessage, IAIMessage } from "@/lib/actions/ai";
 
 const AIConversation = () => {
-  const [messages, setMessage] = useState<any[]>([]);
+  const [messages, setMessage] = useState<IAIMessage[]>([]);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const getChat = async () => {
-    const chat = await getMessage({ id: 3 });
+    const chat = await getAIMessage({ id: 3 });
     
     setMessage(chat);
   };

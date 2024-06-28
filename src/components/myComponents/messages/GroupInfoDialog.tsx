@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { IUserPreview } from "@/lib/actions/user";
 
-const GroupInfoDialog = ({ children, id }: { children: React.ReactNode; id?: number }) => {
+const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.ReactNode; id?: number; groupProfile?: string }) => {
   const [users, setUsers] = useState<IUserPreview[]>([]);
   const [name, setName] = useState("");
 
@@ -58,7 +58,7 @@ const GroupInfoDialog = ({ children, id }: { children: React.ReactNode; id?: num
         <Separator className=" bg-black" />
         <div className="flex flex-col items-center justify-center gap-1">
           <Avatar className="h-20 w-20  lg:h-36 lg:w-36 ">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+            <AvatarImage src={groupProfile ? groupProfile : `/profile-picture.jpg`} alt="@shadcn" />
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
           <h2 className="text-xl font-semibold">{name}</h2>
@@ -74,7 +74,7 @@ const GroupInfoDialog = ({ children, id }: { children: React.ReactNode; id?: num
         <div className="max-h-96">
           {users?.map((user) => (
             <Link href={`/${user.username}`} className="w-full text-left rounded-md" key={user.id}>
-              <AccountPreview username={user.username} />
+              <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
             </Link>
           ))}
         </div>

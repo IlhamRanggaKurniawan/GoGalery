@@ -10,7 +10,8 @@ export interface INotification {
     createdAt: Date,
     user: {
         id: number,
-        username: string
+        username: string,
+        profileUrl: string | null
     }
 }
 
@@ -52,7 +53,8 @@ export const getAllNotification = async ({ userId }: { userId: number }) => {
             user: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             },
         },

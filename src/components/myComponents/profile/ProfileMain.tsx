@@ -1,15 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
-import ProfileBio from "./ProfileBio";
 import ProfileInfo from "./ProfileInfo";
 import ProfileButton from "./ProfileButton";
 
-const ProfileMain = ({ username, userId, content }: { username: string; userId: number; content: number }) => {
+const ProfileMain = ({ username, userId, content, profilePicture, bio }: { username: string; userId: number; content: number; profilePicture: string | null; bio: string | null }) => {
   return (
     <div>
       <div className="flex items-center gap-3 py-4 flex-col">
         <Avatar className="h-20 w-20  lg:h-36 lg:w-36 ">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={profilePicture ? profilePicture : `/profile-picture.jpg`} alt="@shadcn" />
           <AvatarFallback>{username}</AvatarFallback>
         </Avatar>
         <div className="flex overflow-hidden w-screen max-w-sm items-center justify-center">
@@ -20,7 +19,7 @@ const ProfileMain = ({ username, userId, content }: { username: string; userId: 
       <div className="flex justify-center my-2 gap-2">
         <ProfileButton userId={userId} />
       </div>
-      <ProfileBio />
+      <p className="text-sm px-2 whitespace-pre-line text-center">{bio}</p>
     </div>
   );
 };

@@ -12,16 +12,15 @@ export interface IContent {
     updatedAt: Date,
     uploader: {
         id: number,
-        username: string
+        username: string,
+        profileUrl: string | null
     }
 }
 
-export const uploadContent = async ({ formData, uploaderId }: { formData: FormData, uploaderId: number }) => {
-
+export const uploadImage = async ({ formData, folder }: { formData: FormData, folder: string }) => {
     const file = formData.get("file") as File
-    const caption = formData.get("caption") as string
 
-    if (!file || file.size === 0 || !caption) {
+    if (!file || file.size === 0) {
         return ({
             error: "Please fill all the fields and provide a non-empty file",
             statusCode: 400
@@ -30,7 +29,7 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
 
     const date = Date.now()
     const fileExtension = file.name.split('.').pop();
-    const path = `Content/${date}${file.size}.${fileExtension}`
+    const path = `${folder}/${date}${file.size}.${fileExtension}`
 
     const picture = await supabase.storage.from("Connect Verse").upload(path, file)
 
@@ -41,11 +40,49 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
         })
     }
 
+    return {
+        data: path,
+        statusCode: 200,
+    };
+}
+
+export const updateImage = async ({ formData, path }: { formData: FormData, path: string }) => {
+
+    const file = formData.get("file") as File
+
+    if (!file || file.size === 0) {
+        return ({
+            error: "Please fill all the fields and provide a non-empty file",
+            statusCode: 400
+        })
+    }
+
+    const { data } = await supabase.storage.from("Connect Verse").update(path, file)
+
+    return {
+        data: data?.path,
+        statusCode: 200
+    }
+}
+
+export const uploadContent = async ({ formData, uploaderId }: { formData: FormData, uploaderId: number }) => {
+
+    const { data } = await uploadImage({ formData, folder: "Content" })
+
+    const caption = formData.get("caption") as string
+
+    if (!caption) {
+        return ({
+            error: "Please fill all the fields and provide a non-empty file",
+            statusCode: 400
+        })
+    }
+
     const content = await prisma.content.create({
         data: {
             uploaderId,
             caption,
-            url: `https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/${path}`
+            url: `https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/${data}`
         }
     })
 
@@ -62,6 +99,25 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
     };
 }
 
+export const deleteContent = async ({id} : {id: number}) => {
+    const content = await prisma.content.delete({
+        where: {
+            id
+        }
+    })
+
+    if(!content) {
+        return ({
+            error: "Something went wrong",
+            statusCode: 500
+        })
+    }
+
+    return {
+        data: content,
+        statusCode: 200
+    }
+}
 
 export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pageSize: number }) => {
 
@@ -77,6 +133,7 @@ export const getAllContent = async ({ cursor, pageSize }: { cursor?: number, pag
                 select: {
                     id: true,
                     username: true,
+                    profileUrl: true
                 }
             }
         }
@@ -109,7 +166,8 @@ export const getContentByUsername = async ({ accountUsername, cursor, pageSize }
             uploader: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         },
@@ -137,7 +195,8 @@ export const getContentById = async ({ id }: { id: number, }) => {
             uploader: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         },
@@ -173,7 +232,8 @@ export const profileChainingContent = async ({ id, username, pageSize, cursor }:
             uploader: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         },
@@ -205,7 +265,8 @@ export const exploreChainingContent = async ({ pageSize, cursor, id }: { pageSiz
             uploader: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         },
@@ -242,7 +303,8 @@ export const getContentByFollowing = async ({ userId, cursor, pageSize }: { user
             uploader: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         },
@@ -281,7 +343,8 @@ export const savedChainingContent = async ({ pageSize, cursor, id, username }: {
             uploader: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             }
         },

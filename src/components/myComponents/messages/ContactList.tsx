@@ -45,11 +45,11 @@ const ContactList = ({ group }: { group: boolean }) => {
         </Link>
       )}
       {group
-        ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} />)
+        ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} profilePicture={group.pictureUrl}/>)
         : contacts.map((contact) => {
-            const otherParticipant = contact.participants.find((participant: IUserPreview) => participant.id !== session?.user.id)?.username;
+            const otherParticipant = contact.participants.find((participant: IUserPreview) => participant.id !== session?.user.id);
 
-            return <Contact key={contact.id} id={contact.id} group={false} name={otherParticipant} />;
+            return <Contact key={contact.id} id={contact.id} group={false} name={otherParticipant?.username} profilePicture={otherParticipant?.profileUrl}/>;
           })}
     </div>
   );

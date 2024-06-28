@@ -31,7 +31,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
     setUsers(data);
   };
 
-  const handleSelectUser = (user: { id: number; username: string }) => {
+  const handleSelectUser = (user: IUserPreview) => {
     if (selectedUsers.find((prev) => prev.id === user.id)) {
       return setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
     }
@@ -41,7 +41,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
 
   const handleCreateGroup = async () => {
     if (!session) return;
-    const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id, username: session.user.username }] });
+    const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id, username: session.user.username, profileUrl: null }] });
 
     router.push(`/group/${data?.id}`);
   };
@@ -69,7 +69,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             const isSelected = selectedUsers.some((selectedUser) => selectedUser.id === user.id);
             return (
               <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.id} onClick={() => handleSelectUser(user)}>
-                <AccountPreview username={user.username} />
+                <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
               </button>
             );
           })}

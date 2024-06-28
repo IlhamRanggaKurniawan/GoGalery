@@ -2,16 +2,41 @@
 
 import { hash } from "bcrypt"
 import prisma from "../dataStorage/db"
+import { updateImage, uploadImage } from "./content"
+import supabase from "../dataStorage/bucket"
 
 export interface IUserPreview {
     id: number,
-    username: string
+    username: string,
+    profileUrl: string | null
 }
 
-export const updateProfile = async ({ id, data }: { id: number, data: {password?: string, bio?: string} }) => {
-    if (data.password) {
-        const hashedPassword = await hash(data.password, 10);
-        data.password = hashedPassword;
+export const updateProfile = async ({ id, input, formData }: { id: number, input: { password?: string, bio?: string, profileUrl?: string }, formData?: FormData }) => {
+
+    if (formData) {
+        if (input.profileUrl) {
+            const path = input.profileUrl.split("/").pop()
+
+            if (!path) {
+                return {
+                    error: "something went wrong",
+                    statusCode: 500
+                }
+            }
+
+            const { data: image } = await updateImage({ formData, path: "Profile%20Picture/" + path })
+
+            input.profileUrl = `https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/${image}`
+        } else {
+            const { data } = await uploadImage({ formData, folder: "Profile%20Picture" })
+
+            if (data) input.profileUrl = `https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/${data}`
+        }
+    }
+
+    if (input.password) {
+        const hashedPassword = await hash(input.password, 10);
+        input.password = hashedPassword;
     }
 
     const user = await prisma.user.update({
@@ -19,7 +44,7 @@ export const updateProfile = async ({ id, data }: { id: number, data: {password?
             id
         },
         data: {
-            ...data
+            ...input
         }
     })
 
@@ -44,8 +69,8 @@ export const deleteAccount = async ({ id, username }: { id: number, username: st
         }
     })
 
-    if(!user) {
-        return{
+    if (!user) {
+        return {
             error: "something went wrong",
             statusCode: 500
         }
@@ -71,7 +96,8 @@ export const findUser = async ({ username }: { username: string }) => {
         },
         select: {
             id: true,
-            username: true
+            username: true,
+            profileUrl: true
         }
     })
 
@@ -81,7 +107,7 @@ export const findUser = async ({ username }: { username: string }) => {
     }
 }
 
-export const getUserProfile = async ({username}: {username: string}) => {
+export const getUserProfile = async ({ username }: { username: string }) => {
     const user = await prisma.user.findUnique({
         where: {
             username
@@ -101,7 +127,7 @@ export const getUserProfile = async ({username}: {username: string}) => {
     })
 
     if (!user) {
-        return{
+        return {
             error: "user not found",
             statusCode: 400
         }
@@ -129,7 +155,8 @@ export const getUserWefollow = async ({ id, username }: { id: number, username: 
         },
         select: {
             id: true,
-            username: true
+            username: true,
+            profileUrl: true
         }
     })
 
@@ -144,12 +171,13 @@ export const getUserWefollow = async ({ id, username }: { id: number, username: 
         },
         select: {
             id: true,
-            username: true
+            username: true,
+            profileUrl: true
         }
     })
 
     return {
-        data: {users, randomUsers},
+        data: { users, randomUsers },
         statusCode: 200
     }
 }
@@ -173,7 +201,8 @@ export const getMutualFollowers = async ({ id, username }: { id: number, usernam
         },
         select: {
             id: true,
-            username: true
+            username: true,
+            profileUrl: true
         }
     });
 

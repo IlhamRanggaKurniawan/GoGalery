@@ -2,6 +2,20 @@
 import OpenAI from "openai"
 import prisma from "../dataStorage/db"
 
+export interface IAIMessage {
+    id: number;
+    senderId: number;
+    aIConversationId: number;
+    message: string;
+    response: string | null;
+    createdAt: Date;
+}
+
+export interface ITextMessage {
+    role: "assistant" | "user" | "system",
+    content: string
+}
+
 const openAI = new OpenAI({
     apiKey: process.env.OPENAI_KEY
 })
@@ -49,7 +63,7 @@ export const sendChat = async ({ userId, conversationId, message }: { userId: nu
     return chat
 }
 
-export const getMessage = async ({ id }: { id: number }) => {
+export const getAIMessage = async ({ id }: { id: number }) => {
     const message = await prisma.aIMessage.findMany({
         where: {
             aIConversationId: id

@@ -6,14 +6,28 @@ import React from "react";
 import CommentDialog from "./CommentDialog";
 import { useSession } from "next-auth/react";
 
-const Comment = ({ text, username, createdAt, uploader, commentId }: { text: string; username: string; createdAt: Date; uploader: string; commentId: number }) => {
+const Comment = ({
+  text,
+  username,
+  createdAt,
+  uploader,
+  commentId,
+  profilePicture,
+}: {
+  text: string;
+  username: string;
+  createdAt: Date;
+  uploader: string;
+  commentId: number;
+  profilePicture: string | null;
+}) => {
   const { data: session } = useSession();
 
   return (
     <div>
       <div className="flex gap-2">
         <Avatar className="h-9 w-9">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={profilePicture ? profilePicture : `/profile-picture.jpg`} alt="@shadcn" />
           <AvatarFallback>{username}</AvatarFallback>
         </Avatar>
         <div className="flex items-center">
@@ -25,11 +39,13 @@ const Comment = ({ text, username, createdAt, uploader, commentId }: { text: str
       </div>
       <div className="flex items-center gap-3">
         <span className="text-xs">{new Date(createdAt).toLocaleString().split(",")[1]}</span>
-        {session?.user.role === "admin" || session?.user.username === uploader || username === session?.user.username && (
-          <CommentDialog commentId={commentId}>
-            <Ellipsis className="text-xs" size={16} />
-          </CommentDialog>
-        )}
+        {session?.user.role === "admin" ||
+          session?.user.username === uploader ||
+          (username === session?.user.username && (
+            <CommentDialog commentId={commentId}>
+              <Ellipsis className="text-xs" size={16} />
+            </CommentDialog>
+          ))}
       </div>
     </div>
   );

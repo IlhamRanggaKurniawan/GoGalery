@@ -24,7 +24,7 @@ const page = async ({ params }: { params: { id: string; username: string } }) =>
           <h1 className="text-lg font-medium">Post</h1>
         </div>
         <div className="flex flex-col gap-4 items-center">
-          <Content uploader={data.uploader.username} caption={data.caption} url={data.url} contentId={data.id} />
+          <Content uploader={data.uploader.username} caption={data.caption} url={data.url} contentId={data.id} profilePicture={data.uploader.profileUrl} id={data.id}/>
           <StraightContentInfinityScroll contentFuction={profileChainingContent} accountUsername={params.username} id={+params.id} />
         </div>
       </div>
