@@ -24,21 +24,29 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
   const { checkLike, like, unlike } = useLikeStore();
 
   const checkIsLiked = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    const { status, data } = await checkLike({ userId: session.user.id, contentId });
-    setIsLike(status);
-    if (!data) return;
-    setLikeId(data.id);
+      const { status, data } = await checkLike({ userId: session.user.id, contentId });
+      setIsLike(status);
+      if (!data) return;
+      setLikeId(data.id);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const checkIsSave = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    const { data, status } = await isSaved({ userId: session.user.id, contentId });
-    setIsSave(status);
-    if (!data) return;
-    setSaveId(data.id);
+      const { data, status } = await isSaved({ userId: session.user.id, contentId });
+      setIsSave(status);
+      if (!data) return;
+      setSaveId(data.id);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -54,35 +62,47 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
   }, [theme]);
 
   const debouncedLike = useDebouncedCallback(async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    if (!isLike) {
-      setIsLike(true);
-      return await like({ userId: session.user.id, contentId });
+      if (!isLike) {
+        setIsLike(true);
+        return await like({ userId: session.user.id, contentId });
+      }
+
+      setIsLike(false);
+      return await unlike({ id: likeId });
+    } catch (error) {
+      console.error(error);
     }
-
-    setIsLike(false);
-    return await unlike({ id: likeId });
   }, 300);
 
   const debouncedSave = useDebouncedCallback(async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    if (!isSave) {
-      setIsSave(true);
-      return await saveContent({ userId: session.user.id, contentId });
+      if (!isSave) {
+        setIsSave(true);
+        return await saveContent({ userId: session.user.id, contentId });
+      }
+
+      setIsSave(false);
+      return await unsaveContent({ id: saveId });
+    } catch (error) {
+      console.error(error);
     }
-
-    setIsSave(false);
-    return await unsaveContent({ id: saveId });
   }, 300);
 
   const getAllComment = async () => {
-    const { data } = await getComments({ contentId });
+    try {
+      const { data } = await getComments({ contentId });
 
-    if (!data) return;
+      if (!data) return;
 
-    return setComments(data);
+      return setComments(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

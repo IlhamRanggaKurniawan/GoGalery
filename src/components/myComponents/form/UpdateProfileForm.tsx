@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getUserProfile, updateProfile } from "@/lib/actions/user";
 import { useSession } from "next-auth/react";
+import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -13,6 +14,7 @@ const UpdateProfileForm = () => {
   const router = useRouter();
   const [bio, setBio] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const setProfile = async () => {
     if (!session) return;
@@ -25,16 +27,26 @@ const UpdateProfileForm = () => {
     if (data.profileUrl) setProfilePicture(data.profileUrl);
   };
 
-  const updateAccount = async (formData: FormData) => {
-    if (!session) return;
+  const updateAccount = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      setLoading(true)
+      if (!session) return;
 
-    const file = formData.get("file") as File;
+      const formData = new FormData(e.currentTarget);
 
-    if (!bio && !file) return;
+      const file = formData.get("file") as File;
 
-    const { data } = await updateProfile({ id: session.user.id, input: { bio, profileUrl: profilePicture }, formData });
+      if (!bio && !file) return;
 
-    router.push(`/${data?.username}`);
+      const { data } = await updateProfile({ id: session.user.id, input: { bio, profileUrl: profilePicture }, formData });
+
+      router.push(`/${data?.username}`);
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   };
 
   useEffect(() => {
@@ -43,7 +55,7 @@ const UpdateProfileForm = () => {
   }, [session]);
 
   return (
-    <form className="py-5 px-6 sm:py-10 sm:px-10 flex flex-col gap-3 w-full" action={updateAccount}>
+    <form className="py-5 px-6 sm:py-10 sm:px-10 flex flex-col gap-3 w-full" onSubmit={updateAccount}>
       <h2 className="font-medium text-lg mb-2">Edit Profile</h2>
       <div className="flex flex-col items-center justify-center gap-5 bg-secondary p-4 rounded-xl ">
         <Avatar className="h-28 w-28">
@@ -62,7 +74,7 @@ const UpdateProfileForm = () => {
         <textarea placeholder="Bio" className="rounded-xl w-full p-3 border-2 border-secondary resize-none" onChange={(e) => setBio(e.target.value)} value={bio} />
       </div>
       <div className="flex justify-end">
-        <Button type="submit" className="max-w-24">
+        <Button type="submit" className="max-w-24" disabled={loading}>
           Submit
         </Button>
       </div>

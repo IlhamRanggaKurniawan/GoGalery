@@ -15,17 +15,21 @@ const ContactList = ({ group }: { group: boolean }) => {
   const [groupList, setGroupList] = useState<IGroup[]>([]);
 
   const getAllContact = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    if (!group) {
-      const { data } = await getContacts({ userId: session.user.id });
+      if (!group) {
+        const { data } = await getContacts({ userId: session.user.id });
 
-      return setContacts(data);
+        return setContacts(data);
+      }
+
+      const { data } = await getGroup({ userId: session.user.id });
+
+      return setGroupList(data);
+    } catch (error) {
+      console.error(error);
     }
-
-    const { data } = await getGroup({ userId: session.user.id });
-
-    return setGroupList(data);
   };
 
   useEffect(() => {
@@ -35,7 +39,7 @@ const ContactList = ({ group }: { group: boolean }) => {
 
   return (
     <div>
-      {session?.user.role === "admin" && (
+      {session?.user.role === "admin" && !group && (
         <Link href="/ai/1" className="h-14 flex items-center gap-3 p-2">
           <Avatar className="w-12 h-12">
             <AvatarImage src="/openAI.jpeg" alt="@shadcn" />
@@ -45,11 +49,11 @@ const ContactList = ({ group }: { group: boolean }) => {
         </Link>
       )}
       {group
-        ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} profilePicture={group.pictureUrl}/>)
+        ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} profilePicture={group.pictureUrl} />)
         : contacts.map((contact) => {
             const otherParticipant = contact.participants.find((participant: IUserPreview) => participant.id !== session?.user.id);
 
-            return <Contact key={contact.id} id={contact.id} group={false} name={otherParticipant?.username} profilePicture={otherParticipant?.profileUrl}/>;
+            return <Contact key={contact.id} id={contact.id} group={false} name={otherParticipant?.username} profilePicture={otherParticipant?.profileUrl} />;
           })}
     </div>
   );

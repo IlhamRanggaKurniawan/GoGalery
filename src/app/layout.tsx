@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/myComponents/Navbar";
 import { usePathname } from "next/navigation";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { Session } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,7 +18,6 @@ export default function RootLayout({
   session: Session;
 }>) {
   const pathname = usePathname();
-
   const hideNavbar = /^\/(login|register)$/.test(pathname);
   const hideNavbarOnMobile = /^\/(group\/.*|messages\/.*)$/.test(pathname);
   

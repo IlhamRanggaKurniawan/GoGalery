@@ -24,11 +24,15 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const getUsers = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    const { data } = await getMutualFollowers({ username: search, id: session.user.id });
+      const { data } = await getMutualFollowers({ username: search, id: session.user.id });
 
-    setUsers(data);
+      setUsers(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSelectUser = (user: IUserPreview) => {
@@ -40,10 +44,14 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleCreateGroup = async () => {
-    if (!session) return;
-    const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id, username: session.user.username, profileUrl: null }] });
+    try {
+      if (!session) return;
+      const { data } = await createGroup({ name, member: [...selectedUsers, { id: session.user.id, username: session.user.username, profileUrl: null }] });
 
-    router.push(`/group/${data?.id}`);
+      router.push(`/group/${data?.id}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +77,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             const isSelected = selectedUsers.some((selectedUser) => selectedUser.id === user.id);
             return (
               <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.id} onClick={() => handleSelectUser(user)}>
-                <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
+                <AccountPreview username={user.username} profilePicture={user.profileUrl} />
               </button>
             );
           })}

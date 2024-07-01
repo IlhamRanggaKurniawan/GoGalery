@@ -8,13 +8,9 @@ import EditMessageDialog from "./EditMessageDialog";
 const ChatBubble = ({ message, senderId, id, ai }: { message: string; senderId?: number; id: number; ai?: boolean }) => {
   const { data: session } = useSession();
 
-  if (!session) {
-    return;
-  }
-
   return (
     <div>
-      {senderId === session.user.id ? (
+      {senderId === session?.user.id ? (
         <div className="flex py-1 justify-end items-center gap-1 group">
           {!ai && (
             <EditMessageDialog id={id}>

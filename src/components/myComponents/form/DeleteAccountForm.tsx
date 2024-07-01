@@ -14,12 +14,16 @@ const DeleteAccountForm = () => {
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    if (!session) return;
-    if (validate !== "delete my account") {
-      return setError("type delete my account correctly");
-    }
+    try {
+      if (!session) return;
+      if (validate !== "delete my account") {
+        return setError("type delete my account correctly");
+      }
 
-    await deleteAccount({ id: session.user.id, username });
+      await deleteAccount({ id: session.user.id, username });
+    } catch (error) {
+      setError((error as Error).message);
+    }
   };
 
   return (

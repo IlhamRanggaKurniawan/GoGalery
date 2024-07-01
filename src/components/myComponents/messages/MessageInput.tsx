@@ -11,17 +11,20 @@ const MessageInput = ({ id, group }: { id: number; group: boolean }) => {
   const { data: session } = useSession();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!session) return;
+    try {
+      e.preventDefault();
+      if (!session) return;
 
-    if (group) {
-      await sendMessage({ groupId: id, message: text, senderId: session.user.id });
-      return setText("");
+      if (group) {
+        await sendMessage({ groupId: id, message: text, senderId: session.user.id });
+        return setText("");
+      }
 
+      await sendMessage({ directMessageId: id, message: text, senderId: session.user.id });
+      setText("");
+    } catch (error) {
+      console.error(error);
     }
-
-    await sendMessage({ directMessageId: id, message: text, senderId: session.user.id });
-    setText("");
   };
 
   return (

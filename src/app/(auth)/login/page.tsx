@@ -1,5 +1,4 @@
 import LoginForm from "@/components/myComponents/form/LoginForm";
-import HeadMetaData from "@/components/myComponents/HeadMetaData";
 import { Metadata } from "next";
 import React from "react";
 
@@ -21,7 +20,6 @@ export const metadata: Metadata = {
 const page = () => {
   return (
     <>
-      <HeadMetaData pathname="/login" metaDataDescription="login page for connect verse web app" />
       <LoginForm />
     </>
   );

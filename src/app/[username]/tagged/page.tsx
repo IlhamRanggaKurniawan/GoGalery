@@ -1,8 +1,26 @@
 import ContentMain from "@/components/myComponents/content/ContentMain";
 import ProfileMain from "@/components/myComponents/profile/ProfileMain";
 import { getUserProfile } from "@/lib/actions/user";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+
+export const generateMetadata = ({params} : {params : {username: string}}): Metadata => {
+  return {
+    title: `${params.username} | Connect Verse`,
+    description: `Welcome to ${params.username} Post page`,
+    openGraph: {
+      title: `${params.username} | Connect Verse`,
+      description: `Welcome to ${params.username} Post page`,
+      url: "https://ConnectVerse.com",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${params.username} | Connect Verse`,
+      description: `Welcome to ${params.username} Post page`,
+    },
+  }
+}
 
 const page = async ({ params }: { params: { username: string } }) => {
 

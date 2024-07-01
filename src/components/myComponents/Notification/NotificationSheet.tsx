@@ -23,7 +23,7 @@ const NotificationSheet = ({ children, side, notifications }: { children: ReactN
         <Separator className="mb-1" />
         <div className="flex flex-col pb-4 h-[600px] lg:h-[750px] gap-1 overflow-y-auto px-3">
           {notifications.map((notification) => (
-            <Notification key={notification.id}  username={notification.user.username} content={notification.content} createdAt={notification.createdAt} profilePicture={notification.user.profileUrl}/>
+            <Notification key={notification.id}  username={notification.trigger.username} content={notification.content} createdAt={notification.createdAt} profilePicture={notification.trigger.profileUrl}/>
           ))}
         </div>
       </SheetContent>

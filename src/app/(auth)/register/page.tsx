@@ -1,5 +1,4 @@
 import RegisterForm from "@/components/myComponents/form/RegisterForm";
-import HeadMetaData from "@/components/myComponents/HeadMetaData";
 import { Metadata } from "next";
 import React from "react";
 
@@ -21,7 +20,6 @@ export const metadata: Metadata = {
 const page = () => {
   return (
     <>
-      <HeadMetaData pathname="/register" metaDataDescription="register page for connect verse web app" />
       <RegisterForm />
     </>
   );

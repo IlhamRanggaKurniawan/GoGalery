@@ -2,8 +2,24 @@ import Content from "@/components/myComponents/content/Content";
 import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
 import { getContentById, savedChainingContent } from "@/lib/actions/content";
 import { ChevronLeft } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Saved content | Connect Verse",
+  description: "Welcome to the Connect Verse Saved content page",
+  openGraph: {
+    title: "Saved content | Connect Verse",
+    description: "Welcome to the Connect Verse Saved content page",
+    url: "https://ConnectVerse.com/Saved",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Saved content | Connect Verse",
+    description: "Welcome to the Connect Verse Saved content page",
+  },
+};
 
 const page = async ({ params }: { params: { id: string } }) => {
 

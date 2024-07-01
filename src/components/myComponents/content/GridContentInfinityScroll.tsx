@@ -19,16 +19,20 @@ const GridContentInfinityScroll = ({ contentFuction, accountUsername, href }: { 
   const triggerRef = useRef<HTMLDivElement | null>(null);
 
   const loadMoreContents = async () => {
-    if (nextCursor === null) return;
+    try {
+      if (nextCursor === null) return;
 
-    const { data, nextCursor: cursor } = await contentFuction({ accountUsername, cursor: nextCursor, pageSize: 15, username: session?.user.username });
+      const { data, nextCursor: cursor } = await contentFuction({ accountUsername, cursor: nextCursor, pageSize: 15, username: session?.user.username });
 
-    if (!data) {
-      return setError("Failed to load contents");
+      if (!data) {
+        return setError("Failed to load contents");
+      }
+
+      setContents((prevContents) => [...prevContents, ...data]);
+      setNextCursor(cursor ?? null);
+    } catch (error) {
+      setError((error as Error).message);
     }
-
-    setContents((prevContents) => [...prevContents, ...data]);
-    setNextCursor(cursor ?? null);
   };
 
   useEffect(() => {

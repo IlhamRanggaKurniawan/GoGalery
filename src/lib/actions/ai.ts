@@ -28,7 +28,7 @@ export const textGeneration = async ({ id, messages }: { id: number, messages: {
             { role: "system", content: "you are a helpfull asistant" },
             ...messages
         ],
-        max_tokens: 250
+        max_tokens: 350
     })
 
     if (!chat || !chat.choices || !chat.choices[0] || !chat.choices[0].message || !chat.choices[0].message.content) return

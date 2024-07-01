@@ -65,9 +65,16 @@ export const updateImage = async ({ formData, path }: { formData: FormData, path
     }
 }
 
-export const uploadContent = async ({ formData, uploaderId }: { formData: FormData, uploaderId: number }) => {
+export const deleteImage = async ({ path }: { path: string }) => {
+    const image = await supabase.storage.from("Connect Verse").remove([path])
 
-    const { data } = await uploadImage({ formData, folder: "Content" })
+    return {
+        data: image,
+        statusCode: 200
+    }
+}
+
+export const uploadContent = async ({ formData, uploaderId }: { formData: FormData, uploaderId: number }) => {
 
     const caption = formData.get("caption") as string
 
@@ -75,6 +82,15 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
         return ({
             error: "Please fill all the fields and provide a non-empty file",
             statusCode: 400
+        })
+    }
+
+    const { data, error } = await uploadImage({ formData, folder: "Content" })
+
+    if (!data) {
+        return ({
+            error,
+            statusCode: 500
         })
     }
 
@@ -99,14 +115,18 @@ export const uploadContent = async ({ formData, uploaderId }: { formData: FormDa
     };
 }
 
-export const deleteContent = async ({id} : {id: number}) => {
+export const deleteContent = async ({ id }: { id: number }) => {
     const content = await prisma.content.delete({
         where: {
             id
         }
     })
 
-    if(!content) {
+    const path = "Content/" + content.url.split("/").pop()
+
+    const image = await deleteImage({ path })
+
+    if (!content || !image) {
         return ({
             error: "Something went wrong",
             statusCode: 500

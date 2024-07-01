@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import register from "@/lib/actions/authentication";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 const RegisterForm = () => {
   const [error, setError] = useState<string>("");
@@ -15,42 +15,52 @@ const RegisterForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confPassword, setConfPassword] = useState<string>("");
-
   const router = useRouter();
 
+  const {data: session} = useSession()
+
+  if(session) {
+    router.push("/")
+  }
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
+    try {
+      e.preventDefault();
+      setError("");
 
-    if (!username || !email || !password || !confPassword) {
-      return setError("please fill all the fields");
+      if (!username || !email || !password || !confPassword) {
+        return setError("please fill all the fields");
+      }
+      if (password !== confPassword) {
+        return setError("password doesn't match");
+      }
+
+      const { error } = await register({
+        username,
+        email,
+        password,
+      });
+
+      if (error) {
+        return setError(error);
+      }
+
+      const result = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        return setError(result.error);
+      }
+
+      router.push("/");
+    } catch (error) {
+      setError((error as Error).message);
     }
-    if (password !== confPassword) {
-      return setError("password doesn't match");
-    }
-
-    const { error } = await register({
-      username,
-      email,
-      password,
-    });
-
-    if (error) {
-      return setError(error);
-    }
-
-    const result = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-      callbackUrl: "/",
-    });
-
-    if (result?.error) {
-      return setError(result.error);
-    }
-
-    router.push("/");
   };
 
   return (

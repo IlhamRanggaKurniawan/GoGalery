@@ -27,7 +27,11 @@ export const follow = async ({ followerId, followingId }: { followerId: number, 
         },
         include: {
             follower: {
-
+                select: {
+                    id: true,
+                    username: true,
+                    profileUrl: true
+                }
             }
         }
     })

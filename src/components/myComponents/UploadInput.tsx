@@ -11,6 +11,7 @@ import { uploadContent } from "@/lib/actions/content";
 const UploadInput = () => {
   const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { data: session } = useSession();
@@ -31,28 +32,40 @@ const UploadInput = () => {
     setError("");
   };
 
-  const handleSubmit = async (formData: FormData) => {
-    setError("");
-    if (!session) return;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
 
-    const file = formData.get("file") as File;
-    const fileType = file.type;
+      setLoading(true);
+      setError("");
+      
+      if (!session) return;
 
-    if (!file) {
-      return setError("please fill all the fields");
+      const formDataData = new FormData(e.currentTarget);
+      const file = formDataData.get("file") as File;
+
+      if (!file) {
+        return setError("please fill all the fields");
+      }
+
+      const fileType = file.type;
+
+      if (fileType.split("/").shift() !== "image") {
+        return setError("file type must be images");
+      }
+
+      const { data, error } = await uploadContent({ formData: formDataData, uploaderId: session.user.id });
+
+      if (error || !data) {
+        return setError(error as string);
+      }
+
+      router.push(`/${session.user.username}`);
+    } catch (error) {
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
     }
-
-    if (fileType.split("/").shift() !== "image") {
-      return setError("file type must be images");
-    }
-
-    const { data, error } = await uploadContent({ formData, uploaderId: session.user.id });
-
-    if (error || !data) {
-      return setError(error);
-    }
-
-    router.push(`/${session.user.username}`);
   };
 
   return (
@@ -61,7 +74,7 @@ const UploadInput = () => {
         <h2 className="text-xl font-semibold mb-2">Upload Content</h2>
         <span className="text-secondary-foreground text-gray-500">Upload Content you want to share</span>
       </div>
-      <form action={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="border-dashed border-2 border-gray-300 rounded-md h-64 mb-4">
           <label htmlFor="file" className="flex flex-col items-center cursor-pointer p-6 justify-center w-full h-full">
             <ImageUp className="text-gray-500 mb-2" size={50} />
@@ -75,7 +88,7 @@ const UploadInput = () => {
           <Input type="text" id="caption" name="caption" required />
         </div>
 
-        {fileName ? (
+        {fileName && (
           <div className="flex items-center mt-2 justify-between">
             <div className="flex gap-2 w-full">
               <ImageIcon name="file" size={30} />
@@ -84,15 +97,13 @@ const UploadInput = () => {
               </div>
             </div>
           </div>
-        ) : (
-          <div className="mt-2" />
         )}
 
         <div className="flex justify-end gap-2 mt-4">
           <Button className="w-[50%] border border-primary max-w-72" type="reset" variant={"ghost"} onClick={() => setFileName("")}>
             Cancel
           </Button>
-          <Button className="w-[50%] max-w-72" type="submit" onClick={() => setError("")}>
+          <Button className="w-[50%] max-w-72" type="submit" onClick={() => setError("")} disabled={loading}>
             Upload Image
           </Button>
         </div>

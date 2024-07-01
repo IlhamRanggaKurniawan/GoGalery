@@ -6,40 +6,56 @@ import { Send } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 
-const InputAI = ({ conversationId, setMessage }: { conversationId: number; setMessage: React.Dispatch<React.SetStateAction<IAIMessage[]>>}) => {
+const InputAI = ({
+  conversationId,
+  setMessage,
+  setPrompt,
+  prompt,
+}: {
+  conversationId: number;
+  prompt: ITextMessage[];
+  setMessage: React.Dispatch<React.SetStateAction<IAIMessage[]>>;
+  setPrompt: React.Dispatch<React.SetStateAction<ITextMessage[]>>;
+}) => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [params, setParams] = useState<ITextMessage[]>([]);
   const { data: session } = useSession();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    if (!session) return;
+    try {
+      e.preventDefault();
+      setLoading(true);
+      if (!session) return;
 
-    if (params.length > 5) {
-      params.shift();
-      params.shift();
+      if (prompt.length > 5) {
+        prompt.shift();
+        prompt.shift();
+      }
+
+      const chat = await sendChat({ userId: session.user.id, conversationId, message: input });
+
+      setMessage((prev) => [...prev, chat]);
+
+      prompt.push({ role: "user", content: input });
+
+
+      const tes = await textGeneration({ id: chat.id, messages: prompt });
+
+      if (!tes) return;
+
+      setMessage((prev) => {
+        const newMessages = prev.slice(0, -1);
+        return [...newMessages, tes?.data];
+      });
+
+      setLoading(false);
+      setPrompt(tes.messages);
+      setInput("");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-
-    const chat = await sendChat({ userId: session.user.id, conversationId, message: input });
-
-    setMessage((prev) => [...prev, chat]);
-    
-    params.push({ role: "user", content: input });
-
-    const tes = await textGeneration({ id: chat.id, messages: params });
-
-    if (!tes) return;
-
-    setMessage((prev) => {
-      const newMessages = prev.slice(0, -1);
-      return [...newMessages, tes?.data];
-    });
-
-    setLoading(false);
-    setParams(tes.messages);
-    setInput("");
   };
 
   return (

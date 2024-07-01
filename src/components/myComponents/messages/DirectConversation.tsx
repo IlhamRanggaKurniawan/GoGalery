@@ -17,15 +17,19 @@ const DirectConversation = ({ id }: { id: number }) => {
   const { data: session } = useSession();
 
   const getConversation = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    const { data } = await getDirectMessageData({ directMessageId: id });
+      const { data } = await getDirectMessageData({ directMessageId: id });
 
-    if (!data) return;
+      if (!data) return;
 
-    setMessages(data.message);
+      setMessages(data.message);
 
-    setUsers(data.participants);
+      setUsers(data.participants);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -42,7 +46,7 @@ const DirectConversation = ({ id }: { id: number }) => {
     channel.bind("new-message", (message: IMessage) => {
       setMessages((prevMessages) => [...prevMessages, message]);
       if (message.senderId !== session?.user.id) {
-        sound.play().catch((error) => console.log("Error playing sound:", error));
+        sound.play().catch((error) => console.error("Error playing sound:", error));
       }
     });
 
@@ -72,7 +76,7 @@ const DirectConversation = ({ id }: { id: number }) => {
 
   return (
     <div className="overflow-y-hidden">
-      <ConversationHeader group={false} name={otherParticipant.username} profilePicture={otherParticipant.profileUrl}/>
+      <ConversationHeader group={false} name={otherParticipant.username} profilePicture={otherParticipant.profileUrl} />
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
         {messages?.map((message, index) => (
           <div key={message.id} ref={index === messages.length - 1 ? lastMessageRef : null}>

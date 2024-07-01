@@ -15,27 +15,28 @@ datasource db {
 }
 
 model User {
-  id             Int              @id @default(autoincrement())
-  username       String           @unique
-  email          String           @unique
-  password       String
-  role           String           @default("member")
-  profileUrl     String?
-  bio            String?
-  content        Content[]
-  likeContent    LikeContent[]
-  saveContent    SaveContent[]
-  comment        Comment[]
-  followers      Follow[]         @relation("followersRelation")
-  following      Follow[]         @relation("followingRelation")
-  Notification   Notification[]
-  GroupChat      GroupChat[]
-  DirectMessage  DirectMessage[]
-  Message        Message[]
-  createdAt      DateTime         @default(now())
-  Feedback       Feedback[]
-  AIConversation AIConversation[]
-  AIMessage      AIMessage[]
+  id                  Int              @id @default(autoincrement())
+  username            String           @unique
+  email               String           @unique
+  password            String
+  role                String           @default("member")
+  profileUrl          String?
+  bio                 String?
+  content             Content[]
+  likeContent         LikeContent[]
+  saveContent         SaveContent[]
+  comment             Comment[]
+  followers           Follow[]         @relation("followersRelation")
+  following           Follow[]         @relation("followingRelation")
+  GroupChat           GroupChat[]
+  DirectMessage       DirectMessage[]
+  Message             Message[]
+  createdAt           DateTime         @default(now())
+  Feedback            Feedback[]
+  AIConversation      AIConversation[]
+  AIMessage           AIMessage[]
+  Notification        Notification[]   @relation("ReceiverRelation")
+  NotificationTrigger Notification[]   @relation("TriggerRelation")
 }
 
 model Content {
@@ -98,13 +99,15 @@ model Comment {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  type      String
-  content   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  receiverId Int
+  receiver   User     @relation("ReceiverRelation", fields: [receiverId], references: [id])
+  trigger    User     @relation("TriggerRelation", fields: [triggerId], references: [id])
+  triggerId  Int
+  type       String
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
 }
 
 model DirectMessage {

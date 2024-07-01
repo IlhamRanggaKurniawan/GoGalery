@@ -10,9 +10,14 @@ const ReportProblemForm = () => {
   const [feedback, setFeedback] = useState("");
 
   const handleSubmit = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    await sendFeedback({ id: session.user.id, message: feedback });
+      await sendFeedback({ id: session.user.id, message: feedback });
+    } catch (error) {
+      console.error((error as Error).message)
+    }
+ 
   };
 
   return (

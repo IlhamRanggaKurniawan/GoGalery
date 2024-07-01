@@ -25,7 +25,7 @@ const page = () => {
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
       <HomePageBar />
       <div className="flex flex-col gap-4 pt-12 sm:pt-0 w-full">
-        <StraightContentInfinityScroll contentFuction={getContentByFollowing} />
+        <StraightContentInfinityScroll contentFuction={getContentByFollowing} homePage/>
       </div>
     </div>
   );

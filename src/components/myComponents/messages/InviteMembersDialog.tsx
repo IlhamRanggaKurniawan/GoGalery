@@ -21,38 +21,50 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
   const { data: session } = useSession();
 
   const getUsers = async () => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    const { data } = await getMutualFollowers({ username: search, id: session.user.id });
+      const { data } = await getMutualFollowers({ username: search, id: session.user.id });
 
-    if (!data) return;
+      if (!data) return;
 
-    setUsers(data);
+      setUsers(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getMembers = async () => {
-    if (!id) return;
-    const { data } = await getGroupMembers({ id });
+    try {
+      if (!id) return;
+      const { data } = await getGroupMembers({ id });
 
-    if (!data) return;
+      if (!data) return;
 
-    setGroupMembers(data);
+      setGroupMembers(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSelectUser = (user: IUserPreview) => {
     if (selectedUsers.find((prev) => prev.id === user.id)) {
       return setSelectedUsers(selectedUsers.filter((prev) => prev.id !== user.id));
     }
-    
+
     setSelectedUsers([...selectedUsers, user]);
   };
 
   const addPeople = async () => {
-    if (!id) return;
+    try {
+      if (!id) return;
 
-    await addMembers({ groupId: id, members: selectedUsers });
+      await addMembers({ groupId: id, members: selectedUsers });
 
-    getMembers();
+      getMembers();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -79,7 +91,7 @@ const InviteMembersDialog = ({ children, id }: { children: React.ReactNode; id?:
             const isSelected = selectedUsers.some((selectedUser) => selectedUser.id === user.id);
             return (
               <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.id} onClick={() => handleSelectUser(user)}>
-                <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
+                <AccountPreview username={user.username} profilePicture={user.profileUrl} />
               </button>
             );
           })}

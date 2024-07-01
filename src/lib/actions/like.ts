@@ -13,7 +13,8 @@ export const likeContent = async({userId, contentId}: {userId: number, contentId
             user: {
                 select: {
                     id: true,
-                    username: true
+                    username: true,
+                    profileUrl: true
                 }
             },
             content: {

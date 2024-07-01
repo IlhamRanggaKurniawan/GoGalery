@@ -13,14 +13,18 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
   const { data: session } = useSession();
 
   const submitComment = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!session) return;
+    try {
+      e.preventDefault();
+      if (!session) return;
 
-    const { data } = await sendComment({ text, userId: session.user.id, contentId });
+      const { data } = await sendComment({ text, userId: session.user.id, contentId });
 
-    if (data) {
+      if (!data) return;
+
       setText("");
       comments.unshift(data);
+    } catch (error) {
+      console.error(error)
     }
   };
 
@@ -34,7 +38,15 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
         <Separator className="my-1" />
         <div className="flex flex-col pb-4 h-[26rem] sm:h-[633px] gap-1 overflow-y-auto px-3">
           {comments.map((comment) => (
-            <Comment text={comment.text} username={comment.user.username} key={comment.id} createdAt={comment.createdAt} uploader={comment.content.uploader.username} commentId={comment.id} profilePicture={comment.user.profileUrl}/>
+            <Comment
+              text={comment.text}
+              username={comment.user.username}
+              key={comment.id}
+              createdAt={comment.createdAt}
+              uploader={comment.content.uploader.username}
+              commentId={comment.id}
+              profilePicture={comment.user.profileUrl}
+            />
           ))}
         </div>
         <form className="w-full h-14 border-y-2" onSubmit={submitComment}>

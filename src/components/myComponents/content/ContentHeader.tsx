@@ -21,7 +21,7 @@ const ContentHeader = ({ uploader, profilePicture, id }: { uploader: string; pro
         </div>
         <span className="font-semibold text-sm">{uploader}</span>
       </Link>
-      {uploader === session?.user.username && (
+      {(uploader === session?.user.username || session?.user.role === "admin") && (
         <DeleteContentDialog id={id}>
           <EllipsisVertical size={20} className="cursor-pointer" />
         </DeleteContentDialog>

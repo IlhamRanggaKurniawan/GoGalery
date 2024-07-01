@@ -15,16 +15,22 @@ const ChangePasswordForm = () => {
   const [error, setError] = useState("");
 
   const updatePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!session) return;
+    try {
+      e.preventDefault();
+      if (!session) return;
 
-    if (password !== confPassword) {
-      return setError("password doesn't match");
+      if (password !== confPassword) {
+        return setError("password doesn't match");
+      }
+
+      const { data, error } = await updateProfile({ id: session.user.id, input: { password } });
+
+      if (error) return setError(error);
+
+      router.push(`/${data?.username}`);
+    } catch (error) {
+      setError((error as Error).message);
     }
-
-    const { data } = await updateProfile({ id: session.user.id, input: { password } });
-
-    router.push(`/${data?.username}`);
   };
 
   return (

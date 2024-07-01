@@ -21,23 +21,31 @@ const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.React
   const router = useRouter();
 
   const groupData = async () => {
-    if (!id) return;
+    try {
+      if (!id) return;
 
-    const { data } = await getGroupData({ groupChatId: id });
+      const { data } = await getGroupData({ groupChatId: id });
 
-    if (!data) return;
+      if (!data) return;
 
-    setUsers(data.member);
-    setName(data.name);
+      setUsers(data.member);
+      setName(data.name);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleLeaveGroup = async () => {
-    if (!id || !session) return;
+    try {
+      if (!id || !session) return;
 
-    await leaveGroup({ groupId: id, userId: session.user.id });
+      await leaveGroup({ groupId: id, userId: session.user.id });
 
-    groupData();
-    router.push("/group");
+      groupData();
+      router.push("/group");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -74,7 +82,7 @@ const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.React
         <div className="max-h-96">
           {users?.map((user) => (
             <Link href={`/${user.username}`} className="w-full text-left rounded-md" key={user.id}>
-              <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
+              <AccountPreview username={user.username} profilePicture={user.profileUrl} />
             </Link>
           ))}
         </div>

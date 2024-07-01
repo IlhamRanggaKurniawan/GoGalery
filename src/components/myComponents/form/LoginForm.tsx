@@ -6,28 +6,37 @@ import React, { FormEvent, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [error, setError] = useState<string>("");
-
   const router = useRouter();
+  const {data: session} = useSession()
+
+  if(session) {
+    router.push("/")
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
-      username: e.currentTarget.username.value,
-      password: e.currentTarget.password.value,
-      redirect: false,
-      callbackUrl: "/",
-    });
+    try {
+      e.preventDefault();
+      setError("")
+      const result = await signIn("credentials", {
+        username: e.currentTarget.username.value,
+        password: e.currentTarget.password.value,
+        redirect: false,
+        callbackUrl: "/",
+      });
 
-    if (result?.error) {
-      return setError(result.error);
+      if (result?.error) {
+        return setError(result.error);
+      }
+
+      router.push("/");
+    } catch (error) {
+      setError((error as Error).message)
     }
-
-    router.push("/");
   };
 
   return (

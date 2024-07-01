@@ -1,18 +1,15 @@
 "use server"
 
 import prisma from "../dataStorage/db"
+import { IUserPreview } from "./user"
 
 export interface INotification {
     id: number,
-    userId: number,
     type: string,
     content: string,
+    receiver: IUserPreview,
+    trigger: IUserPreview,
     createdAt: Date,
-    user: {
-        id: number,
-        username: string,
-        profileUrl: string | null
-    }
 }
 
 export const createNotification = async ({ receiverId, type, content, senderId }: { receiverId: number, type: string, content: string, senderId: number }) => {
@@ -22,17 +19,31 @@ export const createNotification = async ({ receiverId, type, content, senderId }
 
     const notification = await prisma.notification.create({
         data: {
-            userId: receiverId,
+            receiverId,
             type,
-            content
+            content,
+            triggerId: senderId
         },
         include: {
-            user: {}
+            receiver: {
+                select: {
+                    id: true,
+                    username: true,
+                    profileUrl: true
+                }
+            },
+            trigger: {
+                select: {
+                    id: true,
+                    username: true,
+                    profileUrl: true
+                }
+            }
         }
     })
 
     if (!notification) {
-        return({
+        return ({
             error: "something went wrong",
             statusCode: 500
         })
@@ -47,16 +58,23 @@ export const createNotification = async ({ receiverId, type, content, senderId }
 export const getAllNotification = async ({ userId }: { userId: number }) => {
     const notifications = await prisma.notification.findMany({
         where: {
-            userId
+            receiverId: userId
         },
         include: {
-            user: {
+            receiver: {
                 select: {
                     id: true,
                     username: true,
                     profileUrl: true
                 }
             },
+            trigger: {
+                select: {
+                    id: true,
+                    username: true,
+                    profileUrl: true
+                }
+            }
         },
         orderBy: {
             createdAt: "desc"
@@ -72,7 +90,7 @@ export const getAllNotification = async ({ userId }: { userId: number }) => {
 
     await prisma.notification.updateMany({
         where: {
-            userId,
+            receiverId: userId,
             isRead: false
         },
         data: {
@@ -89,7 +107,7 @@ export const getAllNotification = async ({ userId }: { userId: number }) => {
 export const checkNotification = async ({ userId }: { userId: number }) => {
     const notification = await prisma.notification.findFirst({
         where: {
-            userId,
+            receiverId: userId,
             isRead: false
         }
     })

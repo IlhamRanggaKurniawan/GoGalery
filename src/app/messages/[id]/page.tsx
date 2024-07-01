@@ -1,5 +1,21 @@
 import DirectConversation from "@/components/myComponents/messages/DirectConversation";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Messages | Connect Verse",
+  description: "Welcome to the Connect Verse Messages page",
+  openGraph: {
+    title: "Messages | Connect Verse",
+    description: "Welcome to the Connect Verse Messages page",
+    url: "https://ConnectVerse.com/Messages",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Messages | Connect Verse",
+    description: "Welcome to the Connect Verse Messages page",
+  },
+};
 
 const page = async ({ params }: { params: { id: string } }) => {
 

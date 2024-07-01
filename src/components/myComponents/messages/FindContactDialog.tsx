@@ -22,28 +22,36 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const followingUsers = async () => {
-    if (!session || search.length === 0) return;
+    try {
+      if (!session || search.length === 0) return;
 
-    const { data } = await getUserWefollow({ id: session.user.id, username: search });
+      const { data } = await getUserWefollow({ id: session.user.id, username: search });
 
-    if (!data) return;
+      if (!data) return;
 
-    setUsers(data.randomUsers);
-    setUserWeFollow(data.users);
+      setUsers(data.randomUsers);
+      setUserWeFollow(data.users);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleClick = async ({ id }: { id: number }) => {
-    if (!session) return;
+    try {
+      if (!session) return;
 
-    const { data } = await checkExistingDM({ participantIDs: [id, session.user.id] });
+      const { data } = await checkExistingDM({ participantIDs: [id, session.user.id] });
 
-    if (data) {
-      return router.push(`/messages/${data.id}`);
+      if (data) {
+        return router.push(`/messages/${data.id}`);
+      }
+
+      const { data: res } = await createDM({ participants: [{ id }, { id: session.user.id }] });
+
+      return router.push(`/messages/${res?.id}`);
+    } catch (error) {
+      console.error(error);
     }
-
-    const { data: res } = await createDM({ participants: [{ id }, { id: session.user.id }] });
-
-    return router.push(`/messages/${res?.id}`);
   };
 
   useEffect(() => {
@@ -67,12 +75,12 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
           {search.length === 0 && userWeFollow.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
           {userWeFollow?.map((user) => (
             <button onClick={() => handleClick({ id: user.id })} className="w-full text-left " key={user.id}>
-              <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
+              <AccountPreview username={user.username} profilePicture={user.profileUrl} />
             </button>
           ))}
           {users?.map((user) => (
             <button onClick={() => handleClick({ id: user.id })} className="w-full text-left" key={user.id}>
-              <AccountPreview username={user.username} profilePicture={user.profileUrl}/>
+              <AccountPreview username={user.username} profilePicture={user.profileUrl} />
             </button>
           ))}
         </div>

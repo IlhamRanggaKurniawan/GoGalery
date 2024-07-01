@@ -12,20 +12,24 @@ import { IUserPreview } from "@/lib/actions/user";
 const GroupConversation = ({ id }: { id: number }) => {
   const { data: session } = useSession();
   const [groupName, setGroupName] = useState("");
-  const [groupPicture, setGroupPicture] = useState<string | null>("")
+  const [groupPicture, setGroupPicture] = useState<string | null>("");
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [member, setMember] = useState<IUserPreview[]>([]);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const getConversation = async () => {
-    const { data } = await getGroupData({ groupChatId: id });
+    try {
+      const { data } = await getGroupData({ groupChatId: id });
 
-    if (!data) return;
+      if (!data) return;
 
-    setGroupPicture(data.pictureUrl)
-    setGroupName(data.name);
-    setMessages(data.message);
-    setMember(data.member);
+      setGroupPicture(data.pictureUrl);
+      setGroupName(data.name);
+      setMessages(data.message);
+      setMember(data.member);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -41,7 +45,7 @@ const GroupConversation = ({ id }: { id: number }) => {
     channel.bind("new-message", (message: IMessage) => {
       setMessages((prevMessages) => [...prevMessages, message]);
       if (message.senderId !== session?.user.id) {
-        sound.play().catch((error) => console.log("Error playing sound:", error));
+        sound.play().catch((error) => console.error("Error playing sound:", error));
       }
     });
 
@@ -66,7 +70,7 @@ const GroupConversation = ({ id }: { id: number }) => {
 
   return (
     <div className="overflow-y-hidden">
-      <ConversationHeader group name={groupName} id={id} profilePicture={groupPicture}/>
+      <ConversationHeader group name={groupName} id={id} profilePicture={groupPicture} />
       <div className="pt-16 sm:py-16 overflow-y-auto px-2 h-full">
         {messages.map((message: IMessage, index) => (
           <div key={message.id} ref={index === messages.length - 1 ? lastMessageRef : null}>
