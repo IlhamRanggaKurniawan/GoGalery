@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  connect-verse:
+    build: .
+    container_name: connect-verse
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+      
+  connect-verse-postgres:
+    image: postgres
+    container_name: connect-verse-postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DB=connectVerse
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
