@@ -10,7 +10,7 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "vercel-build": "prisma generate && next build"
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
     "@prisma/client": "^5.16.0",
