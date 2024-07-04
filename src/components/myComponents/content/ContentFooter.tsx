@@ -9,6 +9,7 @@ import { useDebouncedCallback } from "use-debounce";
 import CommentSheet from "../Comment/CommentSheet";
 import { useTheme } from "next-themes";
 import { getComments, IComment } from "@/lib/actions/comment";
+import Link from "next/link";
 
 const ContentFooter = ({ contentId }: { contentId: number }) => {
   const [isLike, setIsLike] = useState(false);
@@ -109,18 +110,27 @@ const ContentFooter = ({ contentId }: { contentId: number }) => {
     <div>
       <div className="flex justify-between m-2">
         <div className="flex gap-3">
-          <button onClick={debouncedLike}>{isLike ? <Star fill="#FFF200" color="#FFF200" /> : <Star />}</button>
-          <button className="flex items-center" onClick={getAllComment}>
-            <CommentSheet contentId={contentId} comments={comments}>
-              <MessageCircle className="cursor-pointer" />
-            </CommentSheet>
+          <button onClick={debouncedLike} aria-label="like button">
+            {isLike ? <Star fill="#FFF200" color="#FFF200" aria-label="like button" /> : <Star aria-label="like button" />}
           </button>
-          <button>
-            <ExternalLink />
+          <button className="flex items-center" onClick={getAllComment} aria-label="comment ">
+            <div className="hidden sm:flex">
+              <CommentSheet contentId={contentId} comments={comments}>
+                <MessageCircle className="cursor-pointer" aria-label="comment" />
+              </CommentSheet>
+            </div>
+            <Link href={`/content/${contentId}/comments`}>
+              <MessageCircle className="cursor-pointer sm:hidden" aria-label="comment" />
+            </Link>
+          </button>
+          <button aria-label="share button">
+            <ExternalLink aria-label="share button" />
           </button>
         </div>
         <div>
-          <button onClick={debouncedSave}>{isSave ? <Pin fill={pinColor} /> : <Pin />}</button>
+          <button onClick={debouncedSave} aria-label="save button">
+            {isSave ? <Pin fill={pinColor} aria-label="save button" /> : <Pin aria-label="save button" />}
+          </button>
         </div>
       </div>
     </div>

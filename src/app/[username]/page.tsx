@@ -10,6 +10,8 @@ export const generateMetadata = ({params} : {params : {username: string}}): Meta
   return {
     title: `${params.username} | Connect Verse`,
     description: `Welcome to ${params.username} profile page`,
+    keywords:"connect, verse, social media",
+    authors: [{name: "Connect Verse team"}],
     openGraph: {
       title: `${params.username} | Connect Verse`,
       description: `Welcome to ${params.username} profile page`,
@@ -33,9 +35,9 @@ const page = async ({ params }: { params: { username: string } }) => {
   return (
     <>
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">
-      <div className="max-w-5xl">
+      <div className="w-full max-w-5xl">
         <ProfileMain username={data.username} userId={data.id} content={data._count.content} bio={data.bio} profilePicture={data.profileUrl}/>
-        <Separator className="my-4" />
+        <Separator className="my-4 w-full" />
         <GridContentInfinityScroll contentFuction={getContentByUsername} accountUsername={data.username} href={data.username}/>
       </div>
     </div>

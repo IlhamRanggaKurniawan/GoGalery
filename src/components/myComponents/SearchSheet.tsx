@@ -37,7 +37,7 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
 
   return (
     <Sheet>
-      <SheetTrigger asChild>{children}</SheetTrigger>
+      <SheetTrigger asChild aria-label="search">{children}</SheetTrigger>
       <SheetContent side={side} className="h-screen w-screen sm:w-96">
         <div className="flex items-center justify-between">
           <SheetHeader>

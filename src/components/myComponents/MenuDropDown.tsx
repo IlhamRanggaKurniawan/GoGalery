@@ -16,7 +16,7 @@ const MenuDropDown = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="cursor-pointer">
+      <DropdownMenuTrigger asChild className="cursor-pointer" aria-label="setting">
         <div className="hidden sm:flex items-center gap-2 p-2 lg:w-52 lg:hover:bg-primary lg:hover:text-background rounded-lg justify-center lg:justify-normal m-2">
           <Settings2 size={25} />
           <span className="hidden lg:block">More</span>
@@ -25,7 +25,7 @@ const MenuDropDown = () => {
       <DropdownMenuContent className="w-64 ml-2" side="top">
         <DropdownMenuGroup className="flex flex-col gap-1">
           <DropdownMenuItem className="cursor-pointer p-0">
-            <Link href="/setting" className="flex gap-3 w-full p-3">
+            <Link href="/setting/profile" className="flex gap-3 w-full p-3">
               <Settings size={20} />
               <span className="font-medium">Setting</span>
             </Link>

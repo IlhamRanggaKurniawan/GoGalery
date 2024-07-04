@@ -13,7 +13,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
   const followingId = userId;
   const { data: session } = useSession();
   const { isFollow, checkFollow, toggleFollow } = useFollowStore();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (!session) return;
@@ -29,7 +29,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
 
   if (followingId === session?.user.id) {
     return (
-      <Button>
+      <Button className="sm:hidden">
         <Link href="/setting"> Edit Profile </Link>
       </Button>
     );
@@ -47,7 +47,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
     const { data: res } = await createDM({ participants: [{ id: followingId }, { id: session.user.id }] });
 
     return router.push(`/messages/${res?.id}`);
-  }
+  };
 
   return (
     <div className="flex justify-center my-2 gap-2">
@@ -62,7 +62,11 @@ const ProfileButton = ({ userId }: { userId: number }) => {
           </Button>
         )}
       </div>
-      {followingId !== session?.user.id && <Button className="py-4 px-8 max-w-24" onClick={handleClick}>Message</Button>}
+      {followingId !== session?.user.id && (
+        <Button className="py-4 px-8 max-w-24" onClick={handleClick}>
+          Message
+        </Button>
+      )}
     </div>
   );
 };

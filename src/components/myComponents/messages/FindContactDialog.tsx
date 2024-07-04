@@ -9,12 +9,11 @@ import AccountPreview from "../AccountPreview";
 import { checkExistingDM, createDM } from "@/lib/actions/messaging";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { getUserWefollow, IUserPreview } from "@/lib/actions/user";
+import { findUser, IUserPreview } from "@/lib/actions/user";
 import { useDebounce } from "use-debounce";
 
 const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<IUserPreview[]>([]);
-  const [userWeFollow, setUserWeFollow] = useState<IUserPreview[]>([]);
   const [search, setSearch] = useState<string>("");
   const [debouncedSearch] = useDebounce(search, 500);
 
@@ -25,12 +24,11 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
     try {
       if (!session || search.length === 0) return;
 
-      const { data } = await getUserWefollow({ id: session.user.id, username: search });
+      const { data } = await findUser({ username: search });
 
       if (!data) return;
 
-      setUsers(data.randomUsers);
-      setUserWeFollow(data.users);
+      setUsers(data);
     } catch (error) {
       console.error(error);
     }
@@ -72,17 +70,15 @@ const FindContactDialog = ({ children }: { children: React.ReactNode }) => {
         <Separator className=" bg-black" />
         <Input type="text" placeholder="Search.." onChange={(e) => setSearch(e.target.value)} />
         <div className="h-[380px] overflow-y-auto">
-          {search.length === 0 && userWeFollow.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
-          {userWeFollow?.map((user) => (
-            <button onClick={() => handleClick({ id: user.id })} className="w-full text-left " key={user.id}>
-              <AccountPreview username={user.username} profilePicture={user.profileUrl} />
-            </button>
-          ))}
-          {users?.map((user) => (
-            <button onClick={() => handleClick({ id: user.id })} className="w-full text-left" key={user.id}>
-              <AccountPreview username={user.username} profilePicture={user.profileUrl} />
-            </button>
-          ))}
+          {search.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
+          {users?.map((user) => {
+            if(user.id === session?.user.id) return
+            return (
+              <button onClick={() => handleClick({ id: user.id })} className="w-full text-left" key={user.id}>
+                <AccountPreview username={user.username} profilePicture={user.profileUrl} />
+              </button>
+            );
+          })}
         </div>
       </DialogContent>
     </Dialog>

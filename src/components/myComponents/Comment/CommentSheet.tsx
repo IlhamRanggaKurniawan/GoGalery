@@ -31,12 +31,12 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent className="mt-[20vh] w-screen h-full sm:m-0 sm:max-w-96 px-0 pt-0">
+      <SheetContent className="mt-[20vh] w-screen h-full sm:m-0 sm:max-w-96 p-0 pt-0">
         <SheetHeader className="py-2">
           <SheetTitle className="text-center">Comment Section</SheetTitle>
         </SheetHeader>
         <Separator className="my-1" />
-        <div className="flex flex-col pb-4 h-[26rem] sm:h-[633px] gap-1 overflow-y-auto px-3">
+        <div className="flex flex-col pb-4 h-[26rem] sm:h-[550px] xl:h-[633px] gap-1 overflow-y-auto px-3">
           {comments.map((comment) => (
             <Comment
               text={comment.text}

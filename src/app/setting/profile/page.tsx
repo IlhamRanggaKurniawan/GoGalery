@@ -6,6 +6,8 @@ import React from "react";
 export const metadata: Metadata = {
   title: "Edit profile | Connect Verse",
   description: "Welcome to the Connect Verse Edit profile page",
+  keywords:"connect, verse, social media",
+  authors: [{name: "Connect Verse team"}],
   openGraph: {
     title: "Edit profile | Connect Verse",
     description: "Welcome to the Connect Verse Edit profile page",

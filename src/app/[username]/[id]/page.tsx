@@ -10,6 +10,8 @@ export const generateMetadata = ({params} : {params : {username: string}}): Meta
   return {
     title: `${params.username} | Connect Verse`,
     description: `Welcome to ${params.username} Post page`,
+    keywords:"connect, verse, social media",
+    authors: [{name: "Connect Verse team"}],
     openGraph: {
       title: `${params.username} | Connect Verse`,
       description: `Welcome to ${params.username} Post page`,

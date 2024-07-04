@@ -1,4 +1,4 @@
-import AIConversation from '@/components/myComponents/ai/AIConversation'
+import CommentPage from '@/components/myComponents/Comment/CommentPage'
 import { Metadata } from 'next';
 import React from 'react'
 
@@ -19,12 +19,9 @@ export const metadata: Metadata = {
   },
 };
 
-const page = ({params} : {params: {id : string}}) => {
-
+const page = ({params} : {params : {id: number}}) => {
   return (
-    <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-0 overflow-hidden">
-        <AIConversation id={+params.id}/>
-    </div>
+    <CommentPage contentId={+params.id}/>
   )
 }
 

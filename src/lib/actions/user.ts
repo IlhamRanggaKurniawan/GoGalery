@@ -139,49 +139,6 @@ export const getUserProfile = async ({ username }: { username: string }) => {
     })
 }
 
-export const getUserWefollow = async ({ id, username }: { id: number, username: string }) => {
-    const users = await prisma.user.findMany({
-        where: {
-            following: {
-                some: {
-                    followerId: {
-                        equals: id
-                    }
-                }
-            },
-            username: {
-                contains: username
-            }
-        },
-        select: {
-            id: true,
-            username: true,
-            profileUrl: true
-        }
-    })
-
-    const randomUsers = await prisma.user.findMany({
-        where: {
-            username: {
-                contains: username
-            },
-            id: {
-                notIn: users.map(user => user.id)
-            }
-        },
-        select: {
-            id: true,
-            username: true,
-            profileUrl: true
-        }
-    })
-
-    return {
-        data: { users, randomUsers },
-        statusCode: 200
-    }
-}
-
 export const getMutualFollowers = async ({ id, username }: { id: number, username: string }) => {
     const mutualFollowers = await prisma.user.findMany({
         where: {

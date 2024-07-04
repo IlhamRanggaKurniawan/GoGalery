@@ -5,8 +5,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/myComponents/Navbar";
 import { usePathname } from "next/navigation";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +20,8 @@ export default function RootLayout({
   session: Session;
 }>) {
   const pathname = usePathname();
-  const hideNavbar = /^\/(login|register)$/.test(pathname);
-  const hideNavbarOnMobile = /^\/(group\/.*|messages\/.*)$/.test(pathname);
+  const hideNavbar = /^\/(login|register|explore\/search)$/.test(pathname);
+  const hideNavbarOnMobile = /^\/(group\/.*|messages\/.*|ai\/.*|content\/.*|notifications)$/.test(pathname);
   
   return (
     <html lang="en">
@@ -34,6 +36,8 @@ export default function RootLayout({
             )}
           </ThemeProvider>
         </SessionProvider>
+        <SpeedInsights/>
+        <Analytics />
       </body>
     </html>
   );

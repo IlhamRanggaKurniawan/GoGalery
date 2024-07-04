@@ -80,7 +80,7 @@ const UploadInput = () => {
             <ImageUp className="text-gray-500 mb-2" size={50} />
             <span>Browse</span>
             <span className="text-sm text-gray-500">Upload File Here</span>
-            <Input type="file" id="file" accept="images/*" name="file" className="hidden" required onChange={handleChange} />
+            <Input type="file" id="file" name="file" className="hidden" required onChange={handleChange} />
           </label>
         </div>
         <div className="flex flex-col gap-1">

@@ -8,7 +8,7 @@ import { INotification } from "@/lib/actions/notification";
 const NotificationSheet = ({ children, side, notifications }: { children: ReactNode; side: "left" | "bottom" | "top" | "right", notifications: INotification[] }) => {
   return (
     <Sheet>
-      <SheetTrigger asChild className="cursor-pointer">
+      <SheetTrigger asChild className="cursor-pointer" aria-label="notification">
         {children}
       </SheetTrigger>
       <SheetContent side={side} className="h-screen w-screen sm:w-96 p-0">

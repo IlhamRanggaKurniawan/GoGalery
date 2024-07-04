@@ -67,7 +67,7 @@ const RegisterForm = () => {
     <div className="flex  justify-center items-center h-screen">
       <div className="w-full p-6 rounded-lg shadow-m max-w-[26rem]">
         <div className="mb-3 ">
-          <h1 className="text-center font-bold"> SpaceShip Social media</h1>
+          <h1 className="text-center font-bold">Connect Verse</h1>
         </div>
         <Separator className="my-2" />
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

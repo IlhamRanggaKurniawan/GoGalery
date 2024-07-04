@@ -1,11 +1,11 @@
 import React from "react";
-import { Input } from "../ui/input";
+import Link from "next/link";
 
 const SearchBar = () => {
   return (
-    <div className="w-screen h-12 flex items-center fixed top-0 right-0 bg-background sm:hidden">
-      <Input className="mx-2 h-8 w-screen " type="text" placeholder="Search"/>
-    </div>
+    <Link className="w-screen h-12 flex items-center fixed top-0 right-0 bg-background sm:hidden" href="/explore/search">
+      <div className="mx-2 h-8 w-screen border flex items-center rounded-sm px-3 font-light text-sm">Search</div>
+    </Link>
   );
 };
 

@@ -1,7 +1,5 @@
-import GridContentInfinityScroll from "@/components/myComponents/content/GridContentInfinityScroll";
-import SearchBar from "@/components/myComponents/SearchBar";
-import SearchSheet from "@/components/myComponents/SearchSheet";
-import { getAllContent } from "@/lib/actions/content";
+import SearchUser from "@/components/myComponents/SearchUser";
+import { X } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
@@ -23,16 +21,17 @@ export const metadata: Metadata = {
   },
 };
 
-const page = async () => {
+const page = () => {
   return (
-    <>
-      <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4 flex items-center justify-center">
-        <SearchBar />
-        <div className="max-w-[1000px] mt-12 sm:mt-0">
-          <GridContentInfinityScroll contentFuction={getAllContent} href="explore" />
-        </div>
+    <div className="p-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-medium">Search</h1>
+        <Link href="/explore">
+          <X />
+        </Link>
       </div>
-    </>
+      <SearchUser />
+    </div>
   );
 };
 
