@@ -20,7 +20,7 @@ const DeleteContentDialog = ({ children, id }: { children: React.ReactNode; id: 
       <DialogContent>
         <DialogClose className="flex flex-col gap-2">
           <Button variant={"destructive"} className="w-full" onClick={handleClick}>
-            Delete comment
+            Delete content
           </Button>
           <Button className="w-full" variant={"secondary"}>
             Close

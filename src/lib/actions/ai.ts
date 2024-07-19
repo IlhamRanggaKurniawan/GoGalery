@@ -23,7 +23,7 @@ const openAI = new OpenAI({
 export const textGeneration = async ({ id, messages }: { id: number, messages: { role: "user" | "assistant" | "system"; content: string }[] }) => {
 
     const chat = await openAI.chat.completions.create({
-        model: "gpt-3.5-turbo-0125",
+        model: "gpt-4o-mini",
         messages: [
             { role: "system", content: "you are a helpfull asistant" },
             ...messages
@@ -82,4 +82,20 @@ export const imageGenerate = async ({ prompt }: { prompt: string }) => {
     })
 
     return image
+}
+
+export const findConversation = async ({userId}: {userId: number}) => {
+    return await prisma.aIConversation.findFirst({
+        where: {
+            userId
+        }
+    })
+}
+
+export const createConversation = async ({userId}: {userId: number}) => {
+    return await prisma.aIConversation.create({
+        data: {
+            userId
+        }
+    })
 }

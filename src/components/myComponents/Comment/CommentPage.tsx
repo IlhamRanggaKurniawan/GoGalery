@@ -14,7 +14,7 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
   const [text, setText] = useState("");
   const [comments, setComments] = useState<IComment[]>([]);
   const { data: session } = useSession();
-  const router = useRouter()
+  const router = useRouter();
 
   const getAllComments = async () => {
     const { data } = await getComments({ contentId });
@@ -40,19 +40,19 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
 
   useEffect(() => {
     getAllComments();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className=" sm:m-0 p-0 pt-0">
-      <div className="p-2 flex justify-between">
+      <div className="p-2 flex justify-between h-[7vh] items-center">
         <h1 className="text-center">Comment Section</h1>
         <button onClick={() => router.back()}>
           <X />
         </button>
       </div>
-      <Separator className="my-1" />
-      <div className="flex flex-col pb-2 h-[552px] gap-1 overflow-y-auto px-3">
+      <Separator/>
+      <div className="flex flex-col py-2 h-[84vh] gap-1 overflow-y-auto px-3">
         {comments.map((comment) => (
           <Comment
             text={comment.text}
@@ -65,8 +65,8 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
           />
         ))}
       </div>
-      <form className="w-full h-14 border-y-2" onSubmit={submitComment}>
-        <Input required placeholder="Send a comment" className="border-0 rounded-none h-14" value={text} onChange={(e) => setText(e.target.value)} />
+      <form className="w-full border-y-2" onSubmit={submitComment}>
+        <Input required placeholder="Send a comment" className="border-0 rounded-none h-[8vh] mt-[2px]" value={text} onChange={(e) => setText(e.target.value)} />
       </form>
     </div>
   );
