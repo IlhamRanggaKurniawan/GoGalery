@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
   const {data: session} = useSession()
 
@@ -20,6 +21,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
+      setLoading(true)
       e.preventDefault();
       setError("")
       const result = await signIn("credentials", {
@@ -36,6 +38,8 @@ const LoginForm = () => {
       router.push("/");
     } catch (error) {
       setError((error as Error).message)
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -57,7 +61,7 @@ const LoginForm = () => {
           </div>
           {error && <p className="text-red-500">{error}</p>}
           <div className="flex justify-center">
-            <Button className="w-full font-bold" type="submit">
+            <Button className="w-full font-bold" type="submit" disabled={loading}>
               login
             </Button>
           </div>

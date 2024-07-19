@@ -15,6 +15,7 @@ const RegisterForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confPassword, setConfPassword] = useState<string>("");
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
 
   const {data: session} = useSession()
@@ -26,6 +27,7 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
+      setLoading(true)
       e.preventDefault();
       setError("");
 
@@ -60,6 +62,8 @@ const RegisterForm = () => {
       router.push("/");
     } catch (error) {
       setError((error as Error).message);
+    } finally {
+      setLoading(true)
     }
   };
 
@@ -89,7 +93,7 @@ const RegisterForm = () => {
           </div>
           {error && <p className="text-red-500">{error}</p>}
           <div className="flex justify-center">
-            <Button className="w-full font-bold" type="submit">
+            <Button className="w-full font-bold" type="submit" disabled={loading}>
               register
             </Button>
           </div>
