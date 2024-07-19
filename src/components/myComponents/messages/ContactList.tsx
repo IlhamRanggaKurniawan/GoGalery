@@ -59,13 +59,15 @@ const ContactList = ({ group }: { group: boolean }) => {
 
   return (
     <div>
-      <Link href={`ai/${aiConversation}`} className="h-14 flex items-center gap-3 p-2">
+      {aiConversation && (
+        <Link href={`ai/${aiConversation}`} className="h-14 flex items-center gap-3 p-2">
         <Avatar className="w-12 h-12">
           <AvatarImage src="/openAI.jpeg" alt="@shadcn" />
           <AvatarFallback>Open AI</AvatarFallback>
         </Avatar>
         <h4 className="truncate">Open AI</h4>
       </Link>
+      )}
       {group
         ? groupList.map((group) => <Contact key={group.id} group id={group.id} name={group.name} profilePicture={group.pictureUrl} />)
         : contacts.map((contact) => {
