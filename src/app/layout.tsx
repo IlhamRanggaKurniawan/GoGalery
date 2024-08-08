@@ -29,11 +29,11 @@ export default function RootLayout({
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {children}
-            {!hideNavbar && (
+            {/* {!hideNavbar && (
               <div className={hideNavbarOnMobile ? "hidden sm:flex" : ""}>
                 <Navbar />
               </div>
-            )}
+            )} */}
           </ThemeProvider>
         </SessionProvider>
         <SpeedInsights/>

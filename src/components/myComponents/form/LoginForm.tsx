@@ -13,11 +13,6 @@ const LoginForm = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false)
   const router = useRouter();
-  const {data: session} = useSession()
-
-  if(session) {
-    router.push("/")
-  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {

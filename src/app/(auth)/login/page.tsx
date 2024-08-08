@@ -1,30 +1,42 @@
-import LoginForm from "@/components/myComponents/form/LoginForm";
-import { Metadata } from "next";
-import React from "react";
+/* eslint-disable react/no-unescaped-entities */
+"use client"
 
-export const metadata: Metadata = {
-  title: "Connect Verse",
-  description: "Welcome to the Connect Verse login page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
-  openGraph: {
-    title: "Connect Verse",
-    description: "Welcome to the Connect Verse login page",
-    url: "https://ConnectVerse.com/login",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Connect Verse",
-    description: "Welcome to the Connect Verse login page",
-  },
-};
+import FormField from "@/components/newDesign/FormField";
+import Header from "@/components/newDesign/Header";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+
   return (
-    <>
-      <LoginForm />
-    </>
+    <div className="w-full h-screen flex justify-center items-center">
+      <form className="w-96 px-4 flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-xl font-semibold text-center">Connect Verse</h1>
+          <Separator className="my-1" />
+        </div>
+        <div>
+          <label htmlFor="password">Username</label>
+          <FormField placeholder="Username" type="text" handleChange={setUsername} value={username} id="username" required/>
+        </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <FormField placeholder="Password" type="password" handleChange={setPassword} value={password} id="password" required/>
+        </div>
+        <div className="w-full flex flex-col gap-2">
+          <Button className="w-full" type="submit" disabled={loading}>
+            Sign In
+          </Button>
+          <p className="text-sm">Don't have an account <Link href="/register" className="text-yellow-400">Sign Up</Link></p>
+        </div>
+      </form>
+    </div>
   );
 };
 
-export default page;
+export default Page;

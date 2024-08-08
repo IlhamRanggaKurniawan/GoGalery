@@ -1,5 +1,6 @@
 import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
 import HomePageBar from "@/components/myComponents/HomePageBar";
+import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
 import { Metadata } from "next";
 import React from "react";
@@ -29,6 +30,7 @@ const page = () => {
       <div className="flex flex-col gap-4 pt-12 sm:pt-0 w-full">
         <StraightContentInfinityScroll contentFuction={getContentByFollowing} homePage/>
       </div>
+      <Navbar />
     </div>
   );
 };
