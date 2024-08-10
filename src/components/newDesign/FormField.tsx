@@ -10,13 +10,13 @@ interface FormFieldProps {
 
 const FormField: React.FC<FormFieldProps> = ({ placeholder, value, handleChange, type, ...props }) => {
     return (
-        <div className={`border-b border-slate-300 w-full rounded-lg mb-2${props.className}`}>
+        <div className={`border-b border-slate-300 w-full mb-2 rounded-xl ${props.className}`}>
             <input
                 value={value}
                 placeholder={placeholder}
                 onChange={(e) => handleChange(e.target.value)}
                 type={type}
-                className='p-3 text-base w-full rounded-xl outline-none ring-0 focus:ring-0 focus:outline-none'
+                className='p-3 text-base w-full outline-none ring-0 focus:ring-0 focus:outline-none'
                 {...props}
             />
         </div>

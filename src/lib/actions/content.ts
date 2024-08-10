@@ -206,34 +206,34 @@ export const getContentByUsername = async ({ accountUsername, cursor, pageSize }
 
 
 
-export const getContentById = async ({ id }: { id: number, }) => {
-    const content = await prisma.content.findUnique({
-        where: {
-            id
-        },
-        include: {
-            uploader: {
-                select: {
-                    id: true,
-                    username: true,
-                    profileUrl: true
-                }
-            }
-        },
-    })
+// export const getContentById = async ({ id }: { id: number, }) => {
+//     const content = await prisma.content.findUnique({
+//         where: {
+//             id
+//         },
+//         include: {
+//             uploader: {
+//                 select: {
+//                     id: true,
+//                     username: true,
+//                     profileUrl: true
+//                 }
+//             }
+//         },
+//     })
 
-    if (!content) {
-        return ({
-            error: "Content not found",
-            statusCode: 400
-        })
-    }
+//     if (!content) {
+//         return ({
+//             error: "Content not found",
+//             statusCode: 400
+//         })
+//     }
 
-    return ({
-        data: content,
-        statusCode: 200
-    })
-}
+//     return ({
+//         data: content,
+//         statusCode: 200
+//     })
+// }
 
 export const profileChainingContent = async ({ id, username, pageSize, cursor }: { id: number, username: string, pageSize: number, cursor?: number }) => {
     const contents = await prisma.content.findMany({

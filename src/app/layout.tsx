@@ -3,12 +3,12 @@
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/myComponents/Navbar";
 import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
+import Navbar from "@/components/newDesign/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,11 +29,11 @@ export default function RootLayout({
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {children}
-            {/* {!hideNavbar && (
+            {!hideNavbar && (
               <div className={hideNavbarOnMobile ? "hidden sm:flex" : ""}>
                 <Navbar />
               </div>
-            )} */}
+            )}
           </ThemeProvider>
         </SessionProvider>
         <SpeedInsights/>

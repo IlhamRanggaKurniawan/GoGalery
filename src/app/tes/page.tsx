@@ -1,6 +1,7 @@
 import GridContentInfinityScroll from "@/components/myComponents/content/GridContentInfinityScroll";
 import SearchBar from "@/components/myComponents/SearchBar";
 import SearchSheet from "@/components/myComponents/SearchSheet";
+import Navbar from "@/components/newDesign/Navbar";
 import { getAllContent } from "@/lib/actions/content";
 import { Metadata } from "next";
 import Link from "next/link";

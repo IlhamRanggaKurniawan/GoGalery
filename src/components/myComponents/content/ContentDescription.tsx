@@ -15,10 +15,10 @@ const ContentDescription = ({ caption }: { caption: string }) => {
   }, [caption]);
 
   return (
-    <div className="m-2">
+    <div>
       <p
         ref={textRef}
-        className={`text-sm ${isTruncate ? "truncate" : ""}`}
+        className={`text-qs ${isTruncate ? "truncate" : ""}`}
         style={{ cursor: isOverflowing ? 'pointer' : 'auto' }}
       >
         {caption}

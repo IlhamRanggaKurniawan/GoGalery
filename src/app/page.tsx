@@ -1,7 +1,9 @@
 import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
 import HomePageBar from "@/components/myComponents/HomePageBar";
+import Content from "@/components/newDesign/Content";
 import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
+import getSession from "@/lib/getSession";
 import { Metadata } from "next";
 import React from "react";
 
@@ -24,13 +26,20 @@ export const metadata: Metadata = {
 };
 
 const page = () => {
+ 
   return (
     <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
-      <HomePageBar />
+      {/* <HomePageBar />
       <div className="flex flex-col gap-4 pt-12 sm:pt-0 w-full">
         <StraightContentInfinityScroll contentFuction={getContentByFollowing} homePage/>
-      </div>
-      <Navbar />
+      </div> */}
+      <Content />
+      <Content />
+      <Content />
+      <Content />
+      <Content />
+      <Content />
+      <Content />
     </div>
   );
 };
