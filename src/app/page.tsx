@@ -10,8 +10,8 @@ import React from "react";
 export const metadata: Metadata = {
   title: "Connect Verse",
   description: "Welcome to the Connect Verse homepage.",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
     title: "Connect Verse",
     description: "Welcome to the Connect Verse homepage.",
@@ -26,20 +26,18 @@ export const metadata: Metadata = {
 };
 
 const page = () => {
- 
+
   return (
-    <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
-      {/* <HomePageBar />
-      <div className="flex flex-col gap-4 pt-12 sm:pt-0 w-full">
-        <StraightContentInfinityScroll contentFuction={getContentByFollowing} homePage/>
-      </div> */}
-      <Content />
-      <Content />
-      <Content />
-      <Content />
-      <Content />
-      <Content />
-      <Content />
+    <div >
+      <div className=" overflow-y-auto flex flex-col items-center">
+        <Content />
+        <Content />
+        <Content />
+        <Content />
+        <Content />
+        <Content />
+        <Content />
+      </div>
     </div>
   );
 };

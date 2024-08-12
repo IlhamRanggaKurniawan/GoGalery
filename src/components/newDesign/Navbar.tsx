@@ -1,6 +1,6 @@
 "use client"
 
-import { AirVent, Bell, BotMessageSquare, CircleUser, Compass, Home, ImageUp, LucideProps, MessageCircle, Rocket, Search, Settings2, Users } from 'lucide-react'
+import { AirVent, Bell, BotMessageSquare, CircleUser, Compass, Home, ImageUp, LucideProps, Menu, MessageCircle, Rocket, Search, Settings2, Users } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -45,8 +45,9 @@ const Navbar = () => {
                 <NavbarIcon path='/' icon={Home} text='Home' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
                 <NavbarIcon path='/tes' icon={Search} text='Search' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
                 <NavbarIcon path='/explore/fyp' icon={Compass} text='Explore' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
-                <NavbarIcon path='/Upload' icon={ImageUp} text='Upload' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
-                <NavbarIcon path='/Notification' icon={Bell} text='Notification' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
+                <NavbarIcon path='/upload' icon={ImageUp} text='Upload' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
+                <NavbarIcon path='/menu' icon={Menu} text='Menu' className='w-full sm:hidden sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
+                <NavbarIcon path='/notification' icon={Bell} text='Notification' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
                 <NavbarIcon path='/messages' icon={MessageCircle} text='Private Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
                 <NavbarIcon path='/group' icon={Users} text='Group Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
                 <NavbarIcon path='/ai' icon={BotMessageSquare} text='Chat Bot' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />

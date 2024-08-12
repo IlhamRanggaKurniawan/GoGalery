@@ -21,14 +21,16 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const hideNavbar = /^\/(login|register|explore\/search)$/.test(pathname);
-  const hideNavbarOnMobile = /^\/(group\/.*|messages\/.*|ai\/.*|content\/.*|notifications)$/.test(pathname);
-  
+  const hideNavbarOnMobile = /^\/(messages\/.*|ai\/.*|content\/.*|notifications)$/.test(pathname);
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
+            <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
+              {children}
+            </div>
             {!hideNavbar && (
               <div className={hideNavbarOnMobile ? "hidden sm:flex" : ""}>
                 <Navbar />
@@ -36,7 +38,7 @@ export default function RootLayout({
             )}
           </ThemeProvider>
         </SessionProvider>
-        <SpeedInsights/>
+        <SpeedInsights />
         <Analytics />
       </body>
     </html>

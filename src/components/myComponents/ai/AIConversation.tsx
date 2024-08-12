@@ -8,8 +8,8 @@ import { getAIMessage, IAIMessage, ITextMessage } from "@/lib/actions/ai";
 
 const AIConversation = ({ id }: { id: number }) => {
   const [messages, setMessage] = useState<IAIMessage[]>([]);
-  const lastMessageRef = useRef<HTMLDivElement>(null);
   const [prompt, setPrompt] = useState<ITextMessage[]>([]);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const getChat = async () => {
     try {

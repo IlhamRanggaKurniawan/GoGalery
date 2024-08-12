@@ -1,12 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client"
 import FormField from "@/components/newDesign/FormField";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
 import axios from "axios"
 import { useRouter } from "next/navigation";
+import Button from "@/components/newDesign/Button";
 
 const Page = () => {
   const [username, setUsername] = useState("")
@@ -54,7 +54,7 @@ const Page = () => {
           <FormField placeholder="Password" type="password" handleChange={setPassword} value={password} id="password" required />
         </div>
         <div className="w-full flex flex-col gap-2">
-          <Button className="w-full" type="submit" disabled={loading}>
+          <Button className="w-full bg-slate-900 text-background rounded-xl" type="submit" disabled={loading}>
             Sign In
           </Button>
           <p className="text-sm">Don't have an account <Link href="/register" className="text-yellow-400">Sign Up</Link></p>

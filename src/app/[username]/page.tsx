@@ -1,48 +1,49 @@
-import GridContentInfinityScroll from "@/components/myComponents/content/GridContentInfinityScroll";
-import ProfileMain from "@/components/myComponents/profile/ProfileMain";
-import { Separator } from "@/components/ui/separator";
-import { getContentByUsername } from "@/lib/actions/content";
-import { getUserProfile } from "@/lib/actions/user";
-import { Metadata } from "next";
-import React from "react";
+import Avatar from '@/components/newDesign/Avatar'
+import Button from '@/components/newDesign/Button'
+import Image from 'next/image'
+import React from 'react'
 
-export const generateMetadata = ({params} : {params : {username: string}}): Metadata => {
-  return {
-    title: `${params.username} | Connect Verse`,
-    description: `Welcome to ${params.username} profile page`,
-    keywords:"connect, verse, social media",
-    authors: [{name: "Connect Verse team"}],
-    openGraph: {
-      title: `${params.username} | Connect Verse`,
-      description: `Welcome to ${params.username} profile page`,
-      url: "https://ConnectVerse.com",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${params.username} | Connect Verse`,
-      description: `Welcome to ${params.username} profile page`,
-    },
-  }
-}
-
-const page = async ({ params }: { params: { username: string } }) => {
-  const { data, error } = await getUserProfile({username: params.username});
-
-  if (!data || error) {
-    return <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">{error}</div>;
-  }
-
+const page = () => {
   return (
-    <>
-    <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-2 flex flex-col items-center justify-center">
-      <div className="w-full max-w-5xl">
-        <ProfileMain username={data.username} userId={data.id} content={data._count.content} bio={data.bio} profilePicture={data.profileUrl}/>
-        <Separator className="my-4 w-full" />
-        <GridContentInfinityScroll contentFuction={getContentByUsername} accountUsername={data.username} href={data.username}/>
+    <div>
+      <div className='flex flex-col items-center justify-center gap-3'>
+        <div className='w-20 h-20'>
+          <Avatar profilePicture={null} username='tes' />
+        </div>
+        <h1>Ilham Rangga</h1>
+      </div>
+      <div className='flex justify-center gap-4 mt-4'>
+        <div className='flex flex-col items-center w-20'>
+          <p>200</p>
+          <h3>Post</h3>
+        </div>
+        <div className='flex flex-col items-center w-20'>
+          <p>200</p>
+          <h3>following</h3>
+        </div>
+        <div className='flex flex-col items-center w-20'>
+          <p>200</p>
+          <h3>followers</h3>
+        </div>
+      </div>
+      <div className='flex justify-center gap-3 px-4'>
+        <Button className='max-w-24 rounded-full bg-red-500 text-primary shadow-lg' >Follow</Button>
+        <Button className='max-w-24 rounded-full bg-red-100 text-primary shadow-lg' >Message</Button>
+      </div>
+      <div className='flex justify-center'>
+        <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+          <Image src="https://gsjjcfotrvkfpibhnnji.supabase.co/storage/v1/object/public/Connect%20Verse/Content/171993024088674146.jpg" alt='tes' width={1000} height={1000} className='rounded-lg max-w-96' />
+        </div>
       </div>
     </div>
-    </>
-  );
-};
+  )
+}
 
-export default page;
+export default page

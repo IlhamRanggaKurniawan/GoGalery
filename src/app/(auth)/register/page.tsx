@@ -2,7 +2,6 @@
 "use client"
 
 import FormField from "@/components/newDesign/FormField";
-import Header from "@/components/newDesign/Header";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";

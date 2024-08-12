@@ -12,9 +12,9 @@ const FormField: React.FC<FormFieldProps> = ({ placeholder, value, handleChange,
     return (
         <div className={`border-b border-slate-300 w-full mb-2 rounded-xl ${props.className}`}>
             <input
-                value={value}
+                // value={value}
                 placeholder={placeholder}
-                onChange={(e) => handleChange(e.target.value)}
+                // onChange={(e) => handleChange(e.target.value)}
                 type={type}
                 className='p-3 text-base w-full outline-none ring-0 focus:ring-0 focus:outline-none'
                 {...props}
