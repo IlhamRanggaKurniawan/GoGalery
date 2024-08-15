@@ -3,33 +3,29 @@ import HomePageBar from "@/components/myComponents/HomePageBar";
 import Content from "@/components/newDesign/Content";
 import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
-import getSession from "@/lib/getSession";
-import { Metadata } from "next";
+import { fetchToken } from "@/lib/actions/token";
+import api from "@/lib/api";
+import getSession from "@/lib/serverHooks/getSession";
 import React from "react";
 
-export const metadata: Metadata = {
-  title: "Connect Verse",
-  description: "Welcome to the Connect Verse homepage.",
-  keywords: "connect, verse, social media",
-  authors: [{ name: "Connect Verse team" }],
-  openGraph: {
-    title: "Connect Verse",
-    description: "Welcome to the Connect Verse homepage.",
-    url: "https://ConnectVerse.com",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Connect Verse",
-    description: "Welcome to the Connect Verse homepage.",
-    images: ["https://example.com/image.jpg"],
-  },
-};
+const page = async () => {
+  const contents = await api.get("/content/findall")
 
-const page = () => {
+  // console.log(contents)
+
+  const data = await api.post("/user/login", {
+    body: {
+      username: "ilham",
+      password: "123123123"
+    },
+    cache: "default"
+  })
+
 
   return (
-    <div >
-      <div className=" overflow-y-auto flex flex-col items-center">
+    <div>
+      <div className="overflow-y-auto flex flex-col items-center">
+        {/* <p>{token}</p> */}
         <Content />
         <Content />
         <Content />
@@ -43,3 +39,4 @@ const page = () => {
 };
 
 export default page;
+

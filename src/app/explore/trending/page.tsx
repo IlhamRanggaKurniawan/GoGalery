@@ -3,7 +3,7 @@ import HomePageBar from "@/components/myComponents/HomePageBar";
 import Content from "@/components/newDesign/Content";
 import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
-import getSession from "@/lib/getSession";
+import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
 import React from "react";
 

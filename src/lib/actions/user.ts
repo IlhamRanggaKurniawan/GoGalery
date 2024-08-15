@@ -4,6 +4,7 @@ import { hash } from "bcrypt"
 import prisma from "../dataStorage/db"
 import { updateImage, uploadImage } from "./content"
 import supabase from "../dataStorage/bucket"
+import axios from "axios"
 
 export interface IUserPreview {
     id: number,

@@ -3,10 +3,11 @@
 import FormField from "@/components/newDesign/FormField";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import axios from "axios"
 import { useRouter } from "next/navigation";
-import Button from "@/components/newDesign/Button";
+import { Button } from "@/components/ui/button";
+import api from "@/lib/api";
 
 const Page = () => {
   const [username, setUsername] = useState("")
@@ -15,6 +16,7 @@ const Page = () => {
 
   const router = useRouter()
 
+
   const login = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -22,14 +24,13 @@ const Page = () => {
 
       setLoading(true);
 
-      const user = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
-        username,
-        password,
-      }, { withCredentials: true });
+      
 
-      localStorage.setItem("AccessToken", user.data.AccessToken);
+      // const user = await data.json()
 
-      router.push("/")
+      // localStorage.setItem("AccessToken", user.AccessToken);
+
+      // // router.push("/")
 
     } catch (error) {
       console.error("Login failed:", error);
@@ -65,3 +66,4 @@ const Page = () => {
 };
 
 export default Page;
+

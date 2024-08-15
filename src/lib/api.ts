@@ -1,48 +1,145 @@
-import axios from "axios"
+import { cookies } from "next/headers";
 
-const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    withCredentials: true
-})
+const getToken = async () => {
+    const accessToken = cookies().get("AccessToken")?.value;
 
-api.interceptors.request.use(config => {
-    const token = localStorage.getItem("AccessToken")
-    if (token) {
-        config.headers["Authorization"] = `Bearer ${token}`
+    if (!accessToken) {
+        const refreshToken = cookies().get("RefreshToken")?.value;
+
+        const newAccessToken = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                Cookie: `RefreshToken=${refreshToken}`
+            },
+        })
+
+
+        const { accessToken } = await newAccessToken.json()
+
+        return accessToken
     }
-    return config
-}, error => {
-    return Promise.reject(error)
-})
 
-api.interceptors.response.use(
-    response => response,
-    async (error) => {
-        const originalRequest = error.config
+    return accessToken
+}
 
-        if (error.response.status === 401 && !originalRequest._entry) {
-            originalRequest._entry = true
 
-            try {
-                const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/token`,
-                    { withCredentials: true }
-                )
+class Api {
+    get = async (endpoint: string) => {
+        try {
+            const token = await getToken()
 
-                localStorage.setItem("AccessToken", data.accessToken)
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
 
-                originalRequest.headers["Authorization"] = `Bearer ${data.accessToken}`
-
-                return api(originalRequest)
-            } catch (error) {
-                console.error("Refresh token failed", error);
-
-                localStorage.removeItem("AccessToken")
-
-                return Promise.reject(error);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
             }
+
+            const data = await response.json()
+
+            return data
+        } catch (error) {
+            console.log(error)
         }
-        return Promise.reject(error);
     }
-)
+
+    post = async (endpoint: string, { body, cache }: { body: {}, cache: RequestCache }) => {
+        try {
+            const token = await getToken()
+
+            console.log(body)
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify({
+                    ...body
+                }),
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                cache
+            })
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json()
+
+            return data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    update = async (endpoint: string, { body, cache }: { body: {}, cache: RequestCache }) => {
+        try {
+            const token = await getToken()
+
+            console.log(body)
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+                method: "PUT",
+                credentials: "include",
+                body: JSON.stringify({
+                    ...body
+                }),
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                cache
+            })
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json()
+
+            return data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    delete = async (endpoint: string, { body, cache }: { body: {}, cache: RequestCache }) => {
+        try {
+            const token = await getToken()
+
+            console.log(body)
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+                method: "DELETE",
+                credentials: "include",
+                body: JSON.stringify({
+                    ...body
+                }),
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                cache
+            })
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json()
+
+            return data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+const api = new Api()
 
 export default api

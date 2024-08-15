@@ -3,7 +3,9 @@ import HomePageBar from "@/components/myComponents/HomePageBar";
 import Content from "@/components/newDesign/Content";
 import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
-import getSession from "@/lib/getSession";
+import api from "@/lib/api";
+import getSession from "@/lib/serverHooks/getSession";
+import axios from "axios";
 import { Metadata } from "next";
 import React from "react";
 
@@ -25,7 +27,12 @@ export const metadata: Metadata = {
   },
 };
 
-const page = () => {
+const page = async () => {
+
+
+  const contents = await api.get(`${process.env.NEXT_PUBLIC_API_URL}/content/findall`, {
+    withCredentials: true
+  })
 
   return (
     <div >

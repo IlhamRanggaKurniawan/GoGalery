@@ -4,8 +4,6 @@ import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { usePathname } from "next/navigation";
-import { SessionProvider } from "next-auth/react";
-import { Session } from "next-auth";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
 import Navbar from "@/components/newDesign/Navbar";
@@ -14,10 +12,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
-  session,
 }: Readonly<{
   children: React.ReactNode;
-  session: Session;
 }>) {
   const pathname = usePathname();
   const hideNavbar = /^\/(login|register|explore\/search)$/.test(pathname);
@@ -26,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
               {children}
@@ -37,7 +32,6 @@ export default function RootLayout({
               </div>
             )}
           </ThemeProvider>
-        </SessionProvider>
         <SpeedInsights />
         <Analytics />
       </body>
