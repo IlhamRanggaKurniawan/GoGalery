@@ -1,4 +1,4 @@
-import Content from '@/components/newDesign/Content'
+import Content from '@/components/newDesign/content/Content'
 import Header from '@/components/newDesign/Header'
 import { ChevronLeft } from 'lucide-react'
 import Image from 'next/image'

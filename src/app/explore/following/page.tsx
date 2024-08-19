@@ -1,8 +1,9 @@
 import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
 import HomePageBar from "@/components/myComponents/HomePageBar";
-import Content from "@/components/newDesign/Content";
+import Content from "@/components/newDesign/content/Content";
 import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
+import api from "@/lib/api";
 import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
 import React from "react";
@@ -25,17 +26,16 @@ export const metadata: Metadata = {
   },
 };
 
-const page = () => {
+const page = async () => {
+  const contents = await api.get("/content/findall", { cache: "force-cache"})
 
   return (
-    <div className=" overflow-y-auto sm:flex sm:flex-col sm:items-center w-full">
-        <Content />
-        <Content />
-        <Content />
-        <Content />
-        <Content />
-        <Content />
-        <Content />
+    <div >
+      <div className=" overflow-y-auto flex flex-col items-center">
+        {contents.map((content: any) => (
+          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} />
+        ))}
+      </div>
     </div>
   );
 };

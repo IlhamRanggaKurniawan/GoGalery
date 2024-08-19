@@ -1,4 +1,4 @@
-import Content from '@/components/newDesign/Content'
+import Content from '@/components/newDesign/content/Content'
 import React from 'react'
 
 const page = () => {

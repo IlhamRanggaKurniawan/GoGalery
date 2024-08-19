@@ -1,6 +1,6 @@
 import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
 import HomePageBar from "@/components/myComponents/HomePageBar";
-import Content from "@/components/newDesign/Content";
+import Content from "@/components/newDesign/content/Content";
 import Navbar from "@/components/newDesign/Navbar";
 import { getContentByFollowing } from "@/lib/actions/content";
 import api from "@/lib/api";
@@ -29,21 +29,14 @@ export const metadata: Metadata = {
 
 const page = async () => {
 
-
-  const contents = await api.get(`${process.env.NEXT_PUBLIC_API_URL}/content/findall`, {
-    withCredentials: true
-  })
+  const contents = await api.get("/content/findall", { cache: "force-cache"})
 
   return (
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
-        <Content />
-        <Content />
-        <Content />
-        <Content />
-        <Content />
-        <Content />
-        <Content />
+        {contents.map((content: any) => (
+          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} />
+        ))}
       </div>
     </div>
   );

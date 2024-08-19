@@ -10,7 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname()
 
     return (
-        <div>
+        <div className='mt-12'> 
             <Header>
                 <div className='flex flex-row justify-center gap-6 py-3 w-full'>
                     <Link href="/messages" className={`text-sm ${pathname === "/messages" ? "font-bold" : "font-light"}`}>Contact</Link>

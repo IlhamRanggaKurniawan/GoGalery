@@ -1,6 +1,6 @@
 import ContentHeader from "./ContentHeader";
 import ContentFooter from "./ContentFooter";
-import ContentDescription from "./ContentDescription";
+import ContentDescription from "../../newDesign/content/ContentDescription";
 import dynamic from "next/dynamic";
 import ContentSkeleton from "./ContentSkeleton";
 const ContentMain = dynamic(() => import("./ContentMain"), {

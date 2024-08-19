@@ -1,4 +1,4 @@
-import UploadInput from "@/components/myComponents/UploadInput";
+import UploadInput from "@/components/newDesign/UploadInput";
 import { Metadata } from "next";
 import React from "react";
 

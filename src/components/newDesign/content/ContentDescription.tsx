@@ -19,7 +19,6 @@ const ContentDescription = ({ caption }: { caption: string }) => {
       <p
         ref={textRef}
         className={`text-sm ${isTruncate ? "truncate" : ""}`}
-        style={{ cursor: isOverflowing ? 'pointer' : 'auto' }}
       >
         {caption}
       </p>

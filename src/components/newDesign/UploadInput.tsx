@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { uploadContent } from "@/lib/actions/content";
+import { useSession } from "@/lib/hooks/useSession";
 
 const UploadInput = () => {
   const [fileName, setFileName] = useState<string>("");
@@ -14,7 +14,7 @@ const UploadInput = () => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { data: session } = useSession();
+  const { user: session } = useSession();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {

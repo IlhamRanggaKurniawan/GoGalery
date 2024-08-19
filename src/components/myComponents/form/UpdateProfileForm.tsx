@@ -4,13 +4,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getUserProfile, updateProfile } from "@/lib/actions/user";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/hooks/useSession";
 import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const UpdateProfileForm = () => {
-  const { data: session } = useSession();
+  const { user: session } = useSession();
   const router = useRouter();
   const [bio, setBio] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
@@ -19,7 +19,7 @@ const UpdateProfileForm = () => {
   const setProfile = async () => {
     if (!session) return;
 
-    const { data } = await getUserProfile({ username: session.user.username });
+    const { data } = await getUserProfile({ username: session.username });
 
     if (!data) return;
 

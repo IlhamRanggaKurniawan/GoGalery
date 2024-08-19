@@ -51,7 +51,7 @@ const Navbar = () => {
                 <NavbarIcon path='/messages' icon={MessageCircle} text='Private Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
                 <NavbarIcon path='/group' icon={Users} text='Group Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
                 <NavbarIcon path='/ai' icon={BotMessageSquare} text='Chat Bot' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
-                <NavbarIcon path='/ilham' icon={CircleUser} text='Profile' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
+                <NavbarIcon path='/profile/ilham' icon={CircleUser} text='Profile' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
             </div>
             <div className='hidden  w-full justify-around items-center sm:flex sm:flex-col gap-2 lg:items-start px-2'>
                 <NavbarIcon path='/tes' icon={Settings2} text='More' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />

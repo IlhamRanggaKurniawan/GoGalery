@@ -7,7 +7,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import axios from "axios"
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import api from "@/lib/api";
+import apiClient from "@/lib/apiClient";
 
 const Page = () => {
   const [username, setUsername] = useState("")
@@ -16,7 +16,6 @@ const Page = () => {
 
   const router = useRouter()
 
-
   const login = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -24,13 +23,17 @@ const Page = () => {
 
       setLoading(true);
 
-      
+      const user = await apiClient.post("/user/login", {
+        body: {
+          username,
+          password
+        },
+        cache: "no-cache"
+      })
 
-      // const user = await data.json()
+      localStorage.setItem("AccessToken", user.AccessToken);
 
-      // localStorage.setItem("AccessToken", user.AccessToken);
-
-      // // router.push("/")
+      router.push("/")
 
     } catch (error) {
       console.error("Login failed:", error);
