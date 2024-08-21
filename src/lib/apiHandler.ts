@@ -8,6 +8,8 @@ class Api {
 
     get = async (endpoint: string, { cache }: { cache: RequestCache }) => {
         try {
+            console.log(endpoint)
+
             const token = await this.token()
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
@@ -20,7 +22,7 @@ class Api {
             })
 
             if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+                throw new Error(response.statusText);
             }
 
             const data = await response.json()

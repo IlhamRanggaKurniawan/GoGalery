@@ -8,7 +8,7 @@ interface props {
 }
 
 const useEffectAfterMount = (fn: props["fn"], trigger: props["trigger"] = []) => {
-
+    
     const isMounted = useRef(false)
 
     useEffect(() => {

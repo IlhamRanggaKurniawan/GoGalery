@@ -1,9 +1,13 @@
 "use client"
 
+import apiClient from '@/lib/apiClient'
+import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount'
+import { useSession } from '@/lib/hooks/useSession'
 import { AirVent, Bell, BotMessageSquare, CircleUser, Compass, Home, ImageUp, LucideProps, Menu, MessageCircle, Rocket, Search, Settings2, Users } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React from 'react'
+import { APIClient } from 'openai/core.mjs'
+import React, { useEffect, useState } from 'react'
 
 const NavbarIcon = ({ icon: Icon, text, path, className, hidden }: { icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>, text: string, path: string, className?: string, hidden: boolean }) => {
     const pathName = usePathname()
@@ -32,6 +36,29 @@ const NavbarIcon = ({ icon: Icon, text, path, className, hidden }: { icon: React
 }
 
 const Navbar = () => {
+    const { user } = useSession()
+    const [AIConvetsationID, setAIConvetsationID] = useState(null)
+
+    useEffectAfterMount(() => {
+        const getAIConversation = async () => {
+            if (!user) return
+            
+            const AIConversation = await apiClient.get(`/ai/conv/findone/${user?.id}`, { cache: "no-cache" })
+
+            if (AIConversation) return setAIConvetsationID(AIConversation.ID)
+
+            const newAIConversation = await apiClient.post(`/ai/conv/create`, {
+                body: {
+                    userId: user?.id
+                },
+                cache: "no-cache"
+            })
+
+            if (newAIConversation) return setAIConvetsationID(newAIConversation.ID)
+        }
+
+        getAIConversation()
+    }, [user])
 
     return (
         <div className='h-14 w-full fixed bottom-0 left-0 flex justify-between items-center z-50 bg-background sm:flex-col sm:h-full sm:justify-between sm:pb-4 sm:w-14 md:w-16 lg:w-56 lg:items-start sm:border-r'>
@@ -50,8 +77,8 @@ const Navbar = () => {
                 <NavbarIcon path='/notification' icon={Bell} text='Notification' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
                 <NavbarIcon path='/messages' icon={MessageCircle} text='Private Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
                 <NavbarIcon path='/group' icon={Users} text='Group Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
-                <NavbarIcon path='/ai' icon={BotMessageSquare} text='Chat Bot' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
-                <NavbarIcon path='/profile/ilham' icon={CircleUser} text='Profile' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
+                <NavbarIcon path={`/ai/${AIConvetsationID}`} icon={BotMessageSquare} text='Chat Bot' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
+                <NavbarIcon path={`/profile/${user?.username}`} icon={CircleUser} text='Profile' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
             </div>
             <div className='hidden  w-full justify-around items-center sm:flex sm:flex-col gap-2 lg:items-start px-2'>
                 <NavbarIcon path='/tes' icon={Settings2} text='More' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />

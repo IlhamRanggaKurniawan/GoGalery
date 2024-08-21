@@ -1,48 +1,30 @@
 import Avatar from '@/components/newDesign/Avatar'
+import Conversation from '@/components/newDesign/Conversation'
+import ConversationHeader from '@/components/newDesign/ConversationHeader'
 import Header from '@/components/newDesign/Header'
 import Message from '@/components/newDesign/Message'
 import MessageInput from '@/components/newDesign/MessageInput'
+import api from '@/lib/api'
+import getSession from '@/lib/serverHooks/getSession'
 import { ChevronLeft } from 'lucide-react'
 import React from 'react'
 
-const page = () => {
+const page = async ({ params }: { params: { id: string } }) => {
+  const { user } = await getSession()
+
+  const tes = async () => {
+    "use server"
+
+    const AIConversation = await api.get(`/ai/conv/findone/${user?.id}`, { cache: "no-cache" })
+
+    console.log(AIConversation)
+    return AIConversation.Messages
+  }
+
   return (
     <div>
-      <Header>
-        <div className="flex gap-2 items-center h-14">
-          <div className="flex gap-2 items-center">
-            <ChevronLeft size={30} />
-            <div className="h-12 w-12">
-              <Avatar profilePicture={null} username="tes" />
-            </div>
-          </div>
-          <h2>Open AI</h2>
-        </div>
-      </Header>
-      <div className=" overflow-y-auto">
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-        <Message senderId={1} message="lorem100" />
-        <Message senderId={2} message="lorem100asdas" />
-        <Message senderId={3} message="lorem100asddas" />
-      </div>
-      <MessageInput value="" />
+      <ConversationHeader />
+      <Conversation fn={tes} conversationId={+params.id} />
     </div>
   )
 }

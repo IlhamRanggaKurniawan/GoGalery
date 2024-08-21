@@ -62,7 +62,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         <Message senderId={2} message="lorem100asdas" />
         <Message senderId={3} message="lorem100asddas" />
       </div>
-      <MessageInput value="" />
+      {/* <MessageInput value="" /> */}
     </div>
   );
 };

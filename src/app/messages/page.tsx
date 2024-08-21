@@ -35,7 +35,7 @@ const page = async () => {
   return (
     <div>
       {contacts && contacts.map((contact: any) => {
-        const otherParticipant = contact.Participants.find((Participants: any) => Participants.ID !== user?.id);
+        const otherParticipant = user.id === contact.Participant1ID ? contact.Participant2 : contact.Participant1
 
         return (
           <Link href={`/messages/${contact.ID}`} key={contact.ID}>
