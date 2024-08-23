@@ -3,10 +3,11 @@
 import { findUser, IUserPreview } from "@/lib/actions/user";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
-import AccountPreview from "./AccountPreview";
+import AccountPreview from "../myComponents/AccountPreview";
+import apiClient from "@/lib/apiClient";
+import { Input } from "../ui/input";
 
 const SearchUser = () => {
   const [search, setSearch] = useState<string>("");
@@ -18,7 +19,9 @@ const SearchUser = () => {
     try {
       if (search.length === 0) return;
 
-      const { data } = await findUser({ username: debouncedSearch });
+      const data = await apiClient.get(`/user/findall/${debouncedSearch}`, { cache: "no-cache" });
+
+      console.log(data)
 
       setUsers(data);
     } catch (error) {
@@ -38,8 +41,8 @@ const SearchUser = () => {
       <div className="overflow-y-auto h-[550px]">
         {users.length > 0 ? (
           users.map((user) => (
-            <Link href={`/${user.username}`} className="flex items-center cursor-pointer gap-3 w-full" key={user.username}>
-              <AccountPreview username={user.username} profilePicture={user.profileUrl} />
+            <Link href={`/${user.Username}`} className="flex items-center cursor-pointer gap-3 w-full" key={user.Username}>
+              <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
             </Link>
           ))
         ) : (

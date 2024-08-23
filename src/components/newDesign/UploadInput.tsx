@@ -7,61 +7,68 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { uploadContent } from "@/lib/actions/content";
 import { useSession } from "@/lib/hooks/useSession";
+import apiClient from "@/lib/apiClient";
 
 const UploadInput = () => {
   const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { user: session } = useSession();
+  const { user } = useSession();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return setError("please fill all the fields");
     }
 
-    const fileType = e.target.files[0].type;
+    const selectedFile = e.target.files[0];
+    const maxSize = 15 * 1024 * 1024; // 15 MB
 
-    if (fileType.split("/").shift() !== "image") {
+    if (selectedFile && selectedFile.size > maxSize) {
+      setError("File size exceeds the 15MB limit.");
       setFileName("");
-      return setError("file type must be images");
+      setFile(null);
+      return;
     }
 
-    setFileName(e.target.files[0].name);
+    setFileName(selectedFile.name);
+    setFile(selectedFile);
     setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
+      if (!user) return;
+
+      if (!file) {
+        return setError("Please select a valid file.");
+      }
+
+      const formData = new FormData();
+
+      formData.append("file", file);
+      formData.append("uploaderId", `${user.id}`)
+      formData.append("caption", e.currentTarget.caption.value);
+      // await uploadContent(formData);
 
       setLoading(true);
       setError("");
-      
-      if (!session) return;
 
-      const formDataData = new FormData(e.currentTarget);
-      const file = formDataData.get("file") as File;
+      const content = await apiClient.post("/content/upload", {
+        body: formData,
+        cache: "no-cache"
+      })
 
-      if (!file) {
-        return setError("please fill all the fields");
+      console.log(content)
+
+      if (content) {
+        router.push(`/profile/${user.username}`);
       }
-
-      const fileType = file.type;
-
-      if (fileType.split("/").shift() !== "image") {
-        return setError("file type must be images");
-      }
-
-      const { data, error } = await uploadContent({ formData: formDataData, uploaderId: session.user.id });
-
-      if (error || !data) {
-        return setError(error as string);
-      }
-
-      router.push(`/${session.user.username}`);
     } catch (error) {
+      console.error(error)
       setError((error as Error).message);
     } finally {
       setLoading(false);

@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 
 interface FormFieldProps {
@@ -10,7 +12,7 @@ interface FormFieldProps {
 
 const FormField: React.FC<FormFieldProps> = ({ placeholder, value, handleChange, type, ...props }) => {
     return (
-        <div className={`border-b border-slate-300 w-full mb-2 rounded-xl ${props.className}`}>
+        <div className={`border-slate-300 w-full rounded-xl ${props.className}`}>
             <input
                 value={value}
                 placeholder={placeholder}

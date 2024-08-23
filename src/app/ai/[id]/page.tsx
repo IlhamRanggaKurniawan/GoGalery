@@ -22,7 +22,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div>
+    <div className='mb-14'>
       <ConversationHeader />
       <Conversation fn={tes} conversationId={+params.id} />
     </div>

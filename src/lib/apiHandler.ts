@@ -33,19 +33,26 @@ class Api {
         }
     }
 
-    post = async (endpoint: string, { body, cache }: { body: {}, cache: RequestCache }) => {
+    post = async (endpoint: string, { body, cache }: { body: FormData | {}, cache: RequestCache }) => {
         try {
             const token = await this.token()
+
+            const headers: HeadersInit = {
+                "Authorization": `Bearer ${token}`,
+            };
+
+            if (!(body instanceof FormData)) {
+                headers["Content-Type"] = "application/json";
+                body = JSON.stringify(body);
+            }
+
+            console.log(body)
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
                 method: "POST",
                 credentials: "include",
-                body: JSON.stringify({
-                    ...body
-                }),
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
+                body: body as BodyInit, 
+                headers,
                 cache
             })
 

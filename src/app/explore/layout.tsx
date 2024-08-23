@@ -17,7 +17,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                     <Link href="/explore/fyp" className={`text-sm ${pathname === "/explore/fyp" ? "font-bold" : "font-light"}`}>For Your</Link>
                     <Link href="/explore/following" className={`text-sm ${pathname === "/explore/following" ? "font-bold" : "font-light"}`}>Following</Link>
                 </div>
-                <Search className='sm:hidden'/>
+                <Link href="/search" className='sm:hidden'>
+                    <Search />
+                </Link>
             </Header>
             {children}
         </div>

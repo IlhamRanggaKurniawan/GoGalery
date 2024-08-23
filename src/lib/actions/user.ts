@@ -7,9 +7,9 @@ import supabase from "../dataStorage/bucket"
 import axios from "axios"
 
 export interface IUserPreview {
-    id: number,
-    username: string,
-    profileUrl: string | null
+    ID: number,
+    Username: string,
+    ProfileUrl: string | null
 }
 
 export const updateProfile = async ({ id, input, formData }: { id: number, input: { password?: string, bio?: string, profileUrl?: string }, formData?: FormData }) => {

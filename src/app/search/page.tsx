@@ -1,4 +1,4 @@
-import SearchUser from "@/components/myComponents/SearchUser";
+import SearchUser from "@/components/newDesign/SearchUser";
 import { X } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -26,7 +26,7 @@ const page = () => {
     <div className="p-5">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-medium">Search</h1>
-        <Link href="/explore">
+        <Link href="/explore/fyp">
           <X />
         </Link>
       </div>

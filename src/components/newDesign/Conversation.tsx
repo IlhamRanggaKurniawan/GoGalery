@@ -24,9 +24,11 @@ const Conversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversa
 
     useEffectAfterMount(() => {
         const fetchData = async () => {
+
             const data = await fn()
+
             setMessages(data)
-            console.log(data)
+
             const lastThreeMessages = data.slice(-3);
 
             const formattedMessages: ITextMessage[] = lastThreeMessages.flatMap((message: any) => [
@@ -34,7 +36,8 @@ const Conversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversa
                 { role: "assistant", content: message.response ?? "" },
             ]);
 
-            setPrompt(promt)
+
+            setPrompt(formattedMessages)
         }
 
         fetchData()
@@ -53,8 +56,6 @@ const Conversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversa
 
         setMessages([...messages, newMessage])
 
-        console.log(conversationId)
-
         const data = await apiClient.post("/ai/message/create", {
             body: {
                 senderId: user?.id,
@@ -65,14 +66,15 @@ const Conversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversa
             cache: "no-cache"
         })
 
-        if (data.Response) {
+        setInput("")
+
+        if (data && data.Response) {
             setMessages((prev) => {
                 const newMessages = prev.slice(0, -1);
                 return [...newMessages, data];
             });
         }
 
-        setInput("")
     }
 
     return (
