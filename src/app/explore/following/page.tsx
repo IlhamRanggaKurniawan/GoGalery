@@ -33,7 +33,7 @@ const page = async () => {
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
         {contents.map((content: any) => (
-          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} />
+          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type}/>
         ))}
       </div>
     </div>

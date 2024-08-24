@@ -27,13 +27,13 @@ export const metadata: Metadata = {
 };
 
 const page = async () => {
-  const contents = await api.get("/content/findall", { cache: "force-cache"})
+  const contents = await api.get("/content/findall", { cache: "force-cache" })
 
   return (
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
         {contents.map((content: any) => (
-          <Content caption={content.Caption} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} />
+          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type} />
         ))}
       </div>
     </div>

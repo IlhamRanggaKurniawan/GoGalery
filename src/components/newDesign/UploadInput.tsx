@@ -62,8 +62,6 @@ const UploadInput = () => {
         cache: "no-cache"
       })
 
-      console.log(content)
-
       if (content) {
         router.push(`/profile/${user.username}`);
       }

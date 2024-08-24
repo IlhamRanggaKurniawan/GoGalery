@@ -11,16 +11,7 @@ const page = async () => {
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
         {contents && contents.map((content: any) => (
-
-
-          content.Type === "image" ? (
-            <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} />
-          ) : (
-            <video width="600" key={content.ID}>
-              <source src={content.URL} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          )
+          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type}/>
         ))}
       </div>
     </div>

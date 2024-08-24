@@ -1,14 +1,15 @@
-"use client"
+import React, { useRef, useEffect } from 'react';
+import Avatar from '../Avatar';
+import { EllipsisVertical } from 'lucide-react';
+import Image from 'next/image';
+import ContentDescription from './ContentDescription';
+import ContentFooter from './ContentFooter';
+import Link from 'next/link';
+import Video from './Video';
 
-import React from 'react'
-import Avatar from '../Avatar'
-import { Bookmark, EllipsisVertical, Heart, MessageCircle, Share } from 'lucide-react'
-import Image from 'next/image'
-import ContentDescription from './ContentDescription'
-import ContentFooter from './ContentFooter'
-import Link from 'next/link'
+const Content = ({ username, profilePicture, contentUrl, caption, id, type }: { username: string, profilePicture?: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video" }) => {
 
-const Content = ({ username, profilePicture, contentUrl, caption, id }: { username: string, profilePicture?: string | null, contentUrl: string, caption: string, id: number }) => {
+
     return (
         <div className='p-2 w-full flex justify-center'>
             <div className='px-2 bg-slate-100 rounded-2xl w-full max-w-[500px]'>
@@ -21,12 +22,16 @@ const Content = ({ username, profilePicture, contentUrl, caption, id }: { userna
                     </Link>
                     <EllipsisVertical />
                 </div>
-                <Image src={contentUrl} alt={caption} width={1000} height={1000} className='rounded-xl w-full ' />
-                <ContentFooter id={id}/>
+                {type === "image" ? (
+                    <Image src={contentUrl} alt={caption} width={1000} height={1000} className='rounded-xl w-full ' />
+                ) : (
+                    <Video contentUrl={contentUrl} autoplay/>
+                )}
+                <ContentFooter id={id} />
                 <ContentDescription caption={caption} />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Content
+export default Content;

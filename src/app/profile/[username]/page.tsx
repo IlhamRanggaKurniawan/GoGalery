@@ -1,6 +1,8 @@
 import Avatar from '@/components/newDesign/Avatar'
 import Button from '@/components/newDesign/Button'
+import ContentPreview from '@/components/newDesign/content/ContentPreview'
 import ProfileButton from '@/components/newDesign/ProfileButton'
+import Video from '@/components/newDesign/content/Video'
 import { Separator } from '@/components/ui/separator'
 import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
@@ -41,10 +43,8 @@ const page = async ({ params }: { params: { username: string } }) => {
       )}
       <div className='flex justify-center my-4'>
         <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
-          {user.Contents.map((content: any) => (
-            <div key={content.ID} className='max-w-96'>
-              <Image src={content.URL} alt='tes' width={1000} height={1000} className='rounded-lg aspect-square object-cover' />
-            </div>
+          {user.Contents && user.Contents.map((content: any) => (
+            <ContentPreview key={content.ID} contentUrl={content.URL} type={content.Type}/>
           ))}
         </div>
       </div>
