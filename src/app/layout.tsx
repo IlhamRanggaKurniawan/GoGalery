@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4">
+            <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-0">
               {children}
             </div>
             {!hideNavbar && (

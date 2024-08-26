@@ -16,7 +16,7 @@ interface MessageType {
     UpdatedAt: Date;
 }
 
-const Conversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversationId: number }) => {
+const AIConversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversationId: number }) => {
     const { user } = useSession()
     const [messages, setMessages] = useState<MessageType[]>([])
     const [promt, setPrompt] = useState<ITextMessage[]>([])
@@ -96,4 +96,4 @@ const Conversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversa
     )
 }
 
-export default Conversation
+export default AIConversation

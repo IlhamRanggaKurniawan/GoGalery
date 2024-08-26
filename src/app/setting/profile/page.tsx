@@ -8,12 +8,6 @@ import React from 'react'
 const page = () => {
   return (
     <div>
-      <Header>
-        <div className="flex gap-2 items-center h-14">
-          <ChevronLeft size={30} />
-          <h2 className="text-lg font-semibold">Update Profile</h2>
-        </div>
-      </Header>
       <div className='bg-muted flex flex-col items-center rounded-2xl mx-3 p-6 gap-6'>
         <div className='w-28 h-28'>
           <Avatar profilePicture={null} username='tes' />

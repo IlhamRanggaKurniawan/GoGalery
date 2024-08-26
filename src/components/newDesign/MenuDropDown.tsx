@@ -4,15 +4,32 @@ import React from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { LogOut, MessageCircleCode, Palette, Pin, Settings, Settings2 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
+import apiClient from "@/lib/apiClient";
+import { useSession } from "@/lib/hooks/useSession";
+import { useRouter } from "next/navigation";
 
 const MenuDropDown = () => {
   const { theme, setTheme } = useTheme();
+  const { user } = useSession()
+  const router = useRouter()
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
+
+  const signOut = async () => {
+    try {
+      await apiClient.delete(`/user/logout/${user?.id}`)
+
+      localStorage.clear()
+
+      router.push("/login")
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
 
   return (
     <DropdownMenu>

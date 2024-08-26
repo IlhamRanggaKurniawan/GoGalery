@@ -8,6 +8,7 @@ import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
 import Image from 'next/image'
 import React from 'react'
+import Link from 'next/link'
 
 const page = async ({ params }: { params: { username: string } }) => {
   const user = await api.get(`/user/findone/${params.username}`, { cache: "no-cache" })
@@ -18,7 +19,7 @@ const page = async ({ params }: { params: { username: string } }) => {
     <div>
       <div className='flex flex-col items-center justify-center gap-3 mt-10'>
         <div className='w-20 h-20'>
-          <Avatar profilePicture={null} username={user.Username} />
+          <Avatar profilePicture={user.ProfileUrl} username={user.Username} />
         </div>
         <h1 className='text-lg'>{user.Username}</h1>
       </div>
@@ -44,7 +45,9 @@ const page = async ({ params }: { params: { username: string } }) => {
       <div className='flex justify-center my-4'>
         <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
           {user.Contents && user.Contents.map((content: any) => (
-            <ContentPreview key={content.ID} contentUrl={content.URL} type={content.Type}/>
+            <Link href={`/profile/${params.username}/${content.ID}`} key={content.ID}>
+              <ContentPreview contentUrl={content.URL} type={content.Type} />
+            </Link>
           ))}
         </div>
       </div>

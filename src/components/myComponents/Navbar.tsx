@@ -4,7 +4,7 @@ import { Bell, CircleUser, Compass, Home, ImageUp, MessageCircle, Rocket, Search
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import SearchSheet from "./SearchSheet";
-import MenuDropDown from "./MenuDropDown";
+import MenuDropDown from "../newDesign/MenuDropDown";
 import { useSession } from "next-auth/react";
 import NotificationSheet from "./Notification/NotificationSheet";
 import { checkNotification, getAllNotification, INotification } from "@/lib/actions/notification";

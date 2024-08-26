@@ -5,13 +5,11 @@ import React from "react";
 const page = async () => {
   const contents = await api.get("/content/findall", { cache: "force-cache" })
 
-  console.log(contents)
-
   return (
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
         {contents && contents.map((content: any) => (
-          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type}/>
+          <Content caption={content.Caption as string} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type} />
         ))}
       </div>
     </div>

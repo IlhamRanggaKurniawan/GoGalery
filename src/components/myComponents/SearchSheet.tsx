@@ -11,6 +11,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { findUser, IUserPreview } from "@/lib/actions/user";
 import { useDebounce } from "use-debounce";
 import Link from "next/link";
+import apiClient from "@/lib/apiClient";
 
 const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "bottom" | "top" | "right" }) => {
   const [search, setSearch] = useState<string>("");
@@ -22,9 +23,11 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
     try {
       if (search.length === 0) return;
 
-      const { data } = await findUser({ username: debouncedSearch });
+      const users = await apiClient.get(`/user/findall/${search}`, { cache: "no-cache" });
 
-      setUsers(data);
+      console.log(users)
+
+      setUsers(users);
     } catch (error) {
       console.error(error)
     }
@@ -51,11 +54,11 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
 
         <Separator className="my-1" />
         <ScrollArea className="h-full pb-[70px] flex flex-col gap-2 pr-2">
-          {users.length > 0 ? (
+          {users && users.length > 0 ? (
             users.map((user) => (
-              <SheetClose asChild key={user.username}>
-                <Link href={`/${user.username}`} className="flex items-center cursor-pointer gap-3 w-full">
-                  <AccountPreview username={user.username} profilePicture={user.profileUrl} />
+              <SheetClose asChild key={user.Username}>
+                <Link href={`/profile/${user.Username}`} className="flex items-center cursor-pointer gap-3 w-full">
+                  <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
                 </Link>
               </SheetClose>
             ))

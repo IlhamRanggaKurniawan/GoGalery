@@ -21,7 +21,7 @@ const SearchUser = () => {
 
       const data = await apiClient.get(`/user/findall/${debouncedSearch}`, { cache: "no-cache" });
 
-      console.log(data)
+      console.log(data) 
 
       setUsers(data);
     } catch (error) {
@@ -43,6 +43,7 @@ const SearchUser = () => {
           users.map((user) => (
             <Link href={`/${user.Username}`} className="flex items-center cursor-pointer gap-3 w-full" key={user.Username}>
               <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
+              <p>{user.ProfileUrl}</p>
             </Link>
           ))
         ) : (

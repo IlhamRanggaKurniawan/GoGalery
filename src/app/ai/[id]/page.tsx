@@ -1,5 +1,5 @@
 import Avatar from '@/components/newDesign/Avatar'
-import Conversation from '@/components/newDesign/Conversation'
+import Conversation from '@/components/newDesign/AIConversation'
 import ConversationHeader from '@/components/newDesign/ConversationHeader'
 import Header from '@/components/newDesign/Header'
 import Message from '@/components/newDesign/Message'
@@ -8,6 +8,7 @@ import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
 import { ChevronLeft } from 'lucide-react'
 import React from 'react'
+import AIConversation from '@/components/newDesign/AIConversation'
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { user } = await getSession()
@@ -24,7 +25,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   return (
     <div className='mb-14'>
       <ConversationHeader />
-      <Conversation fn={tes} conversationId={+params.id} />
+      <AIConversation fn={tes} conversationId={+params.id} />
     </div>
   )
 }

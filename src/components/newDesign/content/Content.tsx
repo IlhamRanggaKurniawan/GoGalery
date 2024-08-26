@@ -22,11 +22,13 @@ const Content = ({ username, profilePicture, contentUrl, caption, id, type }: { 
                     </Link>
                     <EllipsisVertical />
                 </div>
-                {type === "image" ? (
-                    <Image src={contentUrl} alt={caption} width={1000} height={1000} className='rounded-xl w-full ' />
-                ) : (
-                    <Video contentUrl={contentUrl} autoplay/>
-                )}
+                <div className='w-full'>
+                    {type === "image" ? (
+                        <Image src={contentUrl} alt={caption} width={1000} height={1000} className='rounded-xl w-full max-h-[600px] object-contain bg-black' />
+                    ) : (
+                        <Video contentUrl={contentUrl} autoplay />
+                    )}
+                </div>
                 <ContentFooter id={id} />
                 <ContentDescription caption={caption} />
             </div>

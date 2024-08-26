@@ -39,7 +39,7 @@ const Video = ({ contentUrl, autoplay }: { contentUrl: string, autoplay: boolean
             height={1000}
             autoPlay={autoplay}
             loop
-            className='rounded-xl w-full'
+            className='rounded-xl w-full max-h-[600px] bg-black'
         >
             <source src={contentUrl} type="video/mp4" />
             Your browser does not support the video tag.

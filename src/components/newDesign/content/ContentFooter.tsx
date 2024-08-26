@@ -17,7 +17,7 @@ const ContentFooter = ({ id }: { id: number }) => {
 
         const checkLikeAndSave = async () => {
             const isLike = await apiClient.get(`/like/findone?userId=${user?.id}&contentId=${id}`, { cache: "no-cache" })
-            const isSaved = await apiClient.get(`/save/findone?userId=${user?.id}&contentId=${id}`, { cache: "no-cache" })
+            const isSaved = await apiClient.get(`/saved/findone?userId=${user?.id}&contentId=${id}`, { cache: "no-cache" })
 
             if (isLike) setLikeId(isLike.ID)
             if (isSaved) setSavedId(isSaved.ID)
@@ -45,7 +45,7 @@ const ContentFooter = ({ id }: { id: number }) => {
 
     const handleSaveContent = useDebouncedCallback(async () => {
         if (savedId === 0) {
-            const newSave = await apiClient.post("/save/create", {
+            const newSave = await apiClient.post("/saved/create", {
                 body: {
                     userId: user?.id,
                     contentId: id
@@ -55,7 +55,7 @@ const ContentFooter = ({ id }: { id: number }) => {
 
             setSavedId(newSave.ID)
         } else {
-            await apiClient.delete(`/save/delete/${savedId}`)
+            await apiClient.delete(`/saved/delete/${savedId}`)
             setSavedId(0)
         }
     }, 300)
