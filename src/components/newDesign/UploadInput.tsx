@@ -24,7 +24,7 @@ const UploadInput = () => {
     }
 
     const selectedFile = e.target.files[0];
-    const maxSize = 15 * 1024 * 1024; // 15 MB
+    const maxSize = 15 * 1024 * 1024;
 
     if (selectedFile && selectedFile.size > maxSize) {
       setError("File size exceeds the 15MB limit.");

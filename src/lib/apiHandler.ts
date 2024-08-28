@@ -7,24 +7,24 @@ class Api {
     }
 
     get = async (endpoint: string, { cache }: { cache: RequestCache }) => {
-            const token = await this.token()
+        const token = await this.token()
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                cache,
-            })
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            cache,
+        })
 
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
 
-            const data = await response.json()
+        const data = await response.json()
 
-            return data
+        return data
     }
 
     post = async (endpoint: string, { body, cache }: { body: FormData | {}, cache: RequestCache }) => {
@@ -56,51 +56,58 @@ class Api {
         return data
     }
 
-    update = async (endpoint: string, { body, cache }: { body: {}, cache: RequestCache }) => {
-            const token = await this.token()
+    patch = async (endpoint: string, { body, cache }: { body: {}, cache: RequestCache }) => {
+        const token = await this.token()
 
-            console.log(body)
+        const headers: HeadersInit = {
+            "Authorization": `Bearer ${token}`,
+        };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-                method: "PUT",
-                credentials: "include",
-                body: JSON.stringify({
-                    ...body
-                }),
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                cache
-            })
+        if (!(body instanceof FormData)) {
+            headers["Content-Type"] = "application/json";
+            body = JSON.stringify(body);
+        }
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+            method: "PATCH",
+            credentials: "include",
+            body: body as BodyInit,
+            headers,
+            cache
+        })
 
-            const data = await response.json()
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
 
-            return data
+        console.log(response)
+
+        const data = await response.json()
+
+        console.log(data)
+
+        return data
     }
 
     delete = async (endpoint: string) => {
 
-            const token = await this.token()
+        const token = await this.token()
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-                method: "DELETE",
-                credentials: "include",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-            })
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        })
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
 
-            const data = await response.json()
+        const data = await response.json()
 
-            return data
+        return data
     }
 }
 

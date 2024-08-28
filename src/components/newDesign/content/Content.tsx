@@ -9,6 +9,7 @@ import Video from './Video';
 
 const Content = ({ username, profilePicture, contentUrl, caption, id, type }: { username: string, profilePicture?: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video" }) => {
 
+    console.log(profilePicture)
 
     return (
         <div className='p-2 w-full flex justify-center'>
