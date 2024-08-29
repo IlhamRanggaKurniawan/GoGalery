@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Ellipsis } from "lucide-react";
 import React from "react";
-import CommentDialog from "./CommentDialog";
+import CommentDialog from "../../newDesign/comment/CommentDialog";
 import { useSession } from "next-auth/react";
 
 const Comment = ({

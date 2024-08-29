@@ -27,30 +27,16 @@ export const metadata: Metadata = {
   },
 };
 
-const page = async ({ searchParams }: { searchParams: { contentId: number } }) => {
-  let queryContent: any
-
-  if (searchParams.contentId) {
-    queryContent = await api.get(`/content/findone/${searchParams.contentId}`, { cache: "no-cache" })
-  }
+const page = async () => {
 
   const contents = await api.get("/content/findall", { cache: "no-cache" })
 
   return (
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
-        {searchParams.contentId && !queryContent && (
-          <ContentNotFound contentId={searchParams.contentId} />
-        )}
-
-        {queryContent && (
-          <Content caption={queryContent.Caption} username={queryContent.Uploader.Username} contentUrl={queryContent.URL} id={queryContent.ID} key={queryContent.ID} type={queryContent.Type} />
-        )}
-
-        {contents.map((content: any) => {
-          if (queryContent && content.ID === queryContent.ID) return
-          return <Content caption={content.Caption} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type} />
-        })}
+        {contents && contents.map((content: any) => (
+          <Content caption={content.Caption} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type} profilePicture={content.Uploader.ProfileUrl} />
+        ))}
       </div>
     </div>
   );

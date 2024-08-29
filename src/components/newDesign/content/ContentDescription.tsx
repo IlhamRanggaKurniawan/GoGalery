@@ -15,7 +15,7 @@ const ContentDescription = ({ caption }: { caption: string }) => {
   }, [caption]);
 
   return (
-    <div>
+    <div className="mb-2">
       <p
         ref={textRef}
         className={`text-sm ${isTruncate ? "truncate" : ""}`}

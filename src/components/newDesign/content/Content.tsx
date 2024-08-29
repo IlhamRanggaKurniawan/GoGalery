@@ -6,10 +6,11 @@ import ContentDescription from './ContentDescription';
 import ContentFooter from './ContentFooter';
 import Link from 'next/link';
 import Video from './Video';
+import getSession from '@/lib/serverHooks/getSession';
 
-const Content = ({ username, profilePicture, contentUrl, caption, id, type }: { username: string, profilePicture?: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video" }) => {
+const Content = async ({ username, profilePicture, contentUrl, caption, id, type }: { username: string, profilePicture: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video" }) => {
 
-    console.log(profilePicture)
+    const { user } = await getSession()
 
     return (
         <div className='p-2 w-full flex justify-center'>
@@ -21,7 +22,9 @@ const Content = ({ username, profilePicture, contentUrl, caption, id, type }: { 
                         </div>
                         <h2 className='text-sm'>{username}</h2>
                     </Link>
-                    <EllipsisVertical />
+                    {(user.role !== "member" || user.username === username) && (
+                        <EllipsisVertical />
+                    )}
                 </div>
                 <div className='w-full'>
                     {type === "image" ? (
