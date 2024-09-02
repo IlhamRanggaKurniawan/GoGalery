@@ -25,8 +25,6 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
 
       const users = await apiClient.get(`/user/findall/${search}`, { cache: "no-cache" });
 
-      console.log(users)
-
       setUsers(users);
     } catch (error) {
       console.error(error)

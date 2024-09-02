@@ -21,8 +21,6 @@ const SearchUser = () => {
 
       const data = await apiClient.get(`/user/findall/${debouncedSearch}`, { cache: "no-cache" });
 
-      console.log(data) 
-
       setUsers(data);
     } catch (error) {
       console.error(error);

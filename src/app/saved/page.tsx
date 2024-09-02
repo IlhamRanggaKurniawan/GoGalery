@@ -15,7 +15,6 @@ const page = async () => {
 
   const savedContents = await api.get(`/saved/findall/${user.id}`, { cache: "no-cache" })
 
-  console.log(savedContents)
   return (
     <div>
       <Header>

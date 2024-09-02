@@ -18,7 +18,6 @@ const page = async ({ params }: { params: { id: string } }) => {
 
     const AIConversation = await api.get(`/ai/conv/findone/${user?.id}`, { cache: "no-cache" })
 
-    console.log(AIConversation)
     return AIConversation.Messages
   }
 

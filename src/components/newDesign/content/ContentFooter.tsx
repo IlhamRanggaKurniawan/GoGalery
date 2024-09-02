@@ -78,7 +78,7 @@ const ContentFooter = ({ id }: { id: number }) => {
 
             setComments(comments)
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     }
 

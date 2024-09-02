@@ -1,57 +1,47 @@
 "use client"
 
 import { useSession } from '@/lib/hooks/useSession'
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import Message from './Message'
 import MessageInput from './MessageInput'
 import apiClient from '@/lib/apiClient'
 import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount'
+import useWebSocket from '@/lib/hooks/useWebSocket'
 
 const PrivateConversation = ({ conversationId, prevMessage }: { conversationId: number, prevMessage: any[] }) => {
-  const [messages, setMessages] = useState(prevMessage)
   const [input, setInput] = useState("")
+  const [messages, setMessages] = useState<any[]>(prevMessage)
   const { user } = useSession()
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+  const { sendMessage } = useWebSocket(`ws://localhost:8080/ws/dm?dmId=${conversationId}&userId=${user?.id}`, setMessages)
 
-  const submitData = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
+      if(input === "") return
       e.preventDefault()
-
-      console.log(conversationId)
-
-      const message = await apiClient.post(`/message/dm/create/${conversationId}`, {
-        body: {
-          senderId: user?.id,
-          message: input,
-          conversationId: conversationId
-        },
-        cache: "no-cache"
-      })
-
-      console.log(message)
-
-      setMessages([...messages, message])
-
-      console.log(message)
+      sendMessage(input)
+      setInput("")
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <>
       <div className=" overflow-y-auto mt-14">
-        {messages && messages.map((message: any) => (
-          <div key={message.ID}>
-            {user && (
-              <Message message={message.Message} senderId={user.id} />
-            )}
-            {message.Response && (
-              <Message message={message.Response} senderId={0} />
-            )}
+        {messages && messages.map((message, i) => (
+          <div key={message.ID} ref={i === messages.length - 1 ? lastMessageRef : null}>
+            <Message message={message.Message} senderId={message.SenderID} key={message.ID} />
           </div>
         ))}
-      </div>
-      <MessageInput value={input} handleChange={setInput} fn={submitData} />
+      </div >
+      <MessageInput value={input} handleChange={setInput} fn={handleSubmit} />
     </>
   )
 }

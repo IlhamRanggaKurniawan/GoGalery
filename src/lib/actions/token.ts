@@ -5,11 +5,8 @@ export const fetchToken = async () => {
         method: "GET",
         credentials: "include",
       });
-  
-      console.log(accessTokenResponse)
-  
+    
       const data = await accessTokenResponse.json();
-      console.log(data);
 
       return data
 }

@@ -41,6 +41,19 @@ export const useSession = () => {
           const user: IUserSession = await jwtDecode(accessToken);
 
           return setUser(user)
+        } else {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+            method: "GET",
+            credentials: "include",
+          });
+
+          const { accessToken } = await response.json();
+
+          localStorage.setItem("AccessToken", accessToken);
+
+          const user: IUserSession = await jwtDecode(accessToken);
+
+          return setUser(user)
         }
       } catch (error) {
         console.error('Error fetching the token:', error);

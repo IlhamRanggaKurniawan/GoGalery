@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import Api from "./apiHandler";
 
 
-const getToken = async () => {
+export const getToken = async () => {
     const accessToken = localStorage.getItem("AccessToken");
 
     if (accessToken) {

@@ -35,8 +35,6 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   const directMessage = await api.get(`/dm/findone/${params.id}`, { cache: "no-cache" })
 
-  console.log(directMessage)
-
   const otherParticipantUsername = user.id === directMessage.Participant1ID ? directMessage.Participant2.Username : directMessage.Participant1.Username
 
 

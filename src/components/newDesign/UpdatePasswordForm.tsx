@@ -29,8 +29,6 @@ const UpdatePasswordForm = () => {
                 cache: "no-cache"
             })
 
-            console.log(data)
-
             router.push(`/profile/${data.Username}`)
         } catch (error) {
             console.error(error)
