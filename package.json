@@ -8,9 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
