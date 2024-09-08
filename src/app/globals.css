@@ -7,33 +7,33 @@
     --background: 0 0% 100%; /* White */
     --foreground: 0 0% 10%; /* Almost black */
 
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 0 0% 10%; /* Almost black */
+    --card: 0 0% 95%; /* Slightly off-white for a softer contrast */
+    --card-foreground: 0 0% 15%; /* Dark gray */
 
-    --popover: 0 0% 100%; /* White */
-    --popover-foreground: 0 0% 10%; /* Almost black */
+    --popover: 0 0% 98%; /* Off-white */
+    --popover-foreground: 0 0% 15%; /* Dark gray */
 
     --primary: 0 0% 10%; /* Almost black */
     --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 0 0% 100%; /* New dark cool gray */
-    --secondary-foreground: 0 0% 100%; /* White */
+    --secondary: 220 15% 85%; /* Light cool gray */
+    --secondary-foreground: 0 0% 10%; /* Almost black */
 
-    --muted: 0 0% 90%; /* Light gray */
-    --muted-foreground: 0 0% 30%; /* Dark gray */
+    --muted: 0 0% 95%; /* Very light gray */
+    --muted-foreground: 0 0% 50%; /* Medium gray */
 
-    --accent: 0 0% 10%; /* Almost black */
-    --accent-foreground: 0 0% 100%; /* White */
+    --accent: 220 15% 85%; /* Light cool gray */
+    --accent-foreground: 0 0% 10%; /* Almost black */
 
-    --destructive: 0 100% 40%; /* Moderate red */
+    --destructive: 0 65% 55%; /* Softer, muted red */
     --destructive-foreground: 0 0% 100%; /* White */
 
-    --border: 0 0% 80%; /* Light gray */
-    --input: 0 0% 80%; /* Light gray */
-    --ring: 0 0% 10%; /* Almost black */
+    --border: 0 0% 85%; /* Light gray */
+    --input: 0 0% 85%; /* Light gray */
+    --ring: 0 0% 15%; /* Dark gray */
 
-    --header-background: 0 0% 20%; /* Lighter gray for header */
-    --header-foreground: 0 0% 95%; /* Almost white */
+    --header-background: 0 0% 95%; /* Very light gray for a subtle header */
+    --header-foreground: 0 0% 10%; /* Almost black */
 
     --radius: 0.5rem; /* Smaller, cleaner border radius */
   }
@@ -42,26 +42,26 @@
     --background: 0 0% 5%; /* Deep black */
     --foreground: 0 0% 95%; /* Almost white */
 
-    --card: 0 0% 10%; /* Slightly lighter black */
-    --card-foreground: 0 0% 95%; /* Almost white */
+    --card: 0 0% 15%; /* Slightly lighter black */
+    --card-foreground: 0 0% 90%; /* Light gray */
 
     --popover: 0 0% 10%; /* Same as card */
-    --popover-foreground: 0 0% 95%; /* Almost white */
+    --popover-foreground: 0 0% 90%; /* Light gray */
 
     --primary: 0 0% 95%; /* Almost white */
     --primary-foreground: 0 0% 10%; /* Almost black */
 
-    --secondary: 0 0% 10%; /* New dark cool gray */
-    --secondary-foreground: 0 0% 95%; /* Almost white */
+    --secondary: 220 15% 20%; /* Dark cool gray */
+    --secondary-foreground: 0 0% 90%; /* Light gray */
 
-    --muted: 0 0% 20%; /* Dark gray */
-    --muted-foreground: 0 0% 60%; /* Lighter gray */
+    --muted: 0 0% 15%; /* Dark gray */
+    --muted-foreground: 0 0% 70%; /* Light gray */
 
-    --accent: 0 0% 20%; /* Dark gray */
-    --accent-foreground: 0 0% 95%; /* Almost white */
+    --accent: 220 15% 20%; /* Dark cool gray */
+    --accent-foreground: 0 0% 90%; /* Light gray */
 
-    --destructive: 0 100% 40%; /* Moderate red */
-    --destructive-foreground: 0 0% 95%; /* Almost white */
+    --destructive: 0 65% 55%; /* Softer, muted red */
+    --destructive-foreground: 0 0% 95%; /* Light gray */
 
     --border: 0 0% 15%; /* Very dark gray */
     --input: 0 0% 15%; /* Same as border */

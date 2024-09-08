@@ -1,13 +1,9 @@
-import ContactHeader from "@/components/myComponents/messages/ContactHeader";
-import ContactList from "@/components/myComponents/messages/ContactList";
-import Contact from "@/components/newDesign/Contact";
-import Header from "@/components/newDesign/Header";
+import Contact from "@/components/newDesign/messages/Contact";
 import api from "@/lib/api";
 import getSession from "@/lib/serverHooks/getSession";
-import { Users } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import React from "react";
+
 
 export const metadata: Metadata = {
   title: "Messages | Connect Verse",

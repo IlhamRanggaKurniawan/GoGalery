@@ -1,10 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import SettingBar from "@/components/myComponents/SettingBar";
-import Button from "@/components/newDesign/Button";
-import DeleteAccountForm from "@/components/newDesign/DeleteAccountForm";
-import FormField from "@/components/newDesign/FormField";
-import Header from "@/components/newDesign/Header";
-import { ChevronLeft } from "lucide-react";
+import DeleteAccountForm from "@/components/newDesign/form/DeleteAccountForm";
 import { Metadata } from "next";
 import React from "react";
 

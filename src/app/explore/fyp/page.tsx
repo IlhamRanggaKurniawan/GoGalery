@@ -1,12 +1,7 @@
-import StraightContentInfinityScroll from "@/components/myComponents/content/StraightContentInfinityScroll";
-import HomePageBar from "@/components/myComponents/HomePageBar";
+
 import Content from "@/components/newDesign/content/Content";
 import ContentNotFound from "@/components/newDesign/content/ContentNotFound";
-import Navbar from "@/components/newDesign/Navbar";
-import { getContentByFollowing } from "@/lib/actions/content";
 import api from "@/lib/api";
-import getSession from "@/lib/serverHooks/getSession";
-import axios from "axios";
 import { Metadata } from "next";
 import React from "react";
 

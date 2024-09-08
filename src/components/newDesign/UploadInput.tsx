@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
-import { uploadContent } from "@/lib/actions/content";
 import { useSession } from "@/lib/hooks/useSession";
 import apiClient from "@/lib/apiClient";
 

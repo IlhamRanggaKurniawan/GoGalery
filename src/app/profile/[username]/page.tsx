@@ -1,12 +1,9 @@
 import Avatar from '@/components/newDesign/Avatar'
-import Button from '@/components/newDesign/Button'
 import ContentPreview from '@/components/newDesign/content/ContentPreview'
 import ProfileButton from '@/components/newDesign/ProfileButton'
-import Video from '@/components/newDesign/content/Video'
 import { Separator } from '@/components/ui/separator'
 import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
-import Image from 'next/image'
 import React from 'react'
 import Link from 'next/link'
 

@@ -9,16 +9,6 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "gsjjcfotrvkfpibhnnji.supabase.co",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "oaidalleapiprodscus.blob.core.windows.net",
-        pathname: "/**"
-      },
-      {
-        protocol: "https",
         hostname: "connect-verse-bucket.s3.ap-southeast-1.amazonaws.com",
         pathname: "/**"
       }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 
-const Video = ({ contentUrl, autoplay }: { contentUrl: string, autoplay: boolean }) => {
+const Video = ({ contentUrl }: { contentUrl: string }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
     useEffect(() => {
@@ -10,14 +10,18 @@ const Video = ({ contentUrl, autoplay }: { contentUrl: string, autoplay: boolean
 
         if (videoElement) {
             const observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
+                async (entries) => {
+                    for (const entry of entries) {
                         if (entry.isIntersecting) {
-                            videoElement.play();
+                            try {
+                                await videoElement.play();
+                            } catch (err) {
+                                console.error("Failed to play the video:", err);
+                            }
                         } else {
                             videoElement.pause();
                         }
-                    });
+                    }
                 },
                 {
                     threshold: 0.5,
@@ -37,7 +41,6 @@ const Video = ({ contentUrl, autoplay }: { contentUrl: string, autoplay: boolean
             ref={videoRef}
             width={1000}
             height={1000}
-            autoPlay={autoplay}
             loop
             className='rounded-xl w-full max-h-[600px] bg-black'
         >
@@ -47,4 +50,4 @@ const Video = ({ contentUrl, autoplay }: { contentUrl: string, autoplay: boolean
     )
 }
 
-export default Video
+export default Video;

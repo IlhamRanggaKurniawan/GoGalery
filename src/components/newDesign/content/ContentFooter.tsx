@@ -7,12 +7,14 @@ import { Bookmark, Heart, MessageCircle, Share } from 'lucide-react'
 import React, { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CommentSheet from '../comment/CommentSheet'
+import { useRouter } from 'next/navigation'
 
 const ContentFooter = ({ id }: { id: number }) => {
     const { user } = useSession()
     const [likeId, setLikeId] = useState(0)
     const [savedId, setSavedId] = useState(0)
-    const [comments, setComments] = useState([])
+    const [comments, setComments] = useState<any[]>([])
+    const router = useRouter()
 
     useEffectAfterMount(() => {
         if (!user) return
@@ -86,11 +88,14 @@ const ContentFooter = ({ id }: { id: number }) => {
     return (
         <div className='py-2 flex justify-between'>
             <div className='flex gap-4'>
-                <Heart size={23} onClick={handleLikeContent} fill={`${likeId === 0 ? "white" : "red"}`} color={`${likeId === 0 ? "black" : "red"}`} className='cursor-pointer' />
-                <div onClick={getAllComments}>
-                    <CommentSheet contentId={id} comments={comments}>
+                <Heart size={23} onClick={handleLikeContent} fill={`${likeId === 0 ? "none" : "red"}`} color={`${likeId === 0 ? "currentColor" : "red"}`} className='cursor-pointer' />
+                <div onClick={getAllComments} className='hidden sm:flex'>
+                    <CommentSheet contentId={id} comments={comments} setComments={setComments}>
                         <MessageCircle size={23} className='cursor-pointer' />
                     </CommentSheet>
+                </div>
+                <div className='sm:hidden'>
+                    <MessageCircle size={23} className='cursor-pointer' onClick={() => router.push(`/comments/${id}`)} />
                 </div>
                 <Share size={23} className='cursor-pointer' onClick={handleShare} />
             </div>

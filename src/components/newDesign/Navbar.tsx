@@ -3,14 +3,13 @@
 import apiClient from '@/lib/apiClient'
 import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount'
 import { useSession } from '@/lib/hooks/useSession'
-import { AirVent, Bell, BotMessageSquare, CircleUser, Compass, Home, ImageUp, LucideProps, Menu, MessageCircle, Rocket, Search, Settings2, Users } from 'lucide-react'
+import { Bell, BotMessageSquare, CircleUser, Compass, Home, ImageUp, LucideProps, Menu, MessageCircle, Rocket, Search, Users } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { APIClient } from 'openai/core.mjs'
-import React, { useEffect, useState } from 'react'
-import SearchSheet from '../myComponents/SearchSheet'
+import React, { useState } from 'react'
 import NotificationSheet from './notification/NotificationSheet'
 import MenuDropDown from './MenuDropDown'
+import SearchSheet from './SearchSheet'
 
 const NavbarIcon = ({ icon: Icon, text, path, className, hidden }: { icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>, text: string, path?: string, className?: string, hidden: boolean }) => {
     const pathName = usePathname()
@@ -26,9 +25,11 @@ const NavbarIcon = ({ icon: Icon, text, path, className, hidden }: { icon: React
         )
     }
 
+    const isSpecialPath = ["/explore", "/messages", "/group"].some(specialPath => path.startsWith(specialPath) && pathName.startsWith(specialPath))
+
     return (
         <>
-            {path === pathName ? (
+            {(path === pathName || isSpecialPath) ? (
                 <Link href={path} title="Home page" className={`${hidden && hiddenClassname} bg-primary text-background flex justify-center lg:justify-start ${className}`}>
                     <div className="flex items-center gap-2 p-2">
                         <Icon size={25} strokeWidth={2.7} />
@@ -87,7 +88,7 @@ const Navbar = () => {
         <div className='h-14 w-full fixed bottom-0 left-0 flex justify-between items-center z-50 bg-background sm:flex-col sm:h-full sm:justify-between sm:pb-4 sm:w-14 md:w-16 lg:w-56 lg:items-start sm:border-r'>
             <Link href="/" title="Home page" className="hidden w-full sm:flex items-center justify-center">
                 <div className="flex items-center gap-2 p-2">
-                    <Rocket size={25} color='black' strokeWidth={2.7} />
+                    <Rocket size={25} strokeWidth={2.7} />
                     <span className="hidden lg:inline-block font-bold">Connect Verse</span>
                 </div>
             </Link>
@@ -98,7 +99,6 @@ const Navbar = () => {
                         <Search size={25} strokeWidth={2} />
                         <span className="hidden lg:inline-block">Search</span>
                     </div>
-                    {/* <NavbarIcon icon={Search} text='Search' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden /> */}
                 </SearchSheet>
                 <NavbarIcon path='/explore/fyp' icon={Compass} text='Explore' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
                 <NavbarIcon path='/upload' icon={ImageUp} text='Upload' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />

@@ -7,15 +7,16 @@ import { Input } from '@/components/ui/input'
 import { useSession } from '@/lib/hooks/useSession'
 import apiClient from '@/lib/apiClient'
 
-const CommentSheet = ({ children, contentId, comments }: { children: React.ReactNode, contentId: number, comments: any[] }) => {
+const CommentSheet = ({ children, contentId, comments, setComments }: { children: React.ReactNode, contentId: number, comments: any[], setComments: React.Dispatch<React.SetStateAction<any[]>> }) => {
     const [text, setText] = useState("")
     const { user } = useSession()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault()
+            setText("")
 
-            const response = await apiClient.post(`/comment/create/${user?.id}`, {
+            const comment = await apiClient.post(`/comment/create/${user?.id}`, {
                 body: {
                     contentId,
                     message: text
@@ -23,11 +24,9 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
                 cache: "no-cache"
             })
 
-            setText("")
+            comment.User.Username = user?.username
 
-            response.User.Username = user?.username
-
-            comments.unshift(response)
+            setComments(prevComments => [comment, ...prevComments])
 
         } catch (error) {
             console.error(error)
@@ -35,7 +34,7 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
     }
 
     const handleDeleteComment = async () => {
-        
+
     }
 
     return (
@@ -49,9 +48,9 @@ const CommentSheet = ({ children, contentId, comments }: { children: React.React
                     {comments && comments.map((comment) => (
                         <Comment commentId={comment.ID} commentSender={comment.User.Username} createdAt={comment.CreatedAt} profileUrl={comment.User.ProfileUrl} text={comment.Comment} uploader={comment.Content.Uploader.Username} key={comment.ID} />
                     ))}
-                    </div>
-                <form className="w-full max-w-96 h-14 border-y-2 fixed bottom-0" onSubmit={handleSubmit}>
-                    <Input required placeholder="Send a comment" className="border-0 rounded-none h-14" value={text} onChange={(e) => setText(e.target.value)} />
+                </div>
+                <form className="w-full max-w-96 h-14 border-y-2 " onSubmit={handleSubmit}>
+                    <Input required placeholder="Send a comment" className="border-0 rounded-none h-14 fixed bottom-0" value={text} onChange={(e) => setText(e.target.value)} />
                 </form>
             </SheetContent>
         </Sheet>

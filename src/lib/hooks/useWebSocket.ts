@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import useEffectAfterMount from "./useEffectAfterMount";
 import { useSession } from "./useSession";
 
 const useWebSocket = (url: string, setMessages: React.Dispatch<React.SetStateAction<any[]>>) => {
 
     const [ws, setWs] = useState<WebSocket | null>(null)
+    const { user } = useSession()
     const sound = new Audio("/message.mp3");
 
     useEffectAfterMount(() => {
@@ -21,7 +22,9 @@ const useWebSocket = (url: string, setMessages: React.Dispatch<React.SetStateAct
 
             setMessages((prevMessages: any) => [...prevMessages, data]);
 
-            sound.play()
+            if (data.SenderID !== user?.id) {
+                sound.play()
+            }
         }
 
         socket.onclose = () => {

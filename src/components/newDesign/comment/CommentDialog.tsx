@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { deleteComment } from "@/lib/actions/comment";
 import apiClient from "@/lib/apiClient";
 import React from "react";
 

@@ -14,7 +14,7 @@ const Content = async ({ username, profilePicture, contentUrl, caption, id, type
 
     return (
         <div className='p-2 w-full flex justify-center'>
-            <div className='px-2 bg-slate-100 rounded-2xl w-full max-w-[500px]'>
+            <div className='px-2 bg-card rounded-2xl w-full max-w-[500px]'>
                 <div className='flex items-center justify-between py-2'>
                     <Link href={`/profile/${username}`} className='flex items-center gap-3 w-full mr-3'>
                         <div className='w-10 h-10'>
@@ -30,7 +30,7 @@ const Content = async ({ username, profilePicture, contentUrl, caption, id, type
                     {type === "image" ? (
                         <Image src={contentUrl} alt={caption} width={1000} height={1000} className='rounded-xl w-full max-h-[600px] object-contain bg-black' />
                     ) : (
-                        <Video contentUrl={contentUrl} autoplay />
+                        <Video contentUrl={contentUrl} />
                     )}
                 </div>
                 <ContentFooter id={id} />

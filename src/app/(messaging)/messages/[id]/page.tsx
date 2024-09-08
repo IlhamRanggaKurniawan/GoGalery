@@ -1,15 +1,10 @@
-import DirectConversation from "@/components/myComponents/messages/DirectConversation";
-import Avatar from "@/components/newDesign/Avatar";
-import ConversationHeader from "@/components/newDesign/ConversationHeader";
-import Header from "@/components/newDesign/Header";
-import Message from "@/components/newDesign/Message";
-import MessageInput from "@/components/newDesign/MessageInput";
-import PrivateConversation from "@/components/newDesign/PrivateConversation";
+import ConversationHeader from "@/components/newDesign/messages/ConversationHeader";
+import PrivateConversation from "@/components/newDesign/messages/PrivateConversation";
 import api from "@/lib/api";
 import getSession from "@/lib/serverHooks/getSession";
-import { ChevronLeft } from "lucide-react";
 import { Metadata } from "next";
-import React from "react";
+
+
 
 export const metadata: Metadata = {
   title: "Messages | Connect Verse",

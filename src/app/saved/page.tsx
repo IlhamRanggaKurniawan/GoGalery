@@ -1,12 +1,8 @@
-import Content from '@/components/newDesign/content/Content'
 import ContentPreview from '@/components/newDesign/content/ContentPreview'
 import Header from '@/components/newDesign/Header'
 import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
-import { ChevronLeft } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import React from 'react'
 
 const page = async () => {

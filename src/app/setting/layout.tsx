@@ -1,7 +1,6 @@
 "use client"
 
-import Header from '@/components/newDesign/Header'
-import { Bug, KeyRound, LogOut, Palette, Pin, Search, Trash, User } from 'lucide-react'
+import { Bug, KeyRound, Pin, Trash, User } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -9,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <div className='flex h-screen'>
-            <div className='w-72 border-r h-full flex flex-col px-2 gap-2'>
+            <div className='hidden w-72 border-r h-full sm:flex flex-col px-2 gap-2'>
                 <h2 className='font-medium text-lg text-center'>Settings</h2>
                 <Link href="/setting/profile" className="flex gap-2 items-center cursor-pointer">
                     <User size={27} />

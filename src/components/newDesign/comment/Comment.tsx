@@ -4,7 +4,6 @@ import React from 'react'
 import CommentDialog from './CommentDialog'
 import { Ellipsis } from 'lucide-react'
 import Avatar from '../Avatar'
-import getSession from '@/lib/serverHooks/getSession'
 import { useSession } from '@/lib/hooks/useSession'
 
 interface CommentProps {

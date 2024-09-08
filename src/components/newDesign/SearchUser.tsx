@@ -1,13 +1,13 @@
 "use client";
 
-import { findUser, IUserPreview } from "@/lib/actions/user";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
-import AccountPreview from "../myComponents/AccountPreview";
 import apiClient from "@/lib/apiClient";
 import { Input } from "../ui/input";
+import { IUserPreview } from "../../../types/entity";
+import AccountPreview from "./AccountPreview";
 
 const SearchUser = () => {
   const [search, setSearch] = useState<string>("");
@@ -19,7 +19,7 @@ const SearchUser = () => {
     try {
       if (search.length === 0) return;
 
-      const data = await apiClient.get(`/user/findall/${debouncedSearch}`, { cache: "no-cache" });
+      const data = await apiClient.get(`/user/findall/${search}`, { cache: "no-cache" });
 
       setUsers(data);
     } catch (error) {

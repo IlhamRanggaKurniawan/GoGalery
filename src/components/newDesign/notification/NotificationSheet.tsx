@@ -20,9 +20,8 @@ const NotificationSheet = ({ children, notifications }: { children: ReactNode; n
                     </SheetClose>
                 </div>
                 <Separator className="mb-1" />
-                <div className='w-full h-full overflow-y-auto flex flex-col gap-1'>
+                <div className='w-full h-full overflow-y-auto flex flex-col gap-1 pb-20'>
                     {notifications.map((notification) => (
-
                         <Notification key={notification.ID} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} username={notification.Trigger.Username} createdAt={notification.CreatedAt} />
                     ))}
 

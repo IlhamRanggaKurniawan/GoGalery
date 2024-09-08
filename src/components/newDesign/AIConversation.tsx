@@ -1,12 +1,11 @@
 "use client"
 
-import React, { FormEvent, useEffect, useState } from 'react'
-import MessageInput from './MessageInput'
-import Message from './Message'
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
+import MessageInput from './messages/MessageInput'
+import Message from './messages/Message'
 import { useSession } from '@/lib/hooks/useSession'
 import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount'
 import apiClient from '@/lib/apiClient'
-import { ITextMessage } from '@/lib/actions/ai'
 
 interface MessageType {
     ID: number;
@@ -16,73 +15,101 @@ interface MessageType {
     UpdatedAt: Date;
 }
 
-const AIConversation = ({ fn, conversationId }: { fn: () => Promise<any>, conversationId: number }) => {
+const AIConversation = ({ conversationId }: { conversationId: number }) => {
     const { user } = useSession()
     const [messages, setMessages] = useState<MessageType[]>([])
-    const [promt, setPrompt] = useState<ITextMessage[]>([])
+    const [prompt, setPrompt] = useState<any[]>([])
     const [input, setInput] = useState("")
+    const lastMessageRef = useRef<HTMLDivElement>(null)
 
     useEffectAfterMount(() => {
         const fetchData = async () => {
+            if (!user?.id) return
 
-            const data = await fn()
+            const data = await apiClient.get(`/ai/conv/findone/${user?.id}`, {
+                cache: "no-cache"
+            })
 
-            setMessages(data)
+            setMessages(data.Messages)
 
-            const lastThreeMessages = data.slice(-3);
+            const lastThreeMessages = data.Messages.slice(-3);
 
-            const formattedMessages: ITextMessage[] = lastThreeMessages.flatMap((message: any) => [
-                { role: "user", content: message.message },
-                { role: "assistant", content: message.response ?? "" },
+            const prompt = lastThreeMessages.flatMap((message: any) => [
+                { role: "user", content: message.Message },
+                { role: "assistant", content: message.Response ?? "" },
             ]);
 
-
-            setPrompt(formattedMessages)
+            setPrompt(prompt)
         }
 
         fetchData()
     }, [user])
 
     const submitData = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (!input) return
+        try {
+            e.preventDefault()
+            if (!input) return
+            setInput("")
 
-        const newMessage: MessageType = {
-            ID: (messages.length + 1),
-            Message: input,
-            CreatedAt: new Date(),
-            UpdatedAt: new Date()
-        }
+            const newMessage: MessageType = {
+                ID: (messages.length + 1),
+                Message: input,
+                CreatedAt: new Date(),
+                UpdatedAt: new Date()
+            }
 
-        setMessages([...messages, newMessage])
+            if (prompt.length > 5) {
+                setPrompt((prev) => {
+                    const newPrompt = prev.slice(0, -2)
+                    return newPrompt
+                })
+            }
 
-        const data = await apiClient.post("/ai/message/create", {
-            body: {
-                senderId: user?.id,
-                conversationId: conversationId,
-                message: input
+            prompt.push({ role: "user", content: input });
 
-            },
-            cache: "no-cache"
-        })
+            setMessages([...messages, newMessage])
 
-        setInput("")
+            const data = await apiClient.post("/ai/message/create", {
+                body: {
+                    senderId: user?.id,
+                    conversationId: conversationId,
+                    prompt: prompt,
 
-        if (data && data.Response) {
+                },
+                cache: "no-cache"
+            })
+
             setMessages((prev) => {
                 const newMessages = prev.slice(0, -1);
                 return [...newMessages, data];
             });
-        }
 
+            const formattedMessages = [
+                { role: "user", content: data.Message },
+                { role: "assistant", content: data.Response ?? "" },
+            ];
+
+            setPrompt((prev) => {
+                const newPrompt = prev.slice(0, -2);
+                return [...newPrompt, ...formattedMessages]
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
+
+    useEffect(() => {
+        if (lastMessageRef.current) {
+            lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
 
     return (
         <>
             <div className=" overflow-y-auto mt-14">
-                {messages && messages.map((message: any) => (
-                    <div key={message.ID}>
-                        {user && (
+                {messages && messages.map((message, index) => (
+                    <div key={message.ID} ref={index === messages.length - 1 ? lastMessageRef : null}>
+                        {(user && message.Message) && (
                             <Message message={message.Message} senderId={user.id} />
                         )}
                         {message.Response && (
