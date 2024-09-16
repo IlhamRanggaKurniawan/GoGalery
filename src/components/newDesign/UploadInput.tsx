@@ -51,12 +51,11 @@ const UploadInput = () => {
       formData.append("file", file);
       formData.append("uploaderId", `${user.id}`)
       formData.append("caption", e.currentTarget.caption.value);
-      // await uploadContent(formData);
 
       setLoading(true);
       setError("");
 
-      const content = await apiClient.post("/content/upload", {
+      const content = await apiClient.post("/v1/content", {
         body: formData,
         cache: "no-cache"
       })

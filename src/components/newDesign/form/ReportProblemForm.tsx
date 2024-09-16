@@ -15,12 +15,11 @@ const ReportProblemForm = () => {
         try {
             e.preventDefault()
 
-            const response = await apiClient.post(`/feedback/create/${user?.id}`, {
+            const response = await apiClient.post(`/v1/feedback/${user?.id}`, {
                 body: {
                     message: feedback
                 },
                 cache: "no-cache"
-
             })
 
             router.push(`/profile/${user?.username}`)

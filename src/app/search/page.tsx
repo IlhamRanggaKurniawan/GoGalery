@@ -5,19 +5,19 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Explore | Connect Verse",
-  description: "Welcome to the Connect Verse Explore page",
+  title: "Connect Verse",
+  description: "Welcome to the Connect Verse",
   keywords: "connect, verse, social media",
   authors: [{ name: "Connect Verse team" }],
   openGraph: {
-    title: "Explore | Connect Verse",
-    description: "Welcome to the Connect Verse Explore page",
-    url: "https://ConnectVerse.com/group",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+    url: "https://ConnectVerse.com/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Explore | Connect Verse",
-    description: "Welcome to the Connect Verse Explore page",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
   },
 };
 

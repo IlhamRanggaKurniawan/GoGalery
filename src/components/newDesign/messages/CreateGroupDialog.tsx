@@ -27,7 +27,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
         try {
             if (!search || !session) return
 
-            const mutualUsers = await apiClient.get(`/user/mutual/${session.id}`, {
+            const mutualUsers = await apiClient.get(`/v1/user/${session.id}/mutual`, {
                 cache: "no-cache"
             })
 
@@ -49,7 +49,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
         try {
             if (!selectedUsers) return
 
-            const group = await apiClient.post(`/gc/create`, {
+            const group = await apiClient.post(`/v1/group`, {
                 body: {
                     name: groupName,
                     members: [...selectedUsers, { ID: session?.id }]

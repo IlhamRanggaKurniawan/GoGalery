@@ -2,14 +2,32 @@ import ContentPreview from '@/components/newDesign/content/ContentPreview'
 import Header from '@/components/newDesign/Header'
 import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: "Connect Verse",
+  description: "Welcome to the Connect Verse",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
+  openGraph: {
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+    url: "https://ConnectVerse.com/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+  },
+};
 
 const page = async () => {
 
   const { user } = await getSession()
 
-  const savedContents = await api.get(`/saved/findall/${user.id}`, { cache: "no-cache" })
+  const savedContents = await api.get(`/v1/saves/${user.id}`, { cache: "no-cache" })
 
   return (
     <div>

@@ -23,7 +23,7 @@ const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "
         try {
             if (search.length === 0) return;
 
-            const users = await apiClient.get(`/user/findall/${search}`, { cache: "no-cache" });
+            const users = await apiClient.get(`/v1/users/${search}`, { cache: "no-cache" });
 
             setUsers(users);
         } catch (error) {

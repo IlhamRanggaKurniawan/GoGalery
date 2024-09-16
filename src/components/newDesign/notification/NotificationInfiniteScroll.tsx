@@ -13,9 +13,9 @@ const NotificationInfiniteScroll = () => {
 
   const getNotification = async () => {
     try {
-      if(!user) return
+      if (!user) return
 
-      const notifications = await apiClient.get(`/notification/findall/${user?.id}`, { cache: "no-cache" })
+      const notifications = await apiClient.get(`/v1/notifications/${user?.id}`, { cache: "no-cache" })
 
       setNotifications(notifications);
 
@@ -31,7 +31,7 @@ const NotificationInfiniteScroll = () => {
   return (
     <div className='w-full overflow-y-auto mt-12 flex flex-col gap-1'>
       {notifications && notifications.map((notification) => (
-        <Notification username={notification.Trigger.Username} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} createdAt={notification.CreatedAt} key={notification.ID}/>
+        <Notification username={notification.Trigger.Username} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} createdAt={notification.CreatedAt} key={notification.ID} />
       ))}
     </div>
   )

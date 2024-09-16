@@ -22,8 +22,8 @@ const UpdatePasswordForm = () => {
             const formData = new FormData()
 
             formData.append("password", password)
-
-            const data = await apiClient.patch(`/user/update/${user?.id}`, {
+            
+            const data = await apiClient.patch(`/v1/user/${user?.id}`, {
                 body: formData,
                 cache: "no-cache"
             })

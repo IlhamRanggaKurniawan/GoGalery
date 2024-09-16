@@ -4,8 +4,6 @@ import api from "@/lib/api";
 import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
 
-
-
 export const metadata: Metadata = {
   title: "Messages | Connect Verse",
   description: "Welcome to the Connect Verse Messages page",
@@ -28,7 +26,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   const { user } = await getSession()
 
 
-  const directMessage = await api.get(`/dm/findone/${params.id}`, { cache: "no-cache" })
+  const directMessage = await api.get(`/v1/direct/${params.id}`, { cache: "no-cache" })
 
   const otherParticipantUsername = user.id === directMessage.Participant1ID ? directMessage.Participant2.Username : directMessage.Participant1.Username
 

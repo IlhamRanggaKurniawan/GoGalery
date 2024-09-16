@@ -8,7 +8,7 @@ import React from "react";
 const CommentDialog = ({ children, commentId }: { children: React.ReactNode; commentId: number }) => {
   const handleClick = async () => {
     try {
-      await apiClient.delete(`/comment/delete/${commentId}`)
+      await apiClient.delete(`/v1/comment/${commentId}`)
     } catch (error) {
       console.error(error);
     }

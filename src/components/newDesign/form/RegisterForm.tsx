@@ -24,7 +24,7 @@ const RegisterForm = () => {
 
             setLoading(true);
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/register`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user`, {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({
@@ -43,7 +43,7 @@ const RegisterForm = () => {
 
             router.push("/")
 
-            localStorage.setItem("AccessToken", user.data.AccessToken);
+            localStorage.setItem("AccessToken", user.AccessToken);
 
         } catch (error) {
             console.error("Login failed:", error);

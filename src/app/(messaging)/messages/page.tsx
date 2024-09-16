@@ -26,7 +26,7 @@ const page = async () => {
 
   const { user } = await getSession()
 
-  const contacts = await api.get(`/dm/findall/${user?.id}`, { cache: "no-cache" })
+  const contacts = await api.get(`/v1/directs/${user?.id}`, { cache: "no-cache" })
 
   return (
     <div>

@@ -2,6 +2,7 @@
 import Content from "@/components/newDesign/content/Content";
 import ContentNotFound from "@/components/newDesign/content/ContentNotFound";
 import api from "@/lib/api";
+import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
 import React from "react";
 
@@ -27,11 +28,13 @@ const page = async ({ searchParams }: { searchParams: { contentId: number } }) =
 
   let queryContent: any
 
+  const { user } = await getSession()
+
   if (searchParams.contentId) {
-    queryContent = await api.get(`/content/findone/${searchParams.contentId}`, { cache: "no-cache" })
+    queryContent = await api.get(`/v1/content/${searchParams.contentId}?userId=${user.id}`, { cache: "no-cache" })
   }
 
-  const contents = await api.get("/content/findall", { cache: "no-cache" })
+  const responses = await api.get(`/v1/contents/${user.id}`, { cache: "no-cache" })
 
   return (
     <div >
@@ -41,13 +44,14 @@ const page = async ({ searchParams }: { searchParams: { contentId: number } }) =
         )}
 
         {queryContent && (
-          <Content caption={queryContent.Caption} username={queryContent.Uploader.Username} contentUrl={queryContent.URL} id={queryContent.ID} key={queryContent.ID} type={queryContent.Type} profilePicture={queryContent.Uploader.ProfileUrl} />
+          <Content caption={queryContent.content.Caption} username={queryContent.content.Uploader.Username} contentUrl={queryContent.content.URL} id={queryContent.content.ID} key={queryContent.content.ID} type={queryContent.content.Type} profilePicture={queryContent.content.Uploader.ProfileUrl} isLiked={queryContent.Like.isLiked} isSaved={queryContent.Save.isSaved} likeId={queryContent.Like.likeId} saveId={queryContent.Save.saveId} />
         )}
 
-        {contents && contents.map((content: any) => {
-          if (queryContent && content.ID === queryContent.ID) return
-          return <Content caption={content.Caption} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type} profilePicture={content.Uploader.ProfileUrl} />
+        {responses && responses.map((response: any) => {
+          if (queryContent && response.content.ID === queryContent.ID) return
+          return <Content caption={response.content.Caption} username={response.content.Uploader.Username} contentUrl={response.content.URL} id={response.content.ID} key={response.content.ID} type={response.content.Type} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId} />
         })}
+
       </div>
     </div>
   );

@@ -1,16 +1,40 @@
 import Content from '@/components/newDesign/content/Content'
 import ContentNotFound from '@/components/newDesign/content/ContentNotFound'
 import api from '@/lib/api'
+import getSession from '@/lib/serverHooks/getSession'
+import { Metadata } from 'next'
 import React from 'react'
 
+export const generateMetadata = async ({ params }: { params: { username: string } }): Promise<Metadata> => {
+
+    return {
+      title: `${params.username} | Connect Verse`,
+      description: `Check out ${params.username}'s profile on Connect Verse.`,
+      keywords: `connect, verse, social media, ${params.username}`,
+      authors: [{ name: "Connect Verse team" }],
+      openGraph: {
+        title: `${params.username} on Connect Verse`,
+        description: `Check out ${params.username}'s profile on Connect Verse.`,
+        url: `https://ConnectVerse.com/profile/${params.username}`,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${params.username} on Connect Verse`,
+        description: `Check out ${params.username}'s profile on Connect Verse.`,
+        images: ['https://example.com/image.jpg'],
+      },
+    };
+  };
 const page = async ({ params }: { params: { id: string, username: string } }) => {
 
-    const content = await api.get(`/content/findone/${params.id}`, { cache: "no-cache" })
+    const { user } = await getSession()
+
+    const response = await api.get(`/v1/content/${params.id}?userId=${user.id}`, { cache: "no-cache" })
 
     return (
         <div>
-            {content && params.username === content.Uploader.Username ? (
-                <Content username={content.Uploader.Username} caption={content.Caption} contentUrl={content.URL} type={content.Type} id={content.ID} profilePicture={content.Uploader.ProfileUrl} />
+            {response && params.username === response.content.Uploader.Username ? (
+                <Content username={response.content.Uploader.Username} caption={response.content.Caption} contentUrl={response.content.URL} type={response.content.Type} id={response.content.ID} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId} />
             ) : (
                 <ContentNotFound contentId={+params.id} />
             )}

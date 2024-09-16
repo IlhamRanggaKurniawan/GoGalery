@@ -21,7 +21,7 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
             e.preventDefault()
             setText("")
 
-            const comment = await apiClient.post(`/comment/create/${user?.id}`, {
+            const comment = await apiClient.post(`/v1/comment/${contentId}`, {
                 body: {
                     contentId,
                     message: text
@@ -41,7 +41,7 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
 
     const getComments = async () => {
         try {
-            const comments = await apiClient.get(`/comment/findall/${contentId}`, { cache: "no-cache" })
+            const comments = await apiClient.get(`/v1/comments/${contentId}`, { cache: "no-cache" })
 
             setComments(comments)
         } catch (error) {

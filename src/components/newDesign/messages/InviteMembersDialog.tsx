@@ -30,7 +30,7 @@ const InviteMembersDialog = ({ groupId, children }: { groupId: number, children:
 
     useEffect(() => {
         const getGroupData = async () => {
-            const group = await apiClient.get(`/gc/findone/${groupId}`, {
+            const group = await apiClient.get(`/v1/group/${groupId}`, {
                 cache: "no-cache"
             })
 
@@ -44,7 +44,7 @@ const InviteMembersDialog = ({ groupId, children }: { groupId: number, children:
         const searchMutualUsers = async () => {
             try {
                 if (!user?.id) return
-                const users = await apiClient.get(`/user/mutual/${user?.id}`, {
+                const users = await apiClient.get(`/v1/user/${user?.id}/mutual`, {
                     cache: "no-cache"
                 })
 
@@ -61,7 +61,7 @@ const InviteMembersDialog = ({ groupId, children }: { groupId: number, children:
         try {
             if (!groupId) return;
 
-            const group = await apiClient.post(`/gc/members/${groupId}`, {
+            const group = await apiClient.post(`/v1/group/members/${groupId}`, {
                 body: {
                     members: selectedUsers
                 },

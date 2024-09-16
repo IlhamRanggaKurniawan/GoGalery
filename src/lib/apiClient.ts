@@ -10,7 +10,7 @@ export const getToken = async () => {
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (decodedToken.exp && (decodedToken.exp - currentTime) <= 10) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/token`, {
                 method: "GET",
                 credentials: "include",
             });

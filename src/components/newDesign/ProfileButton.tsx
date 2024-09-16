@@ -19,7 +19,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
 
     const checkDMAndFollow = async () => {
 
-      const checkFollowing = await apiClient.get(`/follow/findone?followerId=${user.id}&followingId=${userId}`, { cache: "no-cache" })
+      const checkFollowing = await apiClient.get(`/v1/follow?followerId=${user.id}&followingId=${userId}`, { cache: "no-cache" })
 
       if (checkFollowing) setFollowId(checkFollowing.ID)
     }
@@ -33,10 +33,10 @@ const ProfileButton = ({ userId }: { userId: number }) => {
         if (!user) return
 
         if (followId) {
-          await apiClient.delete(`/follow/delete/${followId}`)
+          await apiClient.delete(`/v1/follow/${followId}`)
           setFollowId(null)
         } else {
-          const follow = await apiClient.post(`/follow/create`, {
+          const follow = await apiClient.post(`/v1/follow`, {
             body: {
               followingId: userId,
               followerId: user.id
@@ -54,13 +54,13 @@ const ProfileButton = ({ userId }: { userId: number }) => {
     try {
       if (!user) return
 
-      const directMessage = await apiClient.get(`/dm/findone?participant1Id=${user.id}&participant2Id=${userId}`, { cache: "no-cache" })
+      const directMessage = await apiClient.get(`/v1/direct?participant1Id=${user.id}&participant2Id=${userId}`, { cache: "no-cache" })
 
       if (directMessage) {
         return router.push(`/messages/${directMessage.ID}`)
       }
 
-      const newDM = await apiClient.post(`/dm/create`, {
+      const newDM = await apiClient.post(`/v1/direct`, {
         body: {
           participants: [user.id, userId]
 

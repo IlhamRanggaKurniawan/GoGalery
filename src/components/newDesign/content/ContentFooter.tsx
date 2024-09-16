@@ -9,57 +9,41 @@ import { useDebouncedCallback } from 'use-debounce'
 import CommentSheet from '../comment/CommentSheet'
 import { useRouter } from 'next/navigation'
 
-const ContentFooter = ({ id }: { id: number }) => {
+const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: initialLikeId }: { id: number, isLiked: boolean, isSaved: boolean, saveId: number, likeId: number }) => {
     const { user } = useSession()
-    const [likeId, setLikeId] = useState(0)
-    const [savedId, setSavedId] = useState(0)
+    const [likeId, setLikeId] = useState(initialLikeId)
+    const [savedId, setSavedId] = useState(initialSaveId)
     const [comments, setComments] = useState<any[]>([])
     const router = useRouter()
 
-    useEffectAfterMount(() => {
-        if (!user) return
-
-        const checkLikeAndSave = async () => {
-            const isLike = await apiClient.get(`/like/findone?userId=${user?.id}&contentId=${id}`, { cache: "no-cache" })
-            const isSaved = await apiClient.get(`/saved/findone?userId=${user?.id}&contentId=${id}`, { cache: "no-cache" })
-
-            if (isLike) setLikeId(isLike.ID)
-            if (isSaved) setSavedId(isSaved.ID)
-        }
-
-        checkLikeAndSave()
-    }, [user?.id])
-
     const handleLikeContent = useDebouncedCallback(async () => {
-        if (likeId === 0) {
-            const newLike = await apiClient.post("/like/create", {
+        if (!isLiked) {
+            const newLike = await apiClient.post(`/v1/like/${id}`, {
                 body: {
                     userId: user?.id,
-                    contentId: id
                 },
                 cache: "no-cache"
             })
 
             setLikeId(newLike.ID)
         } else {
-            await apiClient.delete(`/like/delete/${likeId}`)
+            await apiClient.delete(`/v1/like/${likeId}`)
             setLikeId(0)
         }
     }, 300)
 
     const handleSaveContent = useDebouncedCallback(async () => {
-        if (savedId === 0) {
-            const newSave = await apiClient.post("/saved/create", {
+        if (!isSaved) {
+            const newSave = await apiClient.post(`/v1/save/${id}`, {
                 body: {
                     userId: user?.id,
-                    contentId: id
                 },
                 cache: "no-cache"
             })
 
             setSavedId(newSave.ID)
         } else {
-            await apiClient.delete(`/saved/delete/${savedId}`)
+            await apiClient.delete(`/v1/save/${savedId}`)
             setSavedId(0)
         }
     }, 300)
@@ -74,7 +58,7 @@ const ContentFooter = ({ id }: { id: number }) => {
 
     const getAllComments = async () => {
         try {
-            const comments = await apiClient.get(`/comment/findall/${id}`, {
+            const comments = await apiClient.get(`/v1/comments/${id}`, {
                 cache: "no-cache"
             })
 
@@ -88,7 +72,7 @@ const ContentFooter = ({ id }: { id: number }) => {
     return (
         <div className='py-2 flex justify-between'>
             <div className='flex gap-4'>
-                <Heart size={23} onClick={handleLikeContent} fill={`${likeId === 0 ? "none" : "red"}`} color={`${likeId === 0 ? "currentColor" : "red"}`} className='cursor-pointer' />
+                <Heart size={23} onClick={handleLikeContent} fill={`${likeId !== 0 ? "red" : "none"}`} color={`${likeId !== 0 ? "red" : "currentColor"}`} className='cursor-pointer' />
                 <div onClick={getAllComments} className='hidden sm:flex'>
                     <CommentSheet contentId={id} comments={comments} setComments={setComments}>
                         <MessageCircle size={23} className='cursor-pointer' />
@@ -99,7 +83,7 @@ const ContentFooter = ({ id }: { id: number }) => {
                 </div>
                 <Share size={23} className='cursor-pointer' onClick={handleShare} />
             </div>
-            <Bookmark size={23} onClick={handleSaveContent} fill={`${savedId === 0 ? "white" : "black"}`} className='cursor-pointer' />
+            <Bookmark size={23} onClick={handleSaveContent} fill={`${savedId !== 0 ? "black" : "white"}`} className='cursor-pointer' />
         </div>
     )
 }

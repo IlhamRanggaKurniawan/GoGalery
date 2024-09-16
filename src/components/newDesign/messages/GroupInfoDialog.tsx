@@ -24,7 +24,7 @@ const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.React
     try {
       if (!id || !user) return;
 
-      await apiClient.delete(`/gc/${id}/members/${user.id}`)
+      await apiClient.delete(`/v1/group/${id}/members/${user.id}`)
 
       router.push("/group");
     } catch (error) {
@@ -35,7 +35,7 @@ const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.React
   useEffect(() => {
     const groupData = async () => {
       try {
-        const group = await apiClient.get(`/gc/findone/${id}`, { cache: "no-cache" })
+        const group = await apiClient.get(`/v1/group/${id}`, { cache: "no-cache" })
 
         setUsers(group.Members)
         setName(group.Name)

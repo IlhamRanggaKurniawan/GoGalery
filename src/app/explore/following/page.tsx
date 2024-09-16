@@ -1,6 +1,7 @@
 
 import Content from "@/components/newDesign/content/Content";
 import api from "@/lib/api";
+import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
 import React from "react";
 
@@ -24,13 +25,15 @@ export const metadata: Metadata = {
 
 const page = async () => {
 
-  const contents = await api.get("/content/findall", { cache: "no-cache" })
+  const { user } = await getSession()
+
+  const responses = await api.get(`/v1/contents/${user.id}`, { cache: "no-cache" })
 
   return (
     <div >
       <div className=" overflow-y-auto flex flex-col items-center">
-        {contents && contents.map((content: any) => (
-          <Content caption={content.Caption} username={content.Uploader.Username} contentUrl={content.URL} id={content.ID} key={content.ID} type={content.Type} profilePicture={content.Uploader.ProfileUrl} />
+        {responses && responses.map((response: any) => (
+          <Content caption={response.content.Caption} username={response.content.Uploader.Username} contentUrl={response.content.URL} id={response.content.ID} key={response.content.ID} type={response.content.Type} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId} />
         ))}
       </div>
     </div>

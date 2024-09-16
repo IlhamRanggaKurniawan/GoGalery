@@ -6,9 +6,31 @@ import api from '@/lib/api'
 import getSession from '@/lib/serverHooks/getSession'
 import React from 'react'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const generateMetadata = async ({ params }: { params: { username: string } }): Promise<Metadata> => {
+
+  return {
+    title: `${params.username} | Connect Verse`,
+    description: `Check out ${params.username}'s profile on Connect Verse.`,
+    keywords: `connect, verse, social media, ${params.username}`,
+    authors: [{ name: "Connect Verse team" }],
+    openGraph: {
+      title: `${params.username} on Connect Verse`,
+      description: `Check out ${params.username}'s profile on Connect Verse.`,
+      url: `https://ConnectVerse.com/profile/${params.username}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${params.username} on Connect Verse`,
+      description: `Check out ${params.username}'s profile on Connect Verse.`,
+      images: ['https://example.com/image.jpg'],
+    },
+  };
+};
 
 const page = async ({ params }: { params: { username: string } }) => {
-  const user = await api.get(`/user/findone/${params.username}`, { cache: "no-cache" })
+  const user = await api.get(`/v1/user/${params.username}`, { cache: "no-cache" })
 
   const { user: session } = await getSession()
 

@@ -7,14 +7,13 @@ export const getToken = async () => {
     if (!accessToken) {
         const refreshToken = cookies().get("RefreshToken")?.value;
 
-        const newAccessToken = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+        const newAccessToken = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/token`, {
             method: "GET",
             credentials: "include",
             headers: {
                 Cookie: `RefreshToken=${refreshToken}`
             },
         })
-
 
         const { accessToken } = await newAccessToken.json()
 

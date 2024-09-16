@@ -19,7 +19,7 @@ const SearchUser = () => {
     try {
       if (search.length === 0) return;
 
-      const data = await apiClient.get(`/user/findall/${search}`, { cache: "no-cache" });
+      const data = await apiClient.get(`/v1/users/${search}`, { cache: "no-cache" });
 
       setUsers(data);
     } catch (error) {

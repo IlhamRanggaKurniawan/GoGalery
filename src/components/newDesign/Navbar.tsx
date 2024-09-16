@@ -57,13 +57,12 @@ const Navbar = () => {
         const getAIConversation = async () => {
             if (!user) return
 
-            const AIConversation = await apiClient.get(`/ai/conv/findone/${user?.id}`, { cache: "no-cache" })
+            const AIConversation = await apiClient.get(`/v1/ai/conv/${user.id}`, { cache: "no-cache" })
 
             if (AIConversation) return setAIConvetsationID(AIConversation.ID)
 
-            const newAIConversation = await apiClient.post(`/ai/conv/create`, {
+            const newAIConversation = await apiClient.post(`/v1/ai/conv/${user.id}`, {
                 body: {
-                    userId: user?.id
                 },
                 cache: "no-cache"
             })
@@ -76,7 +75,7 @@ const Navbar = () => {
 
     const getNotification = async () => {
         try {
-            const notifications = await apiClient.get(`/notification/findall/${user?.id}`, { cache: "no-cache" })
+            const notifications = await apiClient.get(`/v1/notifications/${user?.id}`, { cache: "no-cache" })
 
             setNotifications(notifications)
         } catch (error) {

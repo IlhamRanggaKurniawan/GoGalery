@@ -23,7 +23,7 @@ const LoginForm = () => {
 
             setLoading(true);
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user/login`, {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({

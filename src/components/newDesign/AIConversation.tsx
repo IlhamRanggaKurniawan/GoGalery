@@ -26,7 +26,7 @@ const AIConversation = ({ conversationId }: { conversationId: number }) => {
         const fetchData = async () => {
             if (!user?.id) return
 
-            const data = await apiClient.get(`/ai/conv/findone/${user?.id}`, {
+            const data = await apiClient.get(`/v1/ai/conv/${user?.id}`, {
                 cache: "no-cache"
             })
 
@@ -69,10 +69,9 @@ const AIConversation = ({ conversationId }: { conversationId: number }) => {
 
             setMessages([...messages, newMessage])
 
-            const data = await apiClient.post("/ai/message/create", {
+            const data = await apiClient.post(`/v1/ai/message/${conversationId}`, {
                 body: {
                     senderId: user?.id,
-                    conversationId: conversationId,
                     prompt: prompt,
 
                 },

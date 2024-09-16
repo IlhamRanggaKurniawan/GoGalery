@@ -16,9 +16,9 @@ const CommentSheet = ({ children, contentId, comments, setComments }: { children
             e.preventDefault()
             setText("")
 
-            const comment = await apiClient.post(`/comment/create/${user?.id}`, {
+            const comment = await apiClient.post(`/v1/comment/${contentId}`, {
                 body: {
-                    contentId,
+                    userId: user?.id,
                     message: text
                 },
                 cache: "no-cache"
@@ -31,10 +31,6 @@ const CommentSheet = ({ children, contentId, comments, setComments }: { children
         } catch (error) {
             console.error(error)
         }
-    }
-
-    const handleDeleteComment = async () => {
-
     }
 
     return (

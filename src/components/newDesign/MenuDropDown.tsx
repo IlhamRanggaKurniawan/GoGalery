@@ -20,7 +20,7 @@ const MenuDropDown = () => {
 
   const signOut = async () => {
     try {
-      await apiClient.delete(`/user/logout/${user?.id}`)
+      await apiClient.delete(`/v1/user/${user?.id}/logout`)
 
       localStorage.clear()
 

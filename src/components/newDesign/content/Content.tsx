@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Video from './Video';
 import getSession from '@/lib/serverHooks/getSession';
 
-const Content = async ({ username, profilePicture, contentUrl, caption, id, type }: { username: string, profilePicture: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video" }) => {
+const Content = async ({ username, profilePicture, contentUrl, caption, id, type, isLiked, isSaved, likeId, saveId }: { username: string, profilePicture: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video", isLiked: boolean, isSaved: boolean, likeId: number, saveId: number }) => {
 
     const { user } = await getSession()
 
@@ -33,7 +33,7 @@ const Content = async ({ username, profilePicture, contentUrl, caption, id, type
                         <Video contentUrl={contentUrl} />
                     )}
                 </div>
-                <ContentFooter id={id} />
+                <ContentFooter id={id} isLiked={isLiked} isSaved={isSaved} likeId={likeId} saveId={saveId}/>
                 <ContentDescription caption={caption} />
             </div>
         </div>
