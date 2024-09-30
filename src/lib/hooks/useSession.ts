@@ -24,7 +24,7 @@ export const useSession = () => {
           const currentTime = Math.floor(Date.now() / 1000);
 
           if (decodedToken.exp && (decodedToken.exp - currentTime) <= 10) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/token`, {
               method: "GET",
               credentials: "include",
             });
@@ -42,7 +42,7 @@ export const useSession = () => {
 
           return setUser(user)
         } else {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/token`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/token`, {
             method: "GET",
             credentials: "include",
           });

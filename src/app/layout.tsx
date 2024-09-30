@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const hideNavbar = /^\/(login|register|explore\/search)$/.test(pathname);
+  const hideNavbar = /^\/(login|register|otp|otp\/password|explore\/search)$/.test(pathname);
   const hideNavbarOnMobile = /^\/(messages\/.*|group\/.*|ai\/.*|comments\/.*)$/.test(pathname);
 
   return (

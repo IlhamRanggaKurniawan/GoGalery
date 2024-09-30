@@ -11,7 +11,7 @@ const GroupConversation = ({ conversationId, prevMessage }: { conversationId: nu
   const [messages, setMessages] = useState<any[]>(prevMessage)
   const { user } = useSession()
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { sendMessage } = useWebSocket(`ws://localhost:8080/v1/ws/group?groupId=${conversationId}&userId=${user?.id}`, setMessages)
+  const { sendMessage } = useWebSocket(`ws://${process.env.NEXT_PUBLIC_API_URL}/v1/ws/group?groupId=${conversationId}&userId=${user?.id}`, setMessages)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {

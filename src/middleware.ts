@@ -6,11 +6,11 @@ export function middleware(request: NextRequest) {
 
     const { pathname } = request.nextUrl;
 
-    if (refreshToken && (pathname === '/login' || pathname === '/register')) {
+    if (refreshToken && (pathname === '/login' || pathname === '/register' || pathname === '/otp' || pathname === '/otp/password')) {
         return NextResponse.redirect(new URL('/', request.url));
     }
 
-    if (!refreshToken && pathname !== '/login' && pathname !== '/register') {
+    if (!refreshToken && (pathname !== '/login' && pathname !== '/register' && pathname !== '/otp' && pathname !== '/otp/password')) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 

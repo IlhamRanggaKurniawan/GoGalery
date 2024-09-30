@@ -24,7 +24,7 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
     const findUsers = async () => {
         try {
             if(!search) return
-            const users = await apiClient.get(`/user/findall/${search}`, { cache: "no-cache" })
+            const users = await apiClient.get(`/v1/users/${search}`, { cache: "no-cache" })
 
             setUsers(users)
         } catch (error) {
@@ -36,14 +36,14 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
     const handleClick = async ({ id }: { id: number }) => {
         try {
             if (!session) return
-            const existingDM = await apiClient.get(`/dm/findone?participant1Id=${session.id}&participant2Id=${id}`, { cache: "no-cache" })
+            const existingDM = await apiClient.get(`/v1/direct?participant1Id=${session.id}&participant2Id=${id}`, { cache: "no-cache" })
 
             if (existingDM) {
                 return router.push(`/messages/${existingDM.ID}`)
             }
 
 
-            const newDM = await apiClient.post(`/dm/create`, {
+            const newDM = await apiClient.post(`/v1/direct`, {
                 body: {
                     participants: [id, session.id]
                 },
