@@ -1,40 +1,52 @@
-import GridContentInfinityScroll from "@/components/myComponents/content/GridContentInfinityScroll";
-import { getSavedContent } from "@/lib/actions/save";
-import { Metadata } from "next";
-import React from "react";
+import ContentPreview from '@/components/newDesign/content/ContentPreview'
+import Header from '@/components/newDesign/Header'
+import api from '@/lib/api'
+import getSession from '@/lib/serverHooks/getSession'
+import { Metadata } from 'next'
+import Link from 'next/link'
+import React from 'react'
 
 export const metadata: Metadata = {
-  title: "Saved content | Connect Verse",
-  description: "Welcome to the Connect Verse Saved content page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  title: "Connect Verse",
+  description: "Welcome to the Connect Verse",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
-    title: "Saved content | Connect Verse",
-    description: "Welcome to the Connect Verse Saved content page",
-    url: "https://ConnectVerse.com/Saved",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+    url: "https://ConnectVerse.com/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Saved content | Connect Verse",
-    description: "Welcome to the Connect Verse Saved content page",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
   },
 };
 
-const page = () => {
+const page = async () => {
+
+  const { user } = await getSession()
+
+  const savedContents = await api.get(`/v1/saves/${user.id}`, { cache: "no-cache" })
+
   return (
-    <>
-      <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-4 ">
-        <div className="bg-secondary w-full h-12 flex items-center justify-center">
-          <h2 className="font-semibold text-lg">Saved Content</h2>
+    <div>
+      <Header>
+        <div className="flex gap-2 items-center h-14 justify-center w-full">
+          <h2 className="text-lg font-semibold">Saved Content</h2>
         </div>
-        <div className="flex items-center justify-center w-full">
-          <div className="max-w-[1000px]">
-            <GridContentInfinityScroll contentFuction={getSavedContent} href="saved" />
-          </div>
+      </Header>
+      <div className='flex justify-center mt-14'>
+        <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
+          {savedContents && savedContents.map((save: any) => (
+            <Link href={`/saved/${save.Content.ID}`} key={save.Content.ID}>
+              <ContentPreview contentUrl={save.Content.URL} type={save.Content.Type} key={save.Content.ID} />
+            </Link>
+          ))}
         </div>
       </div>
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default page;
+export default page

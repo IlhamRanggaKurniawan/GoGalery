@@ -1,38 +1,28 @@
-import ChangePasswordForm from "@/components/myComponents/form/ChangePasswordForm";
-import SettingBar from "@/components/myComponents/SettingBar";
-import { Metadata } from "next";
-import React from "react";
+import UpdatePasswordForm from '@/components/newDesign/form/UpdatePasswordForm'
+import { Metadata } from 'next';
+import React from 'react'
 
 export const metadata: Metadata = {
-  title: "Change password | Connect Verse",
-  description: "Welcome to the Connect Verse Change password page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  title: "Setting | Connect Verse",
+  description: "Welcome to the Connect Verse",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
-    title: "Change password | Connect Verse",
-    description: "Welcome to the Connect Verse Change password page",
-    url: "https://ConnectVerse.com/setting/password",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+    url: "https://ConnectVerse.com/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Change password | Connect Verse",
-    description: "Welcome to the Connect Verse Change password page",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
   },
 };
 
 const page = () => {
   return (
-    <>
-      <div className="mb-14 sm:pl-14 md:pl-16 lg:pl-56 flex sm:mb-0">
-        <div className="hidden sm:block">
-          <SettingBar />
-        </div>
-        <div className="flex-grow">
-          <ChangePasswordForm />
-        </div>
-      </div>
-    </>
-  );
-};
+    <UpdatePasswordForm />
+  )
+}
 
-export default page;
+export default page

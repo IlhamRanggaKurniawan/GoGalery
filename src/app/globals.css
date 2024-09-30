@@ -1,76 +1,85 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-  @layer base {
-    :root {
-      --background: 0 0% 100%;
-      --foreground: 222.2 84% 4.9%;
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 10%; /* Almost black */
 
-      --card: 0 0% 100%;
-      --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 95%; /* Slightly off-white for a softer contrast */
+    --card-foreground: 0 0% 15%; /* Dark gray */
 
-      --popover: 0 0% 100%;
-      --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 98%; /* Off-white */
+    --popover-foreground: 0 0% 15%; /* Dark gray */
 
-      --primary: 222.2 47.4% 11.2%;
-      --primary-foreground: 210 40% 98%;
+    --primary: 0 0% 10%; /* Almost black */
+    --primary-foreground: 0 0% 100%; /* White */
 
-      --secondary: 210 40% 96.1%;
-      --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 85%; /* Light cool gray */
+    --secondary-foreground: 0 0% 10%; /* Almost black */
 
-      --muted: 210 40% 96.1%;
-      --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 95%; /* Very light gray */
+    --muted-foreground: 0 0% 50%; /* Medium gray */
 
-      --accent: 210 40% 96.1%;
-      --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 220 15% 85%; /* Light cool gray */
+    --accent-foreground: 0 0% 10%; /* Almost black */
 
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 55%; /* Softer, muted red */
+    --destructive-foreground: 0 0% 100%; /* White */
 
-      --border: 214.3 31.8% 91.4%;
-      --input: 214.3 31.8% 91.4%;
-      --ring: 222.2 84% 4.9%;
+    --border: 0 0% 85%; /* Light gray */
+    --input: 0 0% 85%; /* Light gray */
+    --ring: 0 0% 15%; /* Dark gray */
 
-      --radius: 0.5rem;
-    }
+    --header-background: 0 0% 95%; /* Very light gray for a subtle header */
+    --header-foreground: 0 0% 10%; /* Almost black */
 
-    .dark {
-      --background: 222.2 84% 4.9%;
-      --foreground: 210 40% 98%;
-
-      --card: 222.2 84% 4.9%;
-      --card-foreground: 210 40% 98%;
-
-      --popover: 222.2 84% 4.9%;
-      --popover-foreground: 210 40% 98%;
-
-      --primary: 210 40% 98%;
-      --primary-foreground: 222.2 47.4% 11.2%;
-
-      --secondary: 217.2 32.6% 17.5%;
-      --secondary-foreground: 210 40% 98%;
-
-      --muted: 217.2 32.6% 17.5%;
-      --muted-foreground: 215 20.2% 65.1%;
-
-      --accent: 217.2 32.6% 17.5%;
-      --accent-foreground: 210 40% 98%;
-
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 40% 98%;
-
-      --border: 217.2 32.6% 17.5%;
-      --input: 217.2 32.6% 17.5%;
-      --ring: 212.7 26.8% 83.9%;
-    }
+    --radius: 0.5rem; /* Smaller, cleaner border radius */
   }
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+  .dark {
+    --background: 0 0% 5%; /* Deep black */
+    --foreground: 0 0% 95%; /* Almost white */
+
+    --card: 0 0% 15%; /* Slightly lighter black */
+    --card-foreground: 0 0% 90%; /* Light gray */
+
+    --popover: 0 0% 10%; /* Same as card */
+    --popover-foreground: 0 0% 90%; /* Light gray */
+
+    --primary: 0 0% 95%; /* Almost white */
+    --primary-foreground: 0 0% 10%; /* Almost black */
+
+    --secondary: 220 15% 20%; /* Dark cool gray */
+    --secondary-foreground: 0 0% 90%; /* Light gray */
+
+    --muted: 0 0% 15%; /* Dark gray */
+    --muted-foreground: 0 0% 70%; /* Light gray */
+
+    --accent: 220 15% 20%; /* Dark cool gray */
+    --accent-foreground: 0 0% 90%; /* Light gray */
+
+    --destructive: 0 65% 55%; /* Softer, muted red */
+    --destructive-foreground: 0 0% 95%; /* Light gray */
+
+    --border: 0 0% 15%; /* Very dark gray */
+    --input: 0 0% 15%; /* Same as border */
+    --ring: 0 0% 95%; /* Almost white */
+
+    --header-background: 0 0% 10%; /* Almost black for header */
+    --header-foreground: 0 0% 95%; /* Almost white */
+
+    --radius: 0.5rem; /* Smaller, cleaner border radius */
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
