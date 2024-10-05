@@ -1,30 +1,29 @@
-import RegisterForm from "@/components/myComponents/form/RegisterForm";
+import RegisterForm from "@/components/newDesign/form/RegisterForm";
 import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
   title: "Connect Verse",
-  description: "Welcome to the Connect Verse register page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  description: "Welcome to the Connect Verse homepage.",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
     title: "Connect Verse",
-    description: "Welcome to the Connect Verse register page",
-    url: "https://ConnectVerse.com/register",
+    description: "Welcome to the Connect Verse homepage.",
+    url: "https://ConnectVerse.com",
   },
   twitter: {
     card: "summary_large_image",
     title: "Connect Verse",
-    description: "Welcome to the Connect Verse register page",
+    description: "Welcome to the Connect Verse homepage.",
+    images: ["https://example.com/image.jpg"],
   },
 };
 
 const page = () => {
   return (
-    <>
-      <RegisterForm />
-    </>
-  );
+    <RegisterForm />
+  )
 };
 
 export default page;

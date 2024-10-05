@@ -1,38 +1,27 @@
-/* eslint-disable react/no-unescaped-entities */
-import DeleteAccountForm from "@/components/myComponents/form/DeleteAccountForm";
-import SettingBar from "@/components/myComponents/SettingBar";
+import DeleteAccountForm from "@/components/newDesign/form/DeleteAccountForm";
 import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Delete account | Connect Verse",
-  description: "Welcome to the Connect Verse Delete account page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  title: "Setting | Connect Verse",
+  description: "Welcome to the Connect Verse",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
-    title: "Delete account | Connect Verse",
-    description: "Welcome to the Connect Verse Delete account page",
-    url: "https://ConnectVerse.com/setting/Delete",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+    url: "https://ConnectVerse.com/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Delete account | Connect Verse",
-    description: "Welcome to the Connect Verse Delete account page",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
   },
 };
 
 const page = () => {
   return (
-    <>
-      <div className="mb-14 sm:pl-14 md:pl-16 lg:pl-56 flex sm:mb-0">
-        <div className="hidden sm:block">
-          <SettingBar />
-        </div>
-        <div className="flex-grow">
-          <DeleteAccountForm />
-        </div>
-      </div>
-    </>
+    <DeleteAccountForm />
   );
 };
 

@@ -1,5 +1,24 @@
-export { default } from "next-auth/middleware"
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export function middleware(request: NextRequest) {
+    const refreshToken = request.cookies.get('RefreshToken')?.value;
+
+    const { pathname } = request.nextUrl;
+
+    if (refreshToken && (pathname === '/login' || pathname === '/register' || pathname === '/otp' || pathname === '/otp/password')) {
+        return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    if (!refreshToken && (pathname !== '/login' && pathname !== '/register' && pathname !== '/otp' && pathname !== '/otp/password')) {
+        return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    return NextResponse.next();
+}
 
 export const config = {
-    matcher: ["/((?!login|register).*)"]
-}
+    matcher: [
+        '/((?!_next|static|favicon.ico).*)',
+    ],
+};

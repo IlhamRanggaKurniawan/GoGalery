@@ -1,38 +1,28 @@
-import ReportProblemForm from "@/components/myComponents/form/ReportProblemForm";
-import SettingBar from "@/components/myComponents/SettingBar";
-import { Metadata } from "next";
-import React from "react";
+import ReportProblemForm from '@/components/newDesign/form/ReportProblemForm'
+import { Metadata } from 'next';
+import React from 'react'
 
 export const metadata: Metadata = {
-  title: "Report problem | Connect Verse",
-  description: "Welcome to the Connect Verse Report problem page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  title: "Setting | Connect Verse",
+  description: "Welcome to the Connect Verse",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
-    title: "Report problem | Connect Verse",
-    description: "Welcome to the Connect Verse Report problem page",
-    url: "https://ConnectVerse.com/setting/problem",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
+    url: "https://ConnectVerse.com/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Report problem | Connect Verse",
-    description: "Welcome to the Connect Verse Report problem page",
+    title: "Connect Verse",
+    description: "Welcome to the Connect Verse ",
   },
 };
 
 const page = () => {
   return (
-    <>
-      <div className="mb-14 sm:pl-14 md:pl-16 lg:pl-56 flex sm:mb-0">
-        <div className="hidden sm:block">
-          <SettingBar />
-        </div>
-        <div className="flex-grow">
-          <ReportProblemForm />
-        </div>
-      </div>
-    </>
-  );
-};
+    <ReportProblemForm />
+  )
+}
 
-export default page;
+export default page

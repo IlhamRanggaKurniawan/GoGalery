@@ -1,29 +1,32 @@
-import AIConversation from '@/components/myComponents/ai/AIConversation'
-import { Metadata } from 'next';
+
 import React from 'react'
+import AIConversation from '@/components/newDesign/AIConversation'
+import ConversationHeader from '@/components/newDesign/messages/ConversationHeader'
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Connect Verse",
-  description: "Welcome to the Connect Verse AI page",
-  keywords:"connect, verse, social media",
-  authors: [{name: "Connect Verse team"}],
+  title: "Messages | Connect Verse",
+  description: "Welcome to the Connect Verse Messages page",
+  keywords: "connect, verse, social media",
+  authors: [{ name: "Connect Verse team" }],
   openGraph: {
-    title: "Connect Verse",
-    description: "Welcome to the Connect Verse AI page",
-    url: "https://ConnectVerse.com/",
+    title: "Messages | Connect Verse",
+    description: "Welcome to the Connect Verse Messages page",
+    url: "https://ConnectVerse.com/Messages",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Connect Verse",
-    description: "Welcome to the Connect Verse AI page",
+    title: "Messages | Connect Verse",
+    description: "Welcome to the Connect Verse Messages page",
   },
 };
 
-const page = ({params} : {params: {id : string}}) => {
+const page = async ({ params }: { params: { id: string } }) => {
 
   return (
-    <div className="mb-16 sm:pl-14 md:pl-16 lg:pl-56 sm:mb-0 overflow-hidden">
-        <AIConversation id={+params.id}/>
+    <div className='mb-14'>
+      <ConversationHeader />
+      <AIConversation conversationId={+params.id} />
     </div>
   )
 }
