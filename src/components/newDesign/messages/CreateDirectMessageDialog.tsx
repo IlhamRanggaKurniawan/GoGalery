@@ -42,7 +42,6 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
                 return router.push(`/messages/${existingDM.ID}`)
             }
 
-
             const newDM = await apiClient.post(`/v1/direct`, {
                 body: {
                     participants: [id, session.id]

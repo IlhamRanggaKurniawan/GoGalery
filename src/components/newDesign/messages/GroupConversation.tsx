@@ -32,7 +32,7 @@ const GroupConversation = ({ conversationId, prevMessage }: { conversationId: nu
 
   return (
     <>
-      <div className=" overflow-y-auto mt-14">
+      <div className=" overflow-y-auto">
         {messages && messages.map((message, i) => (
           <div key={message.ID} ref={i === messages.length - 1 ? lastMessageRef : null}>
             <Message message={message.Message} senderId={message.SenderID} key={message.ID} />

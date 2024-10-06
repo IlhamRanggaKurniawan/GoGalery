@@ -25,7 +25,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   const group = await api.get(`/v1/group/${params.id}`, { cache: "no-cache" })
 
   return (
-    <div className="mt-14">
+    <div className="mt-2">
       <GroupConversationHeader name={group.Name} profileUrl={group.PictureUrl} id={+params.id} />
       <GroupConversation conversationId={+params.id} prevMessage={group.Messages} />
     </div>

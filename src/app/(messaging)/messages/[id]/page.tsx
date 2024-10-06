@@ -32,7 +32,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
 
   return (
-    <div className="mt-14">
+    <div className="mt-2">
       <ConversationHeader name={otherParticipantUsername} />
       <PrivateConversation conversationId={+params.id} prevMessage={directMessage.Messages}/>
     </div>

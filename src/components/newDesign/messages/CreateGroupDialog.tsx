@@ -27,7 +27,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
         try {
             if (!search || !session) return
 
-            const mutualUsers = await apiClient.get(`/v1/user/${session.id}/mutual`, {
+            const mutualUsers = await apiClient.get(`/v1/users/${session.id}/mutual`, {
                 cache: "no-cache"
             })
 
@@ -57,6 +57,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
                 cache: "no-cache"
             })
 
+            router.push(`/group/${group.ID}`)
         } catch (error) {
             console.error(error)
         }
@@ -94,9 +95,11 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
                         Create Group
                     </Button>
                 ) : (
-                    <Button className="w-full" onClick={handleCreateGroup}>
-                        Create Group
-                    </Button>
+                    <DialogClose>
+                        <Button className="w-full" onClick={handleCreateGroup}>
+                            Create Group
+                        </Button>
+                    </DialogClose>
                 )}
             </DialogContent>
         </Dialog>

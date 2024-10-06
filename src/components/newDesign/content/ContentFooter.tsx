@@ -8,12 +8,14 @@ import React, { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import CommentSheet from '../comment/CommentSheet'
 import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
 
 const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: initialLikeId }: { id: number, isLiked: boolean, isSaved: boolean, saveId: number, likeId: number }) => {
     const { user } = useSession()
     const [likeId, setLikeId] = useState(initialLikeId)
     const [savedId, setSavedId] = useState(initialSaveId)
     const [comments, setComments] = useState<any[]>([])
+    const { theme } = useTheme()
     const router = useRouter()
 
     const handleLikeContent = useDebouncedCallback(async () => {
@@ -83,7 +85,12 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
                 </div>
                 <Share size={23} className='cursor-pointer' onClick={handleShare} />
             </div>
-            <Bookmark size={23} onClick={handleSaveContent} fill={`${savedId !== 0 ? "black" : "white"}`} className='cursor-pointer' />
+            <Bookmark
+                size={23}
+                onClick={handleSaveContent}
+                fill={savedId !== 0 ? theme === "light" ? "black" : "white" : "transparent"}
+                className={`cursor-pointer`}
+            />
         </div>
     )
 }
