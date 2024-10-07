@@ -5,19 +5,19 @@ import { Metadata } from "next";
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Messages | Connect Verse",
-  description: "Welcome to the Connect Verse Messages page",
-  keywords: "connect, verse, social media",
-  authors: [{ name: "Connect Verse team" }],
+  title: "Messages | GoGalery",
+  description: "Welcome to the GoGalery Messages page",
+  keywords: "Go, Galery, social media",
+  authors: [{ name: "GoGalery team" }],
   openGraph: {
-    title: "Messages | Connect Verse",
-    description: "Welcome to the Connect Verse Messages page",
-    url: "https://ConnectVerse.com/Messages",
+    title: "Messages | GoGalery",
+    description: "Welcome to the GoGalery Messages page",
+    url: "https://gogalery.com/Messages",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Messages | Connect Verse",
-    description: "Welcome to the Connect Verse Messages page",
+    title: "Messages | GoGalery",
+    description: "Welcome to the GoGalery Messages page",
   },
 };
 

@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /test/
 Allow: /
 
-Sitemap: https://connect-verse-gylspgipc-ilhamranggakurniawans-projects.vercel.app/sitemap.xml
+Sitemap: https://gogalery.my.id/sitemap.xml

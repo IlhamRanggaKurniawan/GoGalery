@@ -9,6 +9,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import CommentSheet from '../comment/CommentSheet'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
+import toast from 'react-hot-toast'
 
 const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: initialLikeId }: { id: number, isLiked: boolean, isSaved: boolean, saveId: number, likeId: number }) => {
     const { user } = useSession()
@@ -50,12 +51,17 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
         }
     }, 300)
 
-    const handleShare = () => {
+    const handleShare = async () => {
         const origin = window.location.origin;
         const path = window.location.pathname;
 
         const link = path === "/" ? `${origin}/explore/fyp?contentId=${id}` : `${origin}/${path}?contentId=${id}`
-        navigator.clipboard.writeText(link)
+        await navigator.clipboard.writeText(link)
+        toast.success(`Content Url has been copied to your clipboard!`, {
+            icon: "📋",
+            duration: 1000,
+        })
+        console.log("tes")
     }
 
     const getAllComments = async () => {

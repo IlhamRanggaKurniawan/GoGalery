@@ -42,7 +42,7 @@ const SendOtpForm = () => {
     <div className="w-full h-screen flex justify-center items-center">
       <form className="w-96 px-4 flex flex-col gap-3" onSubmit={sendOTP}>
         <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-semibold text-center">Connect Verse</h1>
+          <h1 className="text-xl font-semibold text-center">GoGalery</h1>
           <Separator className="my-1" />
         </div>
         <div>

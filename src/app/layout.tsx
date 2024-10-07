@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/newDesign/Navbar";
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,8 @@ export default function RootLayout({
               <Navbar />
             </div>
           )}
+          <Toaster
+            position="top-right" />
         </ThemeProvider>
       </body>
     </html>

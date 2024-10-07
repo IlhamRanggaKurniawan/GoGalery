@@ -18,16 +18,19 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
+            if(contentId === 0) return
             e.preventDefault()
             setText("")
 
             const comment = await apiClient.post(`/v1/comment/${contentId}`, {
                 body: {
-                    contentId,
+                    userId: user?.id,
                     message: text
                 },
                 cache: "no-cache"
             })
+
+            console.log(comment)
 
             comment.User.Username = user?.username
 

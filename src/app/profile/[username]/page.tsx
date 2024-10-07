@@ -11,19 +11,19 @@ import { Metadata } from 'next'
 export const generateMetadata = async ({ params }: { params: { username: string } }): Promise<Metadata> => {
 
   return {
-    title: `${params.username} | Connect Verse`,
-    description: `Check out ${params.username}'s profile on Connect Verse.`,
-    keywords: `connect, verse, social media, ${params.username}`,
-    authors: [{ name: "Connect Verse team" }],
+    title: `${params.username} | GoGalery`,
+    description: `Check out ${params.username}'s profile on GoGalery.`,
+    keywords: `Go, Galery, social media, ${params.username}`,
+    authors: [{ name: "GoGalery team" }],
     openGraph: {
-      title: `${params.username} on Connect Verse`,
-      description: `Check out ${params.username}'s profile on Connect Verse.`,
-      url: `https://ConnectVerse.com/profile/${params.username}`,
+      title: `${params.username} on GoGalery`,
+      description: `Check out ${params.username}'s profile on GoGalery.`,
+      url: `https://gogalery.com/profile/${params.username}`,
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${params.username} on Connect Verse`,
-      description: `Check out ${params.username}'s profile on Connect Verse.`,
+      title: `${params.username} on GoGalery`,
+      description: `Check out ${params.username}'s profile on GoGalery.`,
       images: ['https://example.com/image.jpg'],
     },
   };

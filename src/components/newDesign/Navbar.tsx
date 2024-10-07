@@ -88,7 +88,7 @@ const Navbar = () => {
             <Link href="/" title="Home page" className="hidden w-full sm:flex items-center justify-center">
                 <div className="flex items-center gap-2 p-2">
                     <Rocket size={25} strokeWidth={2.7} />
-                    <span className="hidden lg:inline-block font-bold">Connect Verse</span>
+                    <span className="hidden lg:inline-block font-bold">GoGalery</span>
                 </div>
             </Link>
             <div className='flex w-full px-2 justify-around items-center sm:flex-col gap-2 lg:items-start '>

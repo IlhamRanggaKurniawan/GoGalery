@@ -1,5 +1,5 @@
 {
-  "name": "connect-verse",
+  "name": "gogalery",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,10 +23,11 @@
     "joi": "^17.13.3",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.378.0",
-    "next": "14.2.3",
+    "next": "^14.2.14",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
     "sharp": "^0.33.4",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

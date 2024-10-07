@@ -39,7 +39,7 @@ const SearchUser = () => {
       <div className="overflow-y-auto h-[550px]">
         {users.length > 0 ? (
           users.map((user) => (
-            <Link href={`/${user.Username}`} className="flex items-center cursor-pointer gap-3 w-full" key={user.Username}>
+            <Link href={`/profile/${user.Username}`} className="flex items-center cursor-pointer gap-3 w-full" key={user.Username}>
               <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
               <p>{user.ProfileUrl}</p>
             </Link>
