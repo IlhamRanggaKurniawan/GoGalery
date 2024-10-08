@@ -8,11 +8,13 @@ import React, { FormEvent, useState } from "react";
 import FormField from "./FormField";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { loginSchema } from "@/lib/validation";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const router = useRouter();
 
@@ -20,6 +22,12 @@ const LoginForm = () => {
     try {
       e.preventDefault();
       if (!username || !password) return;
+      const { error } = loginSchema.validate({
+        username,
+        password
+      }, { abortEarly: true })
+
+      if (error) return setError(error.message)
 
       setLoading(true);
 
@@ -88,6 +96,7 @@ const LoginForm = () => {
           >
             Sign In
           </Button>
+          <p className='text-red-500 '>{error}</p>
           <p className="text-sm">
             Don't have an account
             <Link href="/register" className="text-yellow-400">

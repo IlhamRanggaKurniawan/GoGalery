@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import { useRouter } from 'next/navigation'
-import apiClient from '@/lib/apiClient'
+import { registerSchema } from '@/lib/validation'
+
 
 const RegisterForm = () => {
     const [username, setUsername] = useState("")
@@ -14,6 +15,7 @@ const RegisterForm = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
 
     const router = useRouter()
 
@@ -21,7 +23,15 @@ const RegisterForm = () => {
         try {
             e.preventDefault();
             if (!username || !password) return;
+            const { error } = registerSchema.validate({
+                username,
+                email,
+                password,
+                confirmPassword
+            }, { abortEarly: true })
 
+            if (error) return setError(error.message)
+            
             setLoading(true);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user`, {
@@ -46,7 +56,7 @@ const RegisterForm = () => {
             localStorage.setItem("AccessToken", user.AccessToken);
 
         } catch (error) {
-            console.error("Login failed:", error);
+            setError("register failed: " + error);
         } finally {
             setLoading(false);
         }
@@ -79,6 +89,7 @@ const RegisterForm = () => {
                     <Button className="w-full" type="submit" disabled={loading}>
                         Sign Up
                     </Button>
+                    <p className='text-red-500 '>{error}</p>
                     <p className="text-sm">Already have an account? <Link href="/login" className="text-yellow-400">Sign In</Link></p>
                 </div>
             </form>

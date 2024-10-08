@@ -30,10 +30,7 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
                 cache: "no-cache"
             })
 
-            console.log(comment)
-
             comment.User.Username = user?.username
-
 
             setComments(prevComments => [comment, ...prevComments])
 
