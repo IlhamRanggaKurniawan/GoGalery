@@ -61,7 +61,6 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
             icon: "📋",
             duration: 1000,
         })
-        console.log("tes")
     }
 
     const getAllComments = async () => {

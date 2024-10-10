@@ -11,6 +11,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "connect-verse-bucket.s3.ap-southeast-1.amazonaws.com",
         pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "myskibidybucket.s3.ap-southeast-1.amazonaws.com",
+        pathname: "/**"
       }
     ],
   },

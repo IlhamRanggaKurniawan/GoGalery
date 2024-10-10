@@ -1,6 +1,7 @@
 
 import Content from "@/components/newDesign/content/Content";
 import ContentNotFound from "@/components/newDesign/content/ContentNotFound";
+import ContentSkeleton from "@/components/newDesign/content/ContentSkeleton";
 import api from "@/lib/api";
 import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
@@ -51,6 +52,7 @@ const page = async ({ searchParams }: { searchParams: { contentId: number } }) =
           if (queryContent && response.content.ID === queryContent.ID) return
           return <Content caption={response.content.Caption} username={response.content.Uploader.Username} contentUrl={response.content.URL} id={response.content.ID} key={response.content.ID} type={response.content.Type} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId} />
         })}
+        <ContentSkeleton />
 
       </div>
     </div>

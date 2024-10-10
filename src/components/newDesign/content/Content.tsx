@@ -1,4 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+"use client"
+
+import React from 'react';
 import Avatar from '../Avatar';
 import { EllipsisVertical } from 'lucide-react';
 import Image from 'next/image';
@@ -7,10 +9,11 @@ import ContentFooter from './ContentFooter';
 import Link from 'next/link';
 import Video from './Video';
 import getSession from '@/lib/serverHooks/getSession';
+import { useSession } from '@/lib/hooks/useSession';
 
-const Content = async ({ username, profilePicture, contentUrl, caption, id, type, isLiked, isSaved, likeId, saveId }: { username: string, profilePicture: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video", isLiked: boolean, isSaved: boolean, likeId: number, saveId: number }) => {
+const Content = ({ username, profilePicture, contentUrl, caption, id, type, isLiked, isSaved, likeId, saveId }: { username: string, profilePicture: string | null, contentUrl: string, caption: string, id: number, type: "image" | "video", isLiked: boolean, isSaved: boolean, likeId: number, saveId: number }) => {
 
-    const { user } = await getSession()
+    const { user } =  useSession()
 
     return (
         <div className='p-2 w-full flex justify-center'>
@@ -22,13 +25,13 @@ const Content = async ({ username, profilePicture, contentUrl, caption, id, type
                         </div>
                         <h2 className='text-sm'>{username}</h2>
                     </Link>
-                    {(user.role !== "member" || user.username === username) && (
+                    {(user?.role !== "member" || user?.username === username) && (
                         <EllipsisVertical />
                     )}
                 </div>
                 <div className='w-full'>
                     {type === "image" ? (
-                        <Image src={contentUrl} alt={caption} width={1000} height={1000} className='rounded-xl w-full max-h-[600px] object-contain bg-black' />
+                        <Image src={contentUrl} alt={caption} width={1000} height={1000} loading='lazy' className='rounded-xl w-full max-h-[600px] object-contain bg-black' />
                     ) : (
                         <Video contentUrl={contentUrl} />
                     )}
