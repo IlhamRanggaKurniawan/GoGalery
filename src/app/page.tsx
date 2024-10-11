@@ -37,7 +37,9 @@ const page = async () => {
           </div>
         </Header>
       </div>
+      <div className="mt-12">
       <StraightInfiniteScroll />
+      </div>
     </>
   );
 };

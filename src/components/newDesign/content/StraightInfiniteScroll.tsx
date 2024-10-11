@@ -16,8 +16,8 @@ const StraightInfiniteScroll = () => {
 
     const fetchMore = async () => {
         try {
-            const response = await apiClient.get(`/v1/contents/1`, { cache: "no-cache" })
-            console.log(response)
+            if(!user?.id) return
+            const response = await apiClient.get(`/v1/contents/${user?.id}`, { cache: "no-cache" })
             // setLoading(false)
             setContents((prev) => [...prev, ...response]);
             setHasMore(false)
@@ -37,13 +37,17 @@ const StraightInfiniteScroll = () => {
 
     useEffect(() => {
         fetchMore()
-    }, [])
+    }, [user?.id])
+
+    useEffect(() => {
+        console.log(contents)
+    }, [contents])
 
     return (
         <InfiniteScroll
             dataLength={contents.length}
             loader={
-                <div className=" overflow-y-auto flex flex-col items-center sm:mt-0 w-full">
+                <div className=" overflow-y-auto flex flex-col items-center w-full">
                     <ContentSkeleton />
                     <ContentSkeleton />
                     <ContentSkeleton />
@@ -52,7 +56,7 @@ const StraightInfiniteScroll = () => {
             hasMore={hasMore}
             next={() => console.log("tes")}
             scrollThreshold={0.8}
-            className=" overflow-y-auto flex flex-col items-center mt-14 sm:mt-0">
+            className=" overflow-y-auto flex flex-col items-center">
             {contents && contents.map((response) => (
                 <Content
                     key={response.content.ID}
