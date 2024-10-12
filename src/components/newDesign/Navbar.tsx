@@ -50,7 +50,7 @@ const NavbarIcon = ({ icon: Icon, text, path, className, hidden }: { icon: React
 
 const Navbar = () => {
     const { user } = useSession()
-    const [AIConvetsationID, setAIConvetsationID] = useState(null)
+    const [AIConvetsationId, setAIConvetsationId] = useState(null)
     const [notifications, setNotifications] = useState([])
 
     useEffectAfterMount(() => {
@@ -59,7 +59,7 @@ const Navbar = () => {
 
             const AIConversation = await apiClient.get(`/v1/ai/conv/${user.id}`, { cache: "no-cache" })
 
-            if (AIConversation) return setAIConvetsationID(AIConversation.ID)
+            if (AIConversation) return setAIConvetsationId(AIConversation.Id)
 
             const newAIConversation = await apiClient.post(`/v1/ai/conv/${user.id}`, {
                 body: {
@@ -67,7 +67,7 @@ const Navbar = () => {
                 cache: "no-cache"
             })
 
-            if (newAIConversation) return setAIConvetsationID(newAIConversation.ID)
+            if (newAIConversation) return setAIConvetsationId(newAIConversation.Id)
         }
 
         getAIConversation()
@@ -112,7 +112,7 @@ const Navbar = () => {
                 </div>
                 <NavbarIcon path='/messages' icon={MessageCircle} text='Private Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
                 <NavbarIcon path='/group' icon={Users} text='Group Chat' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
-                <NavbarIcon path={`/ai/${AIConvetsationID}`} icon={BotMessageSquare} text='Chat Bot' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
+                <NavbarIcon path={`/ai/${AIConvetsationId}`} icon={BotMessageSquare} text='Chat Bot' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden />
                 <NavbarIcon path={`/profile/${user?.username}`} icon={CircleUser} text='Profile' className='w-full sm:hover:bg-primary sm:hover:text-secondary rounded-lg' hidden={false} />
             </div>
             <MenuDropDown />

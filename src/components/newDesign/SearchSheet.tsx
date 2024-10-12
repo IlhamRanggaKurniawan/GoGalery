@@ -10,12 +10,11 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useDebounce } from "use-debounce";
 import Link from "next/link";
 import apiClient from "@/lib/apiClient";
-import { IUserPreview } from "../../../types/entity";
 import AccountPreview from "./AccountPreview";
 
 const SearchSheet = ({ children, side }: { children: ReactNode; side: "left" | "bottom" | "top" | "right" }) => {
     const [search, setSearch] = useState<string>("");
-    const [users, setUsers] = useState<IUserPreview[]>([]);
+    const [users, setUsers] = useState<TUserPreview[]>([]);
     const [debouncedSearch] = useDebounce(search, 500);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

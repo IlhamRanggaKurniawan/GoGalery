@@ -6,64 +6,61 @@ import Content from './Content';
 import ContentSkeleton from './ContentSkeleton';
 import apiClient from '@/lib/apiClient';
 import { useSession } from '@/lib/hooks/useSession';
-import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount';
+import EachUtils from '@/lib/EachUtils';
 
 const StraightInfiniteScroll = () => {
     const [contents, setContents] = useState<any[]>([])
     const [hasMore, setHasMore] = useState(true)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [nextCursor, setNextCursor] = useState(null)
     const { user } = useSession()
 
     const fetchMore = async () => {
         try {
             if(!user?.id) return
-            const response = await apiClient.get(`/v1/contents/${user?.id}`, { cache: "no-cache" })
-            // setLoading(false)
-            setContents((prev) => [...prev, ...response]);
-            setHasMore(false)
+            setLoading(true)
+            const response = await apiClient.get(`/v1/contents/${user?.id}?limit=10&cursor=${nextCursor}`, { cache: "no-cache" })
+            setContents((prev) => [...prev, ...response.contents]);
+            setNextCursor(response.nextCursor)
 
-            if (response.length === 0) {
+            if (response.nextCursor === null) {
                 setHasMore(false);
             }
 
         } catch (error) {
             console.error(error)
         } finally {
-            // setLoading(false)
+            setLoading(false)
         }
     }
-
-    // fetchMore()
 
     useEffect(() => {
         fetchMore()
     }, [user?.id])
 
-    useEffect(() => {
-        console.log(contents)
-    }, [contents])
 
     return (
         <InfiniteScroll
             dataLength={contents.length}
             loader={
-                <div className=" overflow-y-auto flex flex-col items-center w-full">
+                loading && (
+                  <div className="overflow-y-auto flex flex-col items-center w-full">
                     <ContentSkeleton />
                     <ContentSkeleton />
-                    <ContentSkeleton />
-                </div>
-            }
+                  </div>
+                ) 
+              }
             hasMore={hasMore}
-            next={() => console.log("tes")}
-            scrollThreshold={0.8}
+            next={fetchMore}
+            scrollThreshold={1}
             className=" overflow-y-auto flex flex-col items-center">
-            {contents && contents.map((response) => (
-                <Content
-                    key={response.content.ID}
+                <EachUtils of={contents} render={(response) => (
+                    <Content
+                    key={response.content.Id}
                     caption={response.content.Caption}
                     username={response.content.Uploader.Username}
                     contentUrl={response.content.URL}
-                    id={response.content.ID}
+                    id={response.content.Id}
                     type={response.content.Type}
                     profilePicture={response.content.Uploader.ProfileUrl}
                     isLiked={response.Like.isLiked}
@@ -71,7 +68,7 @@ const StraightInfiniteScroll = () => {
                     likeId={response.Like.likeId}
                     saveId={response.Save.saveId}
                 />
-            ))}
+                )}/>
         </InfiniteScroll>
     )
 }

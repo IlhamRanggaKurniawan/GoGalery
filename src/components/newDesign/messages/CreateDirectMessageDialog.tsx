@@ -11,11 +11,10 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import AccountPreview from '../AccountPreview'
-import { IUserPreview } from '../../../../types/entity'
 
 const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) => {
     const [search, setSearch] = useState("")
-    const [users, setUsers] = useState<IUserPreview[]>([])
+    const [users, setUsers] = useState<TUserPreview[]>([])
     const [debouncedSearch] = useDebounce(search, 300)
 
     const { user: session } = useSession()
@@ -39,7 +38,7 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
             const existingDM = await apiClient.get(`/v1/direct?participant1Id=${session.id}&participant2Id=${id}`, { cache: "no-cache" })
 
             if (existingDM) {
-                return router.push(`/messages/${existingDM.ID}`)
+                return router.push(`/messages/${existingDM.Id}`)
             }
 
             const newDM = await apiClient.post(`/v1/direct`, {
@@ -49,7 +48,7 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
                 cache: "no-cache"
             })
 
-            router.push(`/messages/${newDM.ID}`)
+            router.push(`/messages/${newDM.Id}`)
         } catch (error) {
             console.error(error)
         }
@@ -74,9 +73,9 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
                 <div className="h-[380px] overflow-y-auto">
                     {search.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
                     {users?.map((user) => {
-                        if (user.ID === session?.id) return
+                        if (user.Id === session?.id) return
                         return (
-                            <button onClick={() => handleClick({ id: user.ID })} className="w-full text-left" key={user.ID}>
+                            <button onClick={() => handleClick({ id: user.Id })} className="w-full text-left" key={user.Id}>
                                 <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
                             </button>
                         );

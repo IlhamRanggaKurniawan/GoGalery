@@ -31,7 +31,7 @@ const page = async ({ params }: { params: { id: string } }) => {
     return (
         <div>
             {response ? (
-                <Content username={response.content.Uploader.Username} caption={response.content.Caption} contentUrl={response.content.URL} type={response.content.Type} id={response.content.ID} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId}/>
+                <Content username={response.content.Uploader.Username} caption={response.content.Caption} contentUrl={response.content.URL} type={response.content.Type} id={response.content.Id} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId}/>
             ) : (
                 <ContentNotFound contentId={+params.id} />
             )}

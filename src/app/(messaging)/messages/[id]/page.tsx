@@ -28,7 +28,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   const directMessage = await api.get(`/v1/direct/${params.id}`, { cache: "no-cache" })
 
-  const otherParticipantUsername = user.id === directMessage.Participant1ID ? directMessage.Participant2.Username : directMessage.Participant1.Username
+  const otherParticipantUsername = user.id === directMessage.Participant1Id ? directMessage.Participant2.Username : directMessage.Participant1.Username
 
 
   return (

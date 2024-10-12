@@ -6,12 +6,11 @@ import { Separator } from "../ui/separator";
 import Link from "next/link";
 import apiClient from "@/lib/apiClient";
 import { Input } from "../ui/input";
-import { IUserPreview } from "../../../types/entity";
 import AccountPreview from "./AccountPreview";
 
 const SearchUser = () => {
   const [search, setSearch] = useState<string>("");
-  const [users, setUsers] = useState<IUserPreview[]>([]);
+  const [users, setUsers] = useState<TUserPreview[]>([]);
   const [debouncedSearch] = useDebounce(search, 500);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

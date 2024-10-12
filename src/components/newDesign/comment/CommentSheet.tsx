@@ -42,7 +42,7 @@ const CommentSheet = ({ children, contentId, comments, setComments }: { children
                 </SheetHeader>
                 <div className='flex flex-col w-full h-full overflow-y-auto p-2 pb-28'>
                     {comments && comments.map((comment) => (
-                        <Comment commentId={comment.ID} commentSender={comment.User.Username} createdAt={comment.CreatedAt} profileUrl={comment.User.ProfileUrl} text={comment.Comment} uploader={comment.Content.Uploader.Username} key={comment.ID} />
+                        <Comment commentId={comment.Id} commentSender={comment.User.Username} createdAt={comment.CreatedAt} profileUrl={comment.User.ProfileUrl} text={comment.Comment} uploader={comment.Content.Uploader.Username} key={comment.Id} />
                     ))}
                 </div>
                 <form className="w-full max-w-96 h-14 border-y-2 " onSubmit={handleSubmit}>

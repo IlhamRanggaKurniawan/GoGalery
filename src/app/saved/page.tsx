@@ -39,8 +39,8 @@ const page = async () => {
       <div className='flex justify-center mt-14'>
         <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
           {savedContents && savedContents.map((save: any) => (
-            <Link href={`/saved/${save.Content.ID}`} key={save.Content.ID}>
-              <ContentPreview contentUrl={save.Content.URL} type={save.Content.Type} key={save.Content.ID} />
+            <Link href={`/saved/${save.Content.Id}`} key={save.Content.Id}>
+              <ContentPreview contentUrl={save.Content.URL} type={save.Content.Type} key={save.Content.Id} />
             </Link>
           ))}
         </div>

@@ -88,11 +88,11 @@ const InviteMembersDialog = ({ groupId, children }: { groupId: number, children:
                 <Input type="text" placeholder="Add members" onChange={(e) => setSearch(e.target.value)} />
                 <div className="h-96 overflow-y-auto">
                     {users.map((user) => {
-                        if (groupMembers.some((member) => member.ID === user.ID)) return 
-                        const isSelected = selectedUsers.some((selectedUser) => selectedUser.ID === user.ID);
+                        if (groupMembers.some((member) => member.Id === user.Id)) return 
+                        const isSelected = selectedUsers.some((selectedUser) => selectedUser.Id === user.Id);
 
                         return (
-                            <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.ID} onClick={() => handleSelectUser(user)}>
+                            <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.Id} onClick={() => handleSelectUser(user)}>
                                 <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
                             </button>
                         );

@@ -41,7 +41,7 @@ const page = async ({ searchParams }: { searchParams: { contentId: number } }) =
         )}
 
         {queryContent && (
-          <Content caption={queryContent.content.Caption} username={queryContent.content.Uploader.Username} contentUrl={queryContent.content.URL} id={queryContent.content.ID} key={queryContent.content.ID} type={queryContent.content.Type} profilePicture={queryContent.content.Uploader.ProfileUrl} isLiked={queryContent.Like.isLiked} isSaved={queryContent.Save.isSaved} likeId={queryContent.Like.likeId} saveId={queryContent.Save.saveId} />
+          <Content caption={queryContent.content.Caption} username={queryContent.content.Uploader.Username} contentUrl={queryContent.content.URL} id={queryContent.content.Id} key={queryContent.content.Id} type={queryContent.content.Type} profilePicture={queryContent.content.Uploader.ProfileUrl} isLiked={queryContent.Like.isLiked} isSaved={queryContent.Save.isSaved} likeId={queryContent.Like.likeId} saveId={queryContent.Save.saveId} />
         )}
         <StraightInfiniteScroll />
       </div>

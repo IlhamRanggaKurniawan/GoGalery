@@ -21,7 +21,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
 
       const checkFollowing = await apiClient.get(`/v1/follow?followerId=${user.id}&followingId=${userId}`, { cache: "no-cache" })
 
-      if (checkFollowing) setFollowId(checkFollowing.ID)
+      if (checkFollowing) setFollowId(checkFollowing.Id)
     }
 
     checkDMAndFollow()
@@ -43,7 +43,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
             },
             cache: "no-cache"
           })
-          setFollowId(follow.ID)
+          setFollowId(follow.Id)
         }
       } catch (error) {
         console.error(error)
@@ -57,7 +57,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
       const directMessage = await apiClient.get(`/v1/direct?participant1Id=${user.id}&participant2Id=${userId}`, { cache: "no-cache" })
 
       if (directMessage) {
-        return router.push(`/messages/${directMessage.ID}`)
+        return router.push(`/messages/${directMessage.Id}`)
       }
 
       const newDM = await apiClient.post(`/v1/direct`, {
@@ -68,7 +68,7 @@ const ProfileButton = ({ userId }: { userId: number }) => {
         cache: "force-cache"
       })
 
-      router.push(`/messages/${newDM.ID}`)
+      router.push(`/messages/${newDM.Id}`)
     } catch (error) {
       console.error(error)
     }

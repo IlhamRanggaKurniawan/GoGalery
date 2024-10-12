@@ -9,7 +9,6 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { use, useState } from 'react'
 import { useDebounce } from 'use-debounce';
-import { IUserPreview } from '../../../../types/entity';
 import AccountPreview from '../AccountPreview';
 
 const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
@@ -17,8 +16,8 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
     const [groupName, setGroupName] = useState("")
     const [search, setSearch] = useState("")
     const [debouncedSearch] = useDebounce(search, 300)
-    const [users, setUsers] = useState<IUserPreview[]>([])
-    const [selectedUsers, setSelectedUsers] = useState<IUserPreview[]>([])
+    const [users, setUsers] = useState<TUserPreview[]>([])
+    const [selectedUsers, setSelectedUsers] = useState<TUserPreview[]>([])
 
     const router = useRouter();
     const { user: session } = useSession()
@@ -37,9 +36,9 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    const handleSelectUser = ({ user }: { user: IUserPreview }) => {
-        if (selectedUsers.find((prev) => prev.ID === user.ID)) {
-            return setSelectedUsers(selectedUsers.filter((prev) => prev.ID !== user.ID))
+    const handleSelectUser = ({ user }: { user: TUserPreview }) => {
+        if (selectedUsers.find((prev) => prev.Id === user.Id)) {
+            return setSelectedUsers(selectedUsers.filter((prev) => prev.Id !== user.Id))
         }
 
         return setSelectedUsers((prev) => [...prev, user])
@@ -52,12 +51,12 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             const group = await apiClient.post(`/v1/group`, {
                 body: {
                     name: groupName,
-                    members: [...selectedUsers, { ID: session?.id }]
+                    members: [...selectedUsers, { Id: session?.id }]
                 },
                 cache: "no-cache"
             })
 
-            router.push(`/group/${group.ID}`)
+            router.push(`/group/${group.Id}`)
         } catch (error) {
             console.error(error)
         }
@@ -82,9 +81,9 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
                 <Input type="text" placeholder="Add members" onChange={(e) => setSearch(e.target.value)} />
                 <div className="h-96">
                     {users.map((user) => {
-                        const isSelected = selectedUsers.some((selectedUser) => selectedUser.ID === user.ID);
+                        const isSelected = selectedUsers.some((selectedUser) => selectedUser.Id === user.Id);
                         return (
-                            <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.ID} onClick={() => handleSelectUser({ user })}>
+                            <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.Id} onClick={() => handleSelectUser({ user })}>
                                 <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
                             </button>
                         );

@@ -22,7 +22,7 @@ const useWebSocket = (url: string, setMessages: React.Dispatch<React.SetStateAct
 
             setMessages((prevMessages: any) => [...prevMessages, data]);
 
-            if (data.SenderID !== user?.id) {
+            if (data.SenderId !== user?.id) {
                 sound.play()
             }
         }

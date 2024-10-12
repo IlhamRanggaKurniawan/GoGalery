@@ -30,7 +30,7 @@ const page = async () => {
   return (
     <div>
       {groups && groups.map((group: any) => (
-        <Link href={`/group/${group.ID}`} key={group.ID}>
+        <Link href={`/group/${group.Id}`} key={group.Id}>
           <Contact username={group.Name} profilePicture={group.PictureUrl} />
         </Link>
       )
