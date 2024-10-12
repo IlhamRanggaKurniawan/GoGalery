@@ -1,7 +1,5 @@
-import Content from "@/components/newDesign/content/Content";
+import StraightInfiniteScroll from "@/components/newDesign/content/StraightInfiniteScroll";
 import Header from "@/components/newDesign/Header";
-import api from "@/lib/api";
-import getSession from "@/lib/serverHooks/getSession";
 import { Bell } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -27,10 +25,6 @@ export const metadata: Metadata = {
 
 const page = async () => {
 
-  const { user } = await getSession()
-
-  const responses = await api.get(`/v1/contents/${user.id}`, { cache: "no-cache" })
-
   return (
     <>
       <div className="sm:hidden">
@@ -43,10 +37,8 @@ const page = async () => {
           </div>
         </Header>
       </div>
-      <div className=" overflow-y-auto flex flex-col items-center mt-14 sm:mt-0">
-        {responses && responses.map((response: any) => (
-          <Content caption={response.content.Caption} username={response.content.Uploader.Username} contentUrl={response.content.URL} id={response.content.ID} key={response.content.ID} type={response.content.Type} profilePicture={response.content.Uploader.ProfileUrl} isLiked={response.Like.isLiked} isSaved={response.Save.isSaved} likeId={response.Like.likeId} saveId={response.Save.saveId} />
-        ))}
+      <div className="mt-12 sm:mt-0">
+      <StraightInfiniteScroll />
       </div>
     </>
   );

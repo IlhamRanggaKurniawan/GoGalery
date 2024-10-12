@@ -8,7 +8,7 @@ import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount'
 import apiClient from '@/lib/apiClient'
 
 interface MessageType {
-    ID: number;
+    Id: number;
     Message: string;
     Response?: string;
     CreatedAt: Date;
@@ -52,7 +52,7 @@ const AIConversation = ({ conversationId }: { conversationId: number }) => {
             setInput("")
 
             const newMessage: MessageType = {
-                ID: (messages.length + 1),
+                Id: (messages.length + 1),
                 Message: input,
                 CreatedAt: new Date(),
                 UpdatedAt: new Date()
@@ -107,7 +107,7 @@ const AIConversation = ({ conversationId }: { conversationId: number }) => {
         <>
             <div className=" overflow-y-auto mt-14">
                 {messages && messages.map((message, index) => (
-                    <div key={message.ID} ref={index === messages.length - 1 ? lastMessageRef : null}>
+                    <div key={message.Id} ref={index === messages.length - 1 ? lastMessageRef : null}>
                         {(user && message.Message) && (
                             <Message message={message.Message} senderId={user.id} />
                         )}

@@ -63,7 +63,7 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
             </Header>
             <div className='w-full h-full overflow-y-scroll mt-14 px-2'>
                 {comments && comments.map((comment) => (
-                    <Comment key={comment.ID} commentId={comment.ID} commentSender={comment.User.Username} profileUrl={comment.User.ProfileUrl} text={comment.Comment} createdAt={comment.CreatedAt} uploader={comment.Content.Uploader.Username} />
+                    <Comment key={comment.Id} commentId={comment.Id} commentSender={comment.User.Username} profileUrl={comment.User.ProfileUrl} text={comment.Comment} createdAt={comment.CreatedAt} uploader={comment.Content.Uploader.Username} />
                 ))}
             </div>
             <form className="w-full h-14 border-t-2 fixed bottom-0" onSubmit={handleSubmit}>

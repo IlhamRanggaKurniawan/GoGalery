@@ -10,11 +10,10 @@ import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger } from 
 import { Separator } from "@/components/ui/separator";
 import Avatar from "../Avatar";
 import { Button } from "@/components/ui/button";
-import { IUserPreview } from "../../../../types/entity";
 import AccountPreview from "../AccountPreview";
 
 const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.ReactNode; id: number; groupProfile: string }) => {
-  const [users, setUsers] = useState<IUserPreview[]>([]);
+  const [users, setUsers] = useState<TUserPreview[]>([]);
   const [name, setName] = useState("");
 
   const { user } = useSession();
@@ -77,7 +76,7 @@ const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.React
         </div>
         <div className="max-h-96">
           {users?.map((user) => (
-            <Link href={`/${user.Username}`} className="w-full text-left rounded-md" key={user.ID}>
+            <Link href={`/${user.Username}`} className="w-full text-left rounded-md" key={user.Id}>
               <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
             </Link>
           ))}

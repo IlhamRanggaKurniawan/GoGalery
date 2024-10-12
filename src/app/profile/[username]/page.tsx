@@ -58,13 +58,13 @@ const page = async ({ params }: { params: { username: string } }) => {
           <span>following</span>
         </div>
       </div>
-      {user.ID !== session.id && (
-        <ProfileButton userId={user.ID} />
+      {user.Id !== session.id && (
+        <ProfileButton userId={user.Id} />
       )}
       <div className='flex justify-center my-4'>
         <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
           {user.Contents && user.Contents.map((content: any) => (
-            <Link href={`/profile/${params.username}/${content.ID}`} key={content.ID}>
+            <Link href={`/profile/${params.username}/${content.Id}`} key={content.Id}>
               <ContentPreview contentUrl={content.URL} type={content.Type} />
             </Link>
           ))}

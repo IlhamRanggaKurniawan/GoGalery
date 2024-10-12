@@ -31,10 +31,10 @@ const page = async () => {
   return (
     <div>
       {contacts && contacts.map((contact: any) => {
-        const otherParticipant = user.id === contact.Participant1ID ? contact.Participant2 : contact.Participant1
+        const otherParticipant = user.id === contact.Participant1Id ? contact.Participant2 : contact.Participant1
 
         return (
-          <Link href={`/messages/${contact.ID}`} key={contact.ID}>
+          <Link href={`/messages/${contact.Id}`} key={contact.Id}>
             <Contact username={otherParticipant.Username} profilePicture={otherParticipant.ProfileUrl} />
           </Link>
         )

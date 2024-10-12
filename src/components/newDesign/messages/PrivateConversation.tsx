@@ -34,8 +34,8 @@ const PrivateConversation = ({ conversationId, prevMessage }: { conversationId: 
     <>
       <div className=" overflow-y-auto">
         {messages && messages.map((message, i) => (
-          <div key={message.ID} ref={i === messages.length - 1 ? lastMessageRef : null}>
-            <Message message={message.Message} senderId={message.SenderID} key={message.ID} />
+          <div key={message.Id} ref={i === messages.length - 1 ? lastMessageRef : null}>
+            <Message message={message.Message} senderId={message.SenderId} key={message.Id} />
           </div>
         ))}
       </div >

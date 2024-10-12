@@ -28,7 +28,7 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
                 cache: "no-cache"
             })
 
-            setLikeId(newLike.ID)
+            setLikeId(newLike.Id)
         } else {
             await apiClient.delete(`/v1/like/${likeId}`)
             setLikeId(0)
@@ -44,7 +44,7 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
                 cache: "no-cache"
             })
 
-            setSavedId(newSave.ID)
+            setSavedId(newSave.Id)
         } else {
             await apiClient.delete(`/v1/save/${savedId}`)
             setSavedId(0)
@@ -61,7 +61,6 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
             icon: "📋",
             duration: 1000,
         })
-        console.log("tes")
     }
 
     const getAllComments = async () => {
