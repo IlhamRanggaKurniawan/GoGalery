@@ -52,7 +52,7 @@ const StraightInfiniteScroll = () => {
               }
             hasMore={hasMore}
             next={fetchMore}
-            scrollThreshold={1}
+            scrollThreshold={0.8}
             className=" overflow-y-auto flex flex-col items-center">
                 <EachUtils of={contents} render={(response) => (
                     <Content

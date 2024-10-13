@@ -1,5 +1,6 @@
 import Contact from "@/components/newDesign/messages/Contact"
 import api from "@/lib/api"
+import EachUtils from "@/lib/EachUtils";
 import getSession from "@/lib/serverHooks/getSession"
 import { Metadata } from "next";
 import Link from "next/link"
@@ -28,14 +29,11 @@ const page = async () => {
   const groups = await api.get(`/v1/groups/${user?.id}`, { cache: "no-cache" })
 
   return (
-    <div>
-      {groups && groups.map((group: any) => (
-        <Link href={`/group/${group.Id}`} key={group.Id}>
-          <Contact username={group.Name} profilePicture={group.PictureUrl} />
-        </Link>
-      )
-      )}
-    </div>
+    <EachUtils of={groups} render={(group: any) => (
+      <Link href={`/group/${group.Id}`} key={group.Id}>
+        <Contact username={group.Name} profilePicture={group.PictureUrl} />
+      </Link>
+    )}/>
   )
 }
 

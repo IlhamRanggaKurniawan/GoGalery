@@ -1,5 +1,6 @@
 import Contact from "@/components/newDesign/messages/Contact";
 import api from "@/lib/api";
+import EachUtils from "@/lib/EachUtils";
 import getSession from "@/lib/serverHooks/getSession";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -29,18 +30,15 @@ const page = async () => {
   const contacts = await api.get(`/v1/directs/${user?.id}`, { cache: "no-cache" })
 
   return (
-    <div>
-      {contacts && contacts.map((contact: any) => {
-        const otherParticipant = user.id === contact.Participant1Id ? contact.Participant2 : contact.Participant1
+    <EachUtils of={contacts} render={(contact: any) => {
+      const otherParticipant = user.id === contact.Participant1Id ? contact.Participant2 : contact.Participant1
 
-        return (
-          <Link href={`/messages/${contact.Id}`} key={contact.Id}>
-            <Contact username={otherParticipant.Username} profilePicture={otherParticipant.ProfileUrl} />
-          </Link>
-        )
-      })}
-
-    </div>
+      return (
+        <Link href={`/messages/${contact.Id}`} key={contact.Id}>
+          <Contact username={otherParticipant.Username} profilePicture={otherParticipant.ProfileUrl} />
+        </Link>
+      )
+    }} />
   );
 };
 

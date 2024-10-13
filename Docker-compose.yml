@@ -9,6 +9,7 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV}
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_wS_URL=${NEXT_PUBLIC_wS_URL}
     
   # nginx:
   #   image: nginx:latest
@@ -19,7 +20,7 @@ services:
   #   depends_on:
   #     - app
   #   volumes:
-  #     - ./nginx.dev.conf:/etc/nginx/nginx.conf
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
   #     - /etc/letsencrypt:/etc/letsencrypt
   #     - /var/www/certbot:/var/www/certbot
   #   networks:

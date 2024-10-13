@@ -6,7 +6,7 @@ const Avatar = ({ profilePicture, username }: { profilePicture?: string | null, 
 
     return (
         <AvatarContainer className="h-full w-full">
-            <AvatarImage src={profilePicture ? profilePicture : `/profile-picture.jpg`} alt="@shadcn" />
+            <AvatarImage src={profilePicture ? profilePicture : `/profile-picture.jpg`} alt={username} />
             <AvatarFallback>{username}</AvatarFallback>
         </AvatarContainer>
     )

@@ -43,8 +43,6 @@ const LoginForm = () => {
         }
       );
 
-      console.log("tes")
-
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText);
       }
@@ -55,7 +53,7 @@ const LoginForm = () => {
 
       localStorage.setItem("AccessToken", user.AccessToken);
     } catch (error) {
-      console.error("Login failed:", error);
+      setError("login failed: " + error);
     } finally {
       setLoading(false);
     }
