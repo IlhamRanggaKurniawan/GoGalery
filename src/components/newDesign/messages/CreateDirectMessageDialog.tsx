@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import AccountPreview from '../AccountPreview'
+import EachUtils from '@/lib/EachUtils'
 
 const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) => {
     const [search, setSearch] = useState("")
@@ -22,7 +23,7 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
 
     const findUsers = async () => {
         try {
-            if(!search) return
+            if (!search) return
             const users = await apiClient.get(`/v1/users/${search}`, { cache: "no-cache" })
 
             setUsers(users)
@@ -72,14 +73,16 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
                 <Input type="text" placeholder="Search.." onChange={(e) => setSearch(e.target.value)} />
                 <div className="h-[380px] overflow-y-auto">
                     {search.length === 0 && users.length === 0 && <div className="text-center">Search for user</div>}
-                    {users?.map((user) => {
-                        if (user.Id === session?.id) return
-                        return (
-                            <button onClick={() => handleClick({ id: user.Id })} className="w-full text-left" key={user.Id}>
-                                <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
-                            </button>
-                        );
-                    })}
+                    <EachUtils
+                        of={users}
+                        render={(user) => {
+                            if (user.Id === session?.id) return
+                            return (
+                                <button onClick={() => handleClick({ id: user.Id })} className="w-full text-left" key={user.Id}>
+                                    <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
+                                </button>
+                            );
+                        }}/>
                 </div>
             </DialogContent>
         </Dialog>

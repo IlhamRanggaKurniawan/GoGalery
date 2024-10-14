@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { createSelectors } from "../createSelectors";
 
-interface IAccountRecoveryStore {
+type TAccountRecoveryStore = {
   email: string;
   setEmail: (email: string) => void;
 }
 
 export const useAccountRecoveryStore = createSelectors(
-  create<IAccountRecoveryStore>()((set, get) => ({
+  create<TAccountRecoveryStore>()((set, get) => ({
     email: "",
     setEmail: (email) => {
       set({ email });

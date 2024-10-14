@@ -5,6 +5,7 @@ import Notification from './Notification';
 import apiClient from '@/lib/apiClient';
 import { useSession } from '@/lib/hooks/useSession';
 import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount';
+import EachUtils from '@/lib/EachUtils';
 
 const NotificationInfiniteScroll = () => {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -30,9 +31,11 @@ const NotificationInfiniteScroll = () => {
 
   return (
     <div className='w-full overflow-y-auto mt-12 flex flex-col gap-1'>
-      {notifications && notifications.map((notification) => (
-        <Notification username={notification.Trigger.Username} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} createdAt={notification.CreatedAt} key={notification.Id} />
-      ))}
+      <EachUtils
+          of={notifications}
+          render={(notification) => (
+            <Notification username={notification.Trigger.Username} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} createdAt={notification.CreatedAt} key={notification.Id} />
+          )} />
     </div>
   )
 }

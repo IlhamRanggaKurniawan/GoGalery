@@ -5,6 +5,7 @@ import Message from './Message'
 import MessageInput from './MessageInput'
 import useWebSocket from '@/lib/hooks/useWebSocket'
 import { useSession } from '@/lib/hooks/useSession'
+import EachUtils from '@/lib/EachUtils'
 
 const GroupConversation = ({ conversationId, prevMessage }: { conversationId: number, prevMessage: any[] }) => {
   const [input, setInput] = useState("")
@@ -33,11 +34,13 @@ const GroupConversation = ({ conversationId, prevMessage }: { conversationId: nu
   return (
     <>
       <div className=" overflow-y-auto">
-        {messages && messages.map((message, i) => (
-          <div key={message.Id} ref={i === messages.length - 1 ? lastMessageRef : null}>
-            <Message message={message.Message} senderId={message.SenderId} key={message.Id} />
-          </div>
-        ))}
+        <EachUtils
+          of={messages}
+          render={(message, i) => (
+            <div key={message.Id} ref={i === messages.length - 1 ? lastMessageRef : null}>
+              <Message message={message.Message} senderId={message.SenderId} key={message.Id} />
+            </div>
+          )} />
       </div >
       <MessageInput value={input} handleChange={setInput} fn={handleSubmit} />
     </>

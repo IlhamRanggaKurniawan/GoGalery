@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import apiClient from '@/lib/apiClient';
@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import React, { use, useState } from 'react'
 import { useDebounce } from 'use-debounce';
 import AccountPreview from '../AccountPreview';
+import EachUtils from '@/lib/EachUtils';
 
 const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
 
@@ -71,7 +72,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
             <DialogTrigger>{children}</DialogTrigger>
             <DialogContent>
                 <div className="flex justify-between">
-                    <DialogHeader className=" font-medium">Create a group</DialogHeader>
+                    <DialogTitle className=" font-medium">Create a group</DialogTitle>
                     <DialogClose className="flex flex-col gap-2">
                         <X />
                     </DialogClose>
@@ -80,14 +81,17 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
                 <Separator className=" bg-black" />
                 <Input type="text" placeholder="Add members" onChange={(e) => setSearch(e.target.value)} />
                 <div className="h-96">
-                    {users.map((user) => {
-                        const isSelected = selectedUsers.some((selectedUser) => selectedUser.Id === user.Id);
-                        return (
-                            <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.Id} onClick={() => handleSelectUser({ user })}>
-                                <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
-                            </button>
-                        );
-                    })}
+                    <EachUtils
+                        of={users}
+                        render={(user) => {
+                            const isSelected = selectedUsers.some((selectedUser) => selectedUser.Id === user.Id);
+                            return (
+                                <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.Id} onClick={() => handleSelectUser({ user })}>
+                                    <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
+                                </button>
+                            );
+                        }}
+                    />
                 </div>
                 {selectedUsers.length === 0 ? (
                     <Button className="w-full" variant={"secondary"} disabled>

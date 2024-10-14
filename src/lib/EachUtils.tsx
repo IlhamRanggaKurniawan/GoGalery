@@ -6,7 +6,7 @@ interface EachUtilsProps<T> {
 }
 
 const EachUtils = <T,>({ of, render }: EachUtilsProps<T>) => {
-    return of.map((item, index) => render(item, index))
+    return of && of.map((item, index) => render(item, index))
 }
 
 export default EachUtils

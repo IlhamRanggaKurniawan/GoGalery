@@ -7,6 +7,7 @@ import getSession from '@/lib/serverHooks/getSession'
 import React from 'react'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import EachUtils from '@/lib/EachUtils'
 
 export const generateMetadata = async ({ params }: { params: { username: string } }): Promise<Metadata> => {
 
@@ -63,11 +64,14 @@ const page = async ({ params }: { params: { username: string } }) => {
       )}
       <div className='flex justify-center my-4'>
         <div className="grid grid-cols-3 m-1 gap-[3px] mt-2">
-          {user.Contents && user.Contents.map((content: any) => (
-            <Link href={`/profile/${params.username}/${content.Id}`} key={content.Id}>
-              <ContentPreview contentUrl={content.URL} type={content.Type} />
-            </Link>
-          ))}
+          <EachUtils 
+            of={user.Contents}
+            render={(content: any) => (
+              <Link href={`/profile/${params.username}/${content.Id}`} key={content.Id}>
+                <ContentPreview contentUrl={content.URL} type={content.Type} />
+              </Link>
+            )}
+          />
         </div>
       </div>
       {user && !user.Contents.length && (

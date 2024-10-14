@@ -31,7 +31,7 @@ const RegisterForm = () => {
             }, { abortEarly: true })
 
             if (error) return setError(error.message)
-            
+
             setLoading(true);
 
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user`, {
@@ -45,15 +45,15 @@ const RegisterForm = () => {
                 })
             })
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
+            const responseJSON = await response.json()
 
-            const user = await response.json()
+            if (!response.ok) {
+                throw new Error(responseJSON.error);
+            }
 
             router.push("/")
 
-            localStorage.setItem("AccessToken", user.AccessToken);
+            localStorage.setItem("AccessToken", responseJSON.AccessToken);
 
         } catch (error) {
             setError("register failed: " + error);

@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SheetClose } from '@/components/ui/sheet'
 import AccountPreview from '../AccountPreview'
+import EachUtils from '@/lib/EachUtils'
 
 const InviteMembersDialog = ({ groupId, children }: { groupId: number, children: React.ReactNode }) => {
     const [users, setUsers] = useState<any[]>([])
@@ -87,16 +88,18 @@ const InviteMembersDialog = ({ groupId, children }: { groupId: number, children:
                 <Separator className=" bg-black" />
                 <Input type="text" placeholder="Add members" onChange={(e) => setSearch(e.target.value)} />
                 <div className="h-96 overflow-y-auto">
-                    {users.map((user) => {
-                        if (groupMembers.some((member) => member.Id === user.Id)) return 
-                        const isSelected = selectedUsers.some((selectedUser) => selectedUser.Id === user.Id);
+                    <EachUtils
+                        of={users}
+                        render={(user) => {
+                            if (groupMembers.some((member) => member.Id === user.Id)) return
+                            const isSelected = selectedUsers.some((selectedUser) => selectedUser.Id === user.Id);
 
-                        return (
-                            <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.Id} onClick={() => handleSelectUser(user)}>
-                                <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
-                            </button>
-                        );
-                    })}
+                            return (
+                                <button className={`w-full text-left rounded-md ${isSelected ? "bg-gray-200" : ""}`} key={user.Id} onClick={() => handleSelectUser(user)}>
+                                    <AccountPreview username={user.Username} profilePicture={user.ProfileUrl} />
+                                </button>
+                            );
+                        }} />
                 </div>
                 {selectedUsers.length === 0 ? (
                     <Button className="w-full" variant={"secondary"} disabled>

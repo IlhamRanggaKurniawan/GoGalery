@@ -9,6 +9,7 @@ import { X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useSession } from '@/lib/hooks/useSession'
 import { useRouter } from 'next/navigation'
+import EachUtils from '@/lib/EachUtils'
 
 const CommentPage = ({ contentId }: { contentId: number }) => {
     const [comments, setComments] = useState<any[]>([])
@@ -18,7 +19,7 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
-            if(contentId === 0) return
+            if (contentId === 0) return
             e.preventDefault()
             setText("")
 
@@ -62,9 +63,11 @@ const CommentPage = ({ contentId }: { contentId: number }) => {
                 </div>
             </Header>
             <div className='w-full h-full overflow-y-scroll mt-14 px-2'>
-                {comments && comments.map((comment) => (
-                    <Comment key={comment.Id} commentId={comment.Id} commentSender={comment.User.Username} profileUrl={comment.User.ProfileUrl} text={comment.Comment} createdAt={comment.CreatedAt} uploader={comment.Content.Uploader.Username} />
-                ))}
+                <EachUtils
+                    of={comments}
+                    render={(comment) => (
+                        <Comment key={comment.Id} commentId={comment.Id} commentSender={comment.User.Username} profileUrl={comment.User.ProfileUrl} text={comment.Comment} createdAt={comment.CreatedAt} uploader={comment.Content.Uploader.Username} />
+                    )}/>
             </div>
             <form className="w-full h-14 border-t-2 fixed bottom-0" onSubmit={handleSubmit}>
                 <Input required placeholder="Send a comment" className="border-0 rounded-none h-14 fixed bottom-0" value={text} onChange={(e) => setText(e.target.value)} />

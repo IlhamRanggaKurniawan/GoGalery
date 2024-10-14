@@ -3,6 +3,7 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import { X } from 'lucide-react';
 import React, { ReactNode } from 'react'
 import Notification from './Notification';
+import EachUtils from '@/lib/EachUtils';
 
 const NotificationSheet = ({ children, notifications }: { children: ReactNode; notifications: any[] }) => {
     return (
@@ -21,10 +22,12 @@ const NotificationSheet = ({ children, notifications }: { children: ReactNode; n
                 </div>
                 <Separator className="mb-1" />
                 <div className='w-full h-full overflow-y-auto flex flex-col gap-1 pb-20'>
-                    {notifications.map((notification) => (
-                        <Notification key={notification.Id} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} username={notification.Trigger.Username} createdAt={notification.CreatedAt} />
-                    ))}
-
+                    <EachUtils
+                        of={notifications}
+                        render={(notification) => (
+                            <Notification username={notification.Trigger.Username} content={notification.Content} profilePicture={notification.Trigger.ProfileUrl} createdAt={notification.CreatedAt} key={notification.Id} />
+                        )}
+                    />
                 </div>
             </SheetContent>
         </Sheet>

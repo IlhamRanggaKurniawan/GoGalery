@@ -43,17 +43,17 @@ const LoginForm = () => {
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
+      const responseJSON = await response.json()
 
-      const user = await response.json();
+      if (!response.ok) {
+        throw new Error(responseJSON.error);
+      }
 
       router.push("/");
 
-      localStorage.setItem("AccessToken", user.AccessToken);
+      localStorage.setItem("AccessToken", responseJSON.AccessToken);
     } catch (error) {
-      setError("login failed: " + error);
+      setError(`login failed : ${error}`);
     } finally {
       setLoading(false);
     }

@@ -6,6 +6,7 @@ import Message from './messages/Message'
 import { useSession } from '@/lib/hooks/useSession'
 import useEffectAfterMount from '@/lib/hooks/useEffectAfterMount'
 import apiClient from '@/lib/apiClient'
+import EachUtils from '@/lib/EachUtils'
 
 interface MessageType {
     Id: number;
@@ -106,16 +107,19 @@ const AIConversation = ({ conversationId }: { conversationId: number }) => {
     return (
         <>
             <div className=" overflow-y-auto mt-14">
-                {messages && messages.map((message, index) => (
-                    <div key={message.Id} ref={index === messages.length - 1 ? lastMessageRef : null}>
-                        {(user && message.Message) && (
-                            <Message message={message.Message} senderId={user.id} />
-                        )}
-                        {message.Response && (
-                            <Message message={message.Response} senderId={0} />
-                        )}
-                    </div>
-                ))}
+                <EachUtils
+                    of={messages}
+                    render={(message, index) => (
+                        <div key={message.Id} ref={index === messages.length - 1 ? lastMessageRef : null}>
+                            {(user && message.Message) && (
+                                <Message message={message.Message} senderId={user.id} />
+                            )}
+                            {message.Response && (
+                                <Message message={message.Response} senderId={0} />
+                            )}
+                        </div>
+                    )}
+                />
             </div>
             <MessageInput value={input} handleChange={setInput} fn={submitData} />
         </>

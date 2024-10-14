@@ -2,11 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeOff, Play } from "lucide-react";
+import { useContentSoundStore } from "@/lib/store/ContentSoundStore";
 
 const Video = ({ contentUrl }: { contentUrl: string }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [isMuted, setIsMuted] = useState(true);
-    const [isPaused, setIsPaused] = useState(true); // State untuk pause/play
+    const { isSoundOn, toggleSound } = useContentSoundStore();
+    const [isPaused, setIsPaused] = useState(true);
 
     const handleContextMenu = (event: React.MouseEvent) => {
         event.preventDefault();
@@ -15,8 +16,8 @@ const Video = ({ contentUrl }: { contentUrl: string }) => {
     const toggleMute = () => {
         const videoElement = videoRef.current;
         if (videoElement) {
-            videoElement.muted = !isMuted;
-            setIsMuted(!isMuted);
+            videoElement.muted = isSoundOn;
+            toggleSound();
         }
     };
 
@@ -35,9 +36,8 @@ const Video = ({ contentUrl }: { contentUrl: string }) => {
         const videoElement = videoRef.current;
 
         if (videoElement) {
-            videoElement.muted = isMuted;
+            videoElement.muted = !isSoundOn;
 
-            // Event listeners untuk play dan pause
             const handlePlay = () => setIsPaused(false);
             const handlePause = () => setIsPaused(true);
 
@@ -82,7 +82,7 @@ const Video = ({ contentUrl }: { contentUrl: string }) => {
                 videoElement.removeEventListener("pause", handlePause);
             };
         }
-    }, [contentUrl, isMuted]);
+    }, [contentUrl, isSoundOn]);
 
     return (
         <div className="relative">
@@ -104,7 +104,7 @@ const Video = ({ contentUrl }: { contentUrl: string }) => {
                     className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 cursor-pointer rounded-xl"
                     onClick={handleVideoClick}
                 >
-                    <Play className="text-white w-16 h-16 opacity-75 hover:opacity-100 transition-opacity duration-200" fill="white"/>
+                    <Play className="text-white w-16 h-16 opacity-75 hover:opacity-100 transition-opacity duration-200" fill="white" />
                 </div>
             )}
 
@@ -112,10 +112,10 @@ const Video = ({ contentUrl }: { contentUrl: string }) => {
                 onClick={toggleMute}
                 className="absolute bottom-3 right-3 bg-gray-700 opacity-60 text-white p-1 rounded-full focus:outline-none"
             >
-                {isMuted ? (
-                    <VolumeOff size={25} />
+                {!isSoundOn ? (
+                    <VolumeOff size={23} />
                 ) : (
-                    <Volume2 size={25} />
+                    <Volume2 size={23} />
                 )}
             </button>
         </div>
