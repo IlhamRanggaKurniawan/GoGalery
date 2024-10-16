@@ -15,7 +15,7 @@ const ReportProblemForm = () => {
         try {
             e.preventDefault()
 
-            const response = await apiClient.post(`/v1/feedback/${user?.id}`, {
+            await apiClient.post(`/v1/feedback`, {
                 body: {
                     message: feedback
                 },

@@ -19,7 +19,6 @@ const CommentSheet = ({ children, contentId, comments, setComments }: { children
 
             const comment = await apiClient.post(`/v1/comment/${contentId}`, {
                 body: {
-                    userId: user?.id,
                     message: text
                 },
                 cache: "no-cache"

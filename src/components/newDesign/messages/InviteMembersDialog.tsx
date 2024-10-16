@@ -45,7 +45,7 @@ const InviteMembersDialog = ({ groupId, children }: { groupId: number, children:
         const searchMutualUsers = async () => {
             try {
                 if (!user?.id) return
-                const users = await apiClient.get(`/v1/user/${user?.id}/mutual`, {
+                const users = await apiClient.get(`/v1/user/mutual/${search}`, {
                     cache: "no-cache"
                 })
 

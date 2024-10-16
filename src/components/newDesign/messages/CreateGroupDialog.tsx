@@ -27,7 +27,7 @@ const CreateGroupDialog = ({ children }: { children: React.ReactNode }) => {
         try {
             if (!search || !session) return
 
-            const mutualUsers = await apiClient.get(`/v1/users/${session.id}/mutual`, {
+            const mutualUsers = await apiClient.get(`/v1/users/mutual/${search}`, {
                 cache: "no-cache"
             })
 

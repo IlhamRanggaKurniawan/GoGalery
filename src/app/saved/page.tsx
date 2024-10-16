@@ -25,10 +25,7 @@ export const metadata: Metadata = {
 };
 
 const page = async () => {
-
-  const { user } = await getSession()
-
-  const savedContents = await api.get(`/v1/saves/${user.id}`, { cache: "no-cache" })
+  const savedContents = await api.get(`/v1/saves`, { cache: "no-cache" })
 
   return (
     <div>

@@ -23,6 +23,15 @@ export const getToken = async () => {
         }
     }
 
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/token`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const { accessToken : newAccessToken } = await response.json();
+
+    localStorage.setItem("AccessToken", newAccessToken);
+
     return accessToken;
 };
 

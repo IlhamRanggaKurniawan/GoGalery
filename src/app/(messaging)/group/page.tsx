@@ -24,9 +24,7 @@ export const metadata: Metadata = {
 
 const page = async () => {
 
-  const { user } = await getSession()
-
-  const groups = await api.get(`/v1/groups/${user?.id}`, { cache: "no-cache" })
+  const groups = await api.get(`/v1/groups`, { cache: "no-cache" })
 
   return (
     <EachUtils of={groups} render={(group: any) => (

@@ -24,7 +24,7 @@ const GroupInfoDialog = ({ children, id, groupProfile }: { children: React.React
     try {
       if (!id || !user) return;
 
-      await apiClient.delete(`/v1/group/${id}/members/${user.id}`)
+      await apiClient.delete(`/v1/group/member/${id}`)
 
       router.push("/group");
     } catch (error) {

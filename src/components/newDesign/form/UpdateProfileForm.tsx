@@ -46,7 +46,7 @@ const UpdateProfileForm = () => {
       formData.append("bio", e.currentTarget.bio.value)
       formData.append("profileUrl", user.profileUrl)
 
-      const data = await apiClient.patch(`/v1/user/${user.id}`, {
+      const data = await apiClient.patch(`/v1/user`, {
         body: formData,
         cache: "no-cache"
       })

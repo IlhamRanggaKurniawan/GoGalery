@@ -19,7 +19,7 @@ const StraightInfiniteScroll = () => {
         try {
             if(!user?.id) return
             setLoading(true)
-            const response = await apiClient.get(`/v1/contents/${user?.id}?limit=10&cursor=${nextCursor}`, { cache: "no-cache" })
+            const response = await apiClient.get(`/v1/contents?limit=10&cursor=${nextCursor}`, { cache: "no-cache" })
             setContents((prev) => [...prev, ...response.contents]);
             setNextCursor(response.nextCursor)
 

@@ -12,7 +12,7 @@ const PrivateConversation = ({ conversationId, prevMessage }: { conversationId: 
   const [messages, setMessages] = useState<any[]>(prevMessage)
   const { user } = useSession()
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const { sendMessage } = useWebSocket(`${process.env.NEXT_PUBLIC_WS_URL}/ws/direct?dmId=${conversationId}&userId=${user?.id}`, setMessages)
+  const { sendMessage } = useWebSocket(`${process.env.NEXT_PUBLIC_WS_URL}/ws/direct/${conversationId}`, setMessages)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {

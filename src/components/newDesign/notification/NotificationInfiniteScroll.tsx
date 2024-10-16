@@ -16,7 +16,7 @@ const NotificationInfiniteScroll = () => {
     try {
       if (!user) return
 
-      const notifications = await apiClient.get(`/v1/notifications/${user?.id}`, { cache: "no-cache" })
+      const notifications = await apiClient.get(`/v1/notifications`, { cache: "no-cache" })
 
       setNotifications(notifications);
 

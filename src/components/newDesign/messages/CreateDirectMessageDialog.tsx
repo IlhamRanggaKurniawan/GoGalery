@@ -36,7 +36,7 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
     const handleClick = async ({ id }: { id: number }) => {
         try {
             if (!session) return
-            const existingDM = await apiClient.get(`/v1/direct?participant1Id=${session.id}&participant2Id=${id}`, { cache: "no-cache" })
+            const existingDM = await apiClient.get(`/v1/direct/user/${id}`, { cache: "no-cache" })
 
             if (existingDM) {
                 return router.push(`/messages/${existingDM.Id}`)
@@ -44,7 +44,7 @@ const CreateDirectMessageDialog = ({ children }: { children: React.ReactNode }) 
 
             const newDM = await apiClient.post(`/v1/direct`, {
                 body: {
-                    participants: [id, session.id]
+                    participants: [id]
                 },
                 cache: "no-cache"
             })

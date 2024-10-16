@@ -16,7 +16,7 @@ const MenuNavigation = ({ icon: Icon, href, text, type }: { icon: React.ElementT
 
     const logout = async () => {
         try {
-            await apiClient.delete(`/v1/user/${user?.id}/logout`)
+            await apiClient.delete(`/v1/user/logout`)
 
             localStorage.clear()
 

@@ -27,9 +27,7 @@ export const generateMetadata = async ({ params }: { params: { username: string 
   };
 const page = async ({ params }: { params: { id: string, username: string } }) => {
 
-    const { user } = await getSession()
-
-    const response = await api.get(`/v1/content/${params.id}?userId=${user.id}`, { cache: "no-cache" })
+    const response = await api.get(`/v1/content/${params.id}`, { cache: "no-cache" })
 
     return (
         <div>

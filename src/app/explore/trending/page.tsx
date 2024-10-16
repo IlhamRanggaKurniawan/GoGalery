@@ -27,10 +27,8 @@ export const metadata: Metadata = {
 const page = async ({ searchParams }: { searchParams: { contentId: number } }) => {
   let queryContent: any
 
-  const { user } = await getSession()
-
   if (searchParams.contentId) {
-    queryContent = await api.get(`/v1/content/${searchParams.contentId}?userId=${user.id}`, { cache: "no-cache" })
+    queryContent = await api.get(`/v1/content/${searchParams.contentId}`, { cache: "no-cache" })
   }
 
   return (

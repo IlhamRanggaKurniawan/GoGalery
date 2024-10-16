@@ -22,9 +22,7 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
     const handleLikeContent = useDebouncedCallback(async () => {
         if (!isLiked) {
             const newLike = await apiClient.post(`/v1/like/${id}`, {
-                body: {
-                    userId: user?.id,
-                },
+                body: {},
                 cache: "no-cache"
             })
 
@@ -38,9 +36,7 @@ const ContentFooter = ({ id, isLiked, isSaved, saveId: initialSaveId, likeId: in
     const handleSaveContent = useDebouncedCallback(async () => {
         if (!isSaved) {
             const newSave = await apiClient.post(`/v1/save/${id}`, {
-                body: {
-                    userId: user?.id,
-                },
+                body: {},
                 cache: "no-cache"
             })
 

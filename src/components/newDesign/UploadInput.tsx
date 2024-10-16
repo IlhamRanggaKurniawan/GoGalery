@@ -49,7 +49,6 @@ const UploadInput = () => {
       const formData = new FormData();
 
       formData.append("file", file);
-      formData.append("uploaderId", `${user.id}`)
       formData.append("caption", e.currentTarget.caption.value);
 
       setLoading(true);

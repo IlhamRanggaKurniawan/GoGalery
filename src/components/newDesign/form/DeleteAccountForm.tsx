@@ -20,7 +20,7 @@ const DeleteAccountForm = () => {
 
             if (key !== "delete my account" && username != user?.username) return
 
-            await apiClient.delete(`/v1/user/${user?.id}`)
+            await apiClient.delete(`/v1/user`)
 
             localStorage.clear()
 

@@ -13,7 +13,8 @@ class Api {
             method: "GET",
             credentials: "include",
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                Cookie: `AccessToken=${token}`
             },
             cache,
         })
@@ -31,7 +32,8 @@ class Api {
         const token = await this.token()
 
         const headers: HeadersInit = {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
+            Cookie: `AccessToken=${token}`
         };
 
         if (!(body instanceof FormData)) {
@@ -60,7 +62,8 @@ class Api {
         const token = await this.token()
 
         const headers: HeadersInit = {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
+            Cookie: `AccessToken=${token}`
         };
 
         if (!(body instanceof FormData)) {
@@ -93,7 +96,8 @@ class Api {
             method: "DELETE",
             credentials: "include",
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                Cookie: `AccessToken=${token}`
             },
         })
 
